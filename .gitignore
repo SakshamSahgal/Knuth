@@ -1,3 +1,4 @@
 node_modules/
 dbCredentials.json
 .env
+testdb.json
