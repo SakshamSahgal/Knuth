@@ -37,7 +37,7 @@ app.get("/home",isLoggedIn,(req, res) => { //protected route
   res.sendFile(path.join(__dirname,"..","ClientSide","home.html"));
 });
 
-app.get("/Coordinators",isLoggedIn,(req,res) => {
+app.get("/coordinators",isLoggedIn,(req,res) => {
   res.sendFile(path.join(__dirname,"..","ClientSide","Coordinators.html"));
 })
 
@@ -47,6 +47,10 @@ app.get("/coordinatorsList",isLoggedIn,(req,res) => {
     }).catch((err) => {
       res.status(400).send("Cant' Read DB");
     })
+})
+
+app.get("/announcements",isLoggedIn,(req,res) => {
+  res.sendFile(path.join(__dirname,"..","ClientSide","Announcements.html"));
 })
 
 app.get("/ConnectWithUs",isLoggedIn,(req,res) => {
