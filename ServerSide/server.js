@@ -14,7 +14,7 @@ app.use(express.json({limit : '1mb'})); //telling that my webapp will be sending
 app.use(express.static(path.join(__dirname,"..","ClientSide","Static"))); //telling that my webapp will be using the files in the ClientSide folder (for the frontend
 
 const {writeDB,readDB,updateDB,deleteDB} = require("./MongoOperations.js"); //including the MongoOperations.js file (for the DB operations)
-
+const {isLoggedIn,isCoordinator} = require("./Middlewares.js"); //including the Middlewares.js file (for the middlewares)
 //------------------------------------------------------------------------------------------------------------------------------
 
 const port = process.env.DEV_PORT || 3000
@@ -22,12 +22,7 @@ app.listen(port, () => {
     console.log("Server Started at port " + process.env.DEV_PORT);    
 });
 
-function isLoggedIn(req, res, next) { //Middleware to check if user is logged in
-  if (req.user) //check if user is authenticated
-    return next();
-  else
-    res.redirect("/"); //if not authenticated, redirect to login page
-}
+
 
 app.get("/", (req, res) => { //unprotected route
   res.sendFile(path.join(__dirname,"..","ClientSide","Knuth.html"));
@@ -57,6 +52,11 @@ app.get("/ConnectWithUs",isLoggedIn,(req,res) => {
   res.sendFile(path.join(__dirname,"..","ClientSide","ConnectWithUs.html"));
 })
 
+
+app.post("/announce",isCoordinator,(req,res) => {
+  res.send("successfully posted");
+})
+
 app.get('/logout',isLoggedIn, (req, res, next) => {
   res.clearCookie('connect.sid');
   req.logout(function (err) {
@@ -78,42 +78,4 @@ app.get("/auth/google/callback", passport.authenticate('google', {
 app.get("/auth/google/failure", (req, res) => {
   res.send("Failed to authenticate..");
 })
-
-
-// app.post("/create", (req, res) => {
-//     console.log(req.body);
-//     writeDB("Main", "Coordinators",req.body).then((acknowledged) => {
-//         res.json(acknowledged)
-//     }).catch((err) => {
-//         console.log("Cant' Write to DB");
-//         res.status(400).send("Cant' Write to DB");
-//     })
-// })
-
-// app.get("/read", (req, res) => {
-//     readDB("Main", "Coordinators", {}).then((coordinators) => {
-//         res.json(coordinators);
-//       }).catch((err) => {
-//         console.log("Cant' Read DB");
-//         res.status(400).send("Cant' Read DB");
-//       })
-// })
-
-// app.put("/update", (req, res) => {
-//     updateDB("Main", "Coordinators", {"name": "Ananya"}, {"name": "Ananya", "Age" : 31}).then((acknowledged) => {
-//         res.json(acknowledged);
-//     }).catch((err) => {
-//         console.log("Cant' Update DB");
-//         res.status(400).send("Cant' Update DB");
-//     })
-// })
-
-// app.delete("/delete", (req, res) => {
-//     deleteDB("Main", "Coordinators", {"name": "Ananya"}).then((acknowledged) => {
-//         res.json(acknowledged);
-//     }).catch((err) => {
-//         console.log("Cant' Delete from DB");
-//         res.status(400).send("Cant' Delete from DB");
-//     })
-// })
 

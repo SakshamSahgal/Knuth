@@ -99,8 +99,7 @@
             <div class="col-md-6">
 
                 <div class="card mb-3 feed-card">
-                    <div class="feed-header bg-dark text-white"
-                        style="background-image: url('your-cool-code-gif.gif'); background-size: cover;">
+                    <div class="feed-header bg-dark text-white">
 
                         <div class="d-flex align-items-center">
                             <img src="https://source.unsplash.com/50x50/?cloud" class="rounded-circle mr-3"
@@ -118,7 +117,7 @@
                     <div class="feed-content p-3">
                         <textarea class="form-control mb-3 mt-2" rows="3"
                             placeholder="Write your post here..."></textarea>
-                        <button type="button" class="btn btn-primary btn-block">Post</button>
+                        <button type="button" class="btn btn-primary btn-block" onclick="Post()">Post</button>
                     </div>
                 </div>
 
@@ -187,5 +186,7 @@
     </div>
 
 </body>
-
+<!-- axios CDN -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="/Scripts/Announcements.js"></script>
 </html>

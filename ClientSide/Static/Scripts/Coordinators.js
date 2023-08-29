@@ -3,7 +3,7 @@
 function fetchCoordinators() //function to fetch coordinators list from the database
 {
     axios.get('/coordinatorsList').then((response) => {
-        // console.log(response.data);
+        console.log(response.data);
         DisplayCoordinatorsList(response.data)
     }).catch((err) => {
         console.log(err);
@@ -19,14 +19,14 @@ function DisplayCoordinatorsList(coordinators){
         
         //nav tabs for years
         yearTab = `<li class="nav-item">
-                    <a href="#id_${i}" class="nav-link ${(i==coordinators.length-1)? "active" : "" }" data-bs-toggle="tab"> ${coordinators[i].year}  </a>
+                    <a href="#id_${i}" class="nav-link ${(i==0)? "active" : "" }" data-bs-toggle="tab"> ${coordinators[i].year}  </a>
                    </li>`
         
         //appending the Nav Tabs to HTML DOM
         document.getElementById("YearTabs").innerHTML += yearTab;
         
         //tab content for each year
-        yearTabContent = `<div class="tab-pane ${(i == coordinators.length-1) ? "show active" : ""} fade" id="id_${i}">         
+        yearTabContent = `<div class="tab-pane ${(i == 0) ? "show active" : ""} fade" id="id_${i}">         
                             <div class="container mt-5">
                                 <ul class="list-group" id="${coordinators[i].year}">                         
                                 </ul>

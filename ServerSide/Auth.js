@@ -7,13 +7,11 @@ passport.use(new GoogleStrategy({
   callbackURL: "http://localhost:3000/auth/google/callback"
 }, (accessToken, refreshToken, profile, done) => {
   console.log("called 1");
-  // console.log(profile);
   return done(null, profile);
 }));
 
 passport.serializeUser((user, done) => { //To determine what data should be stored in the session. 
   console.log("called 2");
-  // console.log(user);
   done(null, user);
 });
 
