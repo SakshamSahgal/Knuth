@@ -31,19 +31,11 @@ app.get("/", (req, res) => { //unprotected route
 });
 
 app.get("/home",isLoggedIn,(req, res) => { //protected route
-  res.sendFile(path.join(__dirname,"..","ClientSide","home.html"));
+  res.render(path.join(__dirname,"..","ClientSide","home"),{email: req.user.emails[0].value})
 });
 
 app.get("/coordinators",isLoggedIn,(req,res) => {
-  res.sendFile(path.join(__dirname,"..","ClientSide","Coordinators.html"));
-})
-
-app.get("/coordinatorsList",isLoggedIn,(req,res) => {
-  readDB("Main", "Coordinators", {}).then((coordinators) => {
-      res.json(coordinators);
-    }).catch((err) => {
-      res.status(400).send("Cant' Read DB");
-    })
+  res.render(path.join(__dirname,"..","ClientSide","Coordinators"),{email: req.user.emails[0].value});
 })
 
 app.get("/announcements",isLoggedIn,(req,res) => {
@@ -52,9 +44,22 @@ app.get("/announcements",isLoggedIn,(req,res) => {
 })
 
 app.get("/ConnectWithUs",isLoggedIn,(req,res) => {
-  res.sendFile(path.join(__dirname,"..","ClientSide","ConnectWithUs.html"));
+  res.render(path.join(__dirname,"..","ClientSide","ConnectWithUs"),{email: req.user.emails[0].value});
 })
 
+app.get("/profile/:email",isLoggedIn,(req,res) => {
+  console.log(req.params.email)
+  res.render(path.join(__dirname,"..","ClientSide","profile"),{});
+})
+
+
+app.get("/coordinatorsList",isLoggedIn,(req,res) => {
+  readDB("Main", "Coordinators", {}).then((coordinators) => {
+      res.json(coordinators);
+    }).catch((err) => {
+      res.status(400).send("Cant' Read DB");
+    })
+})
 
 app.post("/announce",isCoordinator,(req,res) => {
   res.send("successfully posted");
