@@ -17,12 +17,14 @@ const {writeDB,readDB,updateDB,deleteDB} = require("./MongoOperations.js"); //in
 const {isLoggedIn,isCoordinator} = require("./Middlewares.js"); //including the Middlewares.js file (for the middlewares)
 //------------------------------------------------------------------------------------------------------------------------------
 
+
+// Setting the view engine to EJS
+app.set('view engine', 'ejs');
+
 const port = process.env.DEV_PORT || 3000
 app.listen(port, () => {  
     console.log("Server Started at port " + process.env.DEV_PORT);    
 });
-
-
 
 app.get("/", (req, res) => { //unprotected route
   res.sendFile(path.join(__dirname,"..","ClientSide","Knuth.html"));
@@ -45,7 +47,8 @@ app.get("/coordinatorsList",isLoggedIn,(req,res) => {
 })
 
 app.get("/announcements",isLoggedIn,(req,res) => {
-  res.sendFile(path.join(__dirname,"..","ClientSide","Announcements.html"));
+  console.log(req.user)
+  res.render(path.join(__dirname,"..","ClientSide","Announcements"),{email : req.user.emails[0].value,username: req.user.displayName, profilePicture : req.user.photos[0].value});//sending the user data to the frontend
 })
 
 app.get("/ConnectWithUs",isLoggedIn,(req,res) => {
