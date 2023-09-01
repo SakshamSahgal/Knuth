@@ -50,7 +50,7 @@ app.get("/profile/:email",isLoggedIn,(req,res) => {
 
   readDB("Main", "Users", {"email": req.params.email}).then((found) => { //finding the user in the DB
     if(found.length > 0){ //user found
-      res.render(path.join(__dirname,"..","ClientSide","profile"),{email : found[0].email, displayName : found[0].displayName, photo : found[0].photo, designation : found[0].designation});
+      res.render(path.join(__dirname,"..","ClientSide","profile"),{myemail : req.user.emails[0].value, email : found[0].email, displayName : found[0].displayName, photo : found[0].photo, designation : found[0].designation});
     }
     else{
       res.status(400).send("User Doesn't Exist");
