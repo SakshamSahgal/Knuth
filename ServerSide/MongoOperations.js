@@ -5,7 +5,7 @@ const client = new MongoClient(process.env.URI, {
     serverApi: {
         version: ServerApiVersion.v1,
         strict: true,
-        deprecationErrors: true,
+        deprecationErrors: true, //generate errors when deprecated MongoDB features are used
     }
 });
 
@@ -44,13 +44,13 @@ async function readDB(Database, Collection, Query) { //Read Entry
     }
 }
 
-async function updateDB(Database, Collection, Query, UpdateData) { //Update Entry
+async function updateDB(Database, Collection, FindQuery, UpdateQuery) { //Update Entry
     try {
         await client.connect();
         const db = client.db(Database);
         const collection = db.collection(Collection);
 
-        const result = await collection.updateOne(Query, { $set: UpdateData });
+        const result = await collection.updateOne(FindQuery,UpdateQuery);
 
         return result;
     } catch (error) {

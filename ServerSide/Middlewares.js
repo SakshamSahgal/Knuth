@@ -24,10 +24,6 @@ function isCoordinator(req,res,next) { //middleware to check if currently logged
     res.status(400).json("User Doesn't Exist"); //not a coordinator
 }
 
-function AccountExists(req,res,next){
-
-}
-
 
 
 module.exports = {isLoggedIn,isCoordinator}

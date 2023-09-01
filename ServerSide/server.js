@@ -14,7 +14,7 @@ app.use(express.json({limit : '1mb'})); //telling that my webapp will be sending
 app.use(express.static(path.join(__dirname,"..","ClientSide","Static"))); //telling that my webapp will be using the files in the ClientSide folder (for the frontend
 
 const {writeDB,readDB,updateDB,deleteDB} = require("./MongoOperations.js"); //including the MongoOperations.js file (for the DB operations)
-const {isLoggedIn,isCoordinator} = require("./Middlewares.js"); //including the Middlewares.js file (for the middlewares)
+const {isLoggedIn,isCoordinator,} = require("./Middlewares.js"); //including the Middlewares.js file (for the middlewares)
 //------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -47,8 +47,17 @@ app.get("/ConnectWithUs",isLoggedIn,(req,res) => {
 })
 
 app.get("/profile/:email",isLoggedIn,(req,res) => {
-  console.log(req.params.email)
-  res.render(path.join(__dirname,"..","ClientSide","profile"),{});
+
+  readDB("Main", "Users", {"email": req.params.email}).then((found) => { //finding the user in the DB
+    if(found.length > 0){ //user found
+      res.render(path.join(__dirname,"..","ClientSide","profile"),{email : found[0].email, displayName : found[0].displayName, photo : found[0].photo, designation : found[0].designation});
+    }
+    else{
+      res.status(400).send("User Doesn't Exist");
+    }
+  }).catch((err) => {
+    console.log("Cant' Read Users DB while fetching profile page info");
+  })
 })
 
 
@@ -85,4 +94,3 @@ app.get("/auth/google/callback", passport.authenticate('google', {
 app.get("/auth/google/failure", (req, res) => {
   res.send("Failed to authenticate..");
 })
-
