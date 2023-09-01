@@ -1,5 +1,6 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const { captureAccount } = require("./AccountDB.js");
 
 passport.use(new GoogleStrategy({
   clientID: process.env.CLIENT_ID,
@@ -7,6 +8,7 @@ passport.use(new GoogleStrategy({
   callbackURL: "http://localhost:3000/auth/google/callback"
 }, (accessToken, refreshToken, profile, done) => {
   console.log("called 1");
+  captureAccount(profile); //function that checks if account already visited the site, if not, adds it to the DB
   return done(null, profile);
 }));
 

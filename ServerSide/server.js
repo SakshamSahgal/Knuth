@@ -39,7 +39,6 @@ app.get("/coordinators",isLoggedIn,(req,res) => {
 })
 
 app.get("/announcements",isLoggedIn,(req,res) => {
-  console.log(req.user)
   res.render(path.join(__dirname,"..","ClientSide","Announcements"),{email : req.user.emails[0].value,username: req.user.displayName, profilePicture : req.user.photos[0].value});//sending the user data to the frontend
 })
 
