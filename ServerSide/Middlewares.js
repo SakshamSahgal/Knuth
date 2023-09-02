@@ -24,6 +24,12 @@ function isCoordinator(req,res,next) { //middleware to check if currently logged
     res.status(400).json("User Doesn't Exist"); //not a coordinator
 }
 
+function redirectIfLoggedIn(req, res, next) { //Middleware to check if user is logged in
+  if (req.user) //check if user is authenticated
+    return res.redirect("/home"); //redirect to homepage
+  else
+    return next(); //if not authenticated, redirect to login page
+}
 
 
-module.exports = {isLoggedIn,isCoordinator}
+module.exports = {isLoggedIn,isCoordinator,redirectIfLoggedIn}
