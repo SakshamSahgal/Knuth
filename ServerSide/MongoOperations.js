@@ -39,8 +39,6 @@ async function readDB(Database, Collection, Query) { //Read Entry
     } catch (error) {
         console.error("Error:", error);
         throw error; // Rethrow the error for the caller to handle
-    } finally {
-        await client.close();
     }
 }
 
@@ -56,8 +54,6 @@ async function updateDB(Database, Collection, FindQuery, UpdateQuery) { //Update
     } catch (error) {
         console.error("Error:", error);
         throw error; // Rethrow the error for the caller to handle
-    } finally {
-        await client.close();
     }
 }
 
@@ -73,8 +69,6 @@ async function deleteDB(Database, Collection, Query) { //Delete Entry
     } catch (error) {
         console.error("Error:", error);
         throw error; // Rethrow the error for the caller to handle
-    } finally {
-        await client.close();
     }
 }
 
