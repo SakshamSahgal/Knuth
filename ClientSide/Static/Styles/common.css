@@ -1,9 +1,9 @@
 .activeNavbar {
-    color: rgb(126, 246, 160)
+    color: rgb(126, 246, 160) !important;
 }
 
 .inactiveNavbar {
-    color: white;
+    color: white !important;
 }
 
 .navbar {
