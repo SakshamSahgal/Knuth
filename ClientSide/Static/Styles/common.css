@@ -1,0 +1,23 @@
+.activeNavbar {
+    color: rgb(126, 246, 160)
+}
+
+.inactiveNavbar {
+    color: white;
+}
+
+.navbar {
+    position: relative;
+}
+
+.profile-icon {
+    position: absolute;
+    right: 10px;
+    /* Adjust the distance from the right edge */
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.navbar-toggler {
+    margin-left: auto;
+}

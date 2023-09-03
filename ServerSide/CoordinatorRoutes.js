@@ -7,7 +7,7 @@ module.exports = (app) => {
 
     //route that renders the coordinators page
     app.get("/coordinators", isLoggedIn, (req, res) => {
-        res.render(path.join(__dirname, "..", "ClientSide", "Coordinators"), { email: req.user.emails[0].value });
+        res.render(path.join(__dirname, "..", "ClientSide", "coordinators"), {page: "coordinators", emailTo: req.user.emails[0].value });
     })
     
     //route that returns the list of coordinators fetched from the DB

@@ -10,7 +10,7 @@ const port = process.env.DEV_PORT || 3000
 
 app.use(session({ secret: process.env.SESSION_SECRET , resave: false, saveUninitialized: true })); //telling express to use sesssion middleware [Secret used to sign the session cookie]
 app.use(express.json({limit : '1mb'})); //telling that my webapp will be sending/recieving data in json format (limiting to 1MB)
-app.use(express.static(path.join(__dirname,"..","ClientSide","Static"))); //telling that my webapp will be using the files in the ClientSide folder (for the frontend
+app.use(express.static(path.join(__dirname,"..","ClientSide","Static"))); //telling that my webapp will be using the files in the ClientSide/Static folder for static js files
 
 const {isLoggedIn,redirectIfLoggedIn} = require("./Middlewares.js"); //including the Middlewares.js file (for the middlewares)
 //------------------------------------------------------------------------------------------------------------------------------
@@ -32,11 +32,11 @@ app.get("/",redirectIfLoggedIn, (req, res) => { //unprotected route
 });
 
 app.get("/home",isLoggedIn,(req, res) => { //protected route
-  res.render(path.join(__dirname,"..","ClientSide","home"),{email: req.user.emails[0].value})
+  res.render(path.join(__dirname,"..","ClientSide","home"),{page: "home", emailTo: req.user.emails[0].value})
 });
 
 app.get("/ConnectWithUs",isLoggedIn,(req,res) => {
-  res.render(path.join(__dirname,"..","ClientSide","ConnectWithUs"),{email: req.user.emails[0].value});
+  res.render(path.join(__dirname,"..","ClientSide","ConnectWithUs"),{page: "connectWithUs", emailTo: req.user.emails[0].value});
 })
 
 app.get('/logout',isLoggedIn, (req, res, next) => {
