@@ -39,7 +39,8 @@
                 
 
 
-
+                <% for(var i=0;i<0;i++){%>
+                
                 <div class="card mb-3 feed-card">
                     <div class="feed-header">
                         <div class="d-flex align-items-center">
@@ -49,6 +50,7 @@
                                 <p class="mb-0">User 1 &lt;user1@example.com&gt;</p>
                                 <small class="mb-0">August 29, 2023 at 10:30 AM</small>
                             </div>
+                            <button class="btn btn-danger ml-auto" onclick="deleteCard(this)">Delete</button>
                         </div>
                     </div>
                     <div class="feed-content">
@@ -61,42 +63,8 @@
                     </div>
                 </div>
 
-                <!-- Card List -->
-                <div class="card mb-3 feed-card">
-                    <div class="feed-header">
-                        <div class="d-flex align-items-center">
-                            <img src="https://source.unsplash.com/50x50/?cloud" class="rounded-circle mr-2"
-                                alt="User Profile" style="width: 40px; height: 40px;">
-                            <div>
-                                <p class="mb-0">User 1 &lt;user1@example.com&gt;</p>
-                                <small class="mb-0">August 29, 2023 at 10:30 AM</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="feed-content">
-                        <h5 class="card-title">Post Title 1</h5>
-                        <p class="card-text">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Alias quia qui
-                            quae expedita voluptatum autem, deserunt doloribus quos cum magnam?</p>
-                    </div>
-                </div>
-
-                <div class="card mb-3 feed-card">
-                    <div class="feed-header">
-                        <div class="d-flex align-items-center">
-                            <img src="https://source.unsplash.com/50x50/?cloud" class="rounded-circle mr-2"
-                                alt="User Profile" style="width: 40px; height: 40px;">
-                            <div>
-                                <p class="mb-0">User 1 &lt;user1@example.com&gt;</p>
-                                <small class="mb-0">August 29, 2023 at 10:30 AM</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="feed-content">
-                        <h5 class="card-title">Post Title 1</h5>
-                        <p class="card-text">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Alias quia qui
-                            quae expedita voluptatum autem, deserunt doloribus quos cum magnam?</p>
-                    </div>
-                </div>
+                <%}%>
+                
 
             </div>
         </div>

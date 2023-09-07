@@ -13,15 +13,48 @@
     <br><br>
     <div class="container">
         <ul class="nav-tabs nav nav-justified bg-light" id="YearTabs">
+          
 
+          <% for(var i=0;i<coordinators.length;i++) { %>
+            
+            <li class="nav-item">
+              <a href="#id_<%=i%>" class="nav-link <%= (i == 0) ? 'active' : ''  %>" data-bs-toggle="tab"> <%= coordinators[i].year %>  </a>
+             </li>
+
+          <% } %>
         </ul>
-        
+
         <div class="tab-content" id="YearTabContents">
           
-      </div>
+          <% for(var i=0;i<coordinators.length;i++) { %>
+
+            <div class="tab-pane <%= (i == 0) ? 'show active' : '' %> fade" id="id_<%=i%>">         
+              <div class="container mt-5">
+                  <ul class="list-group" id="<%= coordinators[i].year %>">    
+                    
+                    <% for(var j=0;j<coordinators[i].list.length;j++) { %>
+
+                    <li class="list-group-item d-flex align-items-center my-3 rounded border border-dark">
+                      <div class="flex-grow-1">
+                          <h5><%= coordinators[i].list[j].name %></h5>
+                      </div>
+                      <div>
+                          <a href="<%=coordinators[i].list[j].linkedIn%>" class="me-2" target="_blank"><i class="fab fa-linkedin"></i></a>
+                      </div>
+                    </li>
+                    
+                    <% } %>
+
+                  </ul>
+              </div>        
+            </div>
+
+          <% } %>
+
+        </div>
+
+       
+
     </div>
 </body>
-  <!-- axios CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script src="/Scripts/Coordinators.js"></script>
 </html>
