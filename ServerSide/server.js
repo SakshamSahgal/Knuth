@@ -22,6 +22,7 @@ require("./GoogleOAuthRoutes.js")(app); //requiring the GoogleOAuthRoutes.js fil
 require("./CoordinatorRoutes.js")(app); //requiring the CoordinatorRoutes.js file (for the coordinator page routes)
 require("./ProfileRoutes.js")(app); //requiring the ProfileRoutes.js file (for the profile page routes)
 require("./AnnouncementRoutes.js")(app); //requiring the AnnouncementRoutes.js file (for the announcement page routes)
+require("./HomeRoutes.js")(app); //requiring the HomeRoutes.js file (for the home page routes)
 
 app.listen(port, () => {  
     console.log("Server Started at port " + process.env.DEV_PORT);    
@@ -31,9 +32,7 @@ app.get("/",redirectIfLoggedIn, (req, res) => { //unprotected route
   res.sendFile(path.join(__dirname,"..","ClientSide","Knuth.html"));
 });
 
-app.get("/home",isLoggedIn,(req, res) => { //protected route
-  res.render(path.join(__dirname,"..","ClientSide","home"),{page: "home", emailTo: req.user.emails[0].value})
-});
+
 
 app.get("/ConnectWithUs",isLoggedIn,(req,res) => {
   res.render(path.join(__dirname,"..","ClientSide","ConnectWithUs"),{page: "connectWithUs", emailTo: req.user.emails[0].value});

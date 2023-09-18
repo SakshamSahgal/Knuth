@@ -8,7 +8,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Home</title>
   </head>
+  <link rel="stylesheet" href="/Styles/Home.css">
   <body>
+
     <%- include('./ReusableComponents/navbar.ejs',{ activePage : page, email: emailTo }) %>
+
+    <div class="container mt-5">
+      <!-- Timeline -->
+      <div class="timeline">
+
+        <% for(var i=0;i<events.length;i++) { %>
+
+        <!-- Event Item 1 -->
+        <div class="event">
+          <div class="event-header">
+            <!-- Event Title -->
+            <h5 class="event-title"> <a href="<%= events[i].eventLink %>" target="_blank"> <%= events[i].eventName %> </a>  </h5>
+            <!-- Delete Button with Generic Bin Icon -->
+            <button class="delete-button">
+              <span class="delete-icon">&#10006;</span>
+            </button>
+          </div>
+          <div class="event-content">
+            <span class="badge badge-primary">Date: <%= events[i].eventDate %></span>
+            <p><%= events[i].eventDescription %></p>
+            <p>  <b> <%= (events[i].Winners.length) ? " Winners : "  : "" %> </b> </p>
+            <ul>
+
+              <% for(var j=0;j<events[i].Winners.length; j++){ %>
+                
+                <% for(const key in events[i].Winners[j]) {%>
+
+                  <li> <%= key %> : <%= events[i].Winners[j][key] %> </li>
+
+                <% } %>
+
+              <% } %>
+
+            </ul>
+          </div>
+        </div>
+  
+        <% } %>
+
+      </div>
+    </div>
+
   </body>
 </html>
