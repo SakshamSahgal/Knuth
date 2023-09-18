@@ -5,63 +5,37 @@ const path = require('path');
 require('dotenv').config() //including the .env file (for the API keys and DB Credentials)
 
 const app = express();
-const passport = require('./Auth'); // Import passport configuration from auth.js
+
+const port = process.env.DEV_PORT || 3000
 
 app.use(session({ secret: process.env.SESSION_SECRET , resave: false, saveUninitialized: true })); //telling express to use sesssion middleware [Secret used to sign the session cookie]
-app.use(passport.initialize()); //Telling express to use passport for authentication
-app.use(passport.session()); // Tell express to use passport.session() to support persistent login sessions (recommended).
 app.use(express.json({limit : '1mb'})); //telling that my webapp will be sending/recieving data in json format (limiting to 1MB)
-app.use(express.static(path.join(__dirname,"..","ClientSide","Static"))); //telling that my webapp will be using the files in the ClientSide folder (for the frontend
+app.use(express.static(path.join(__dirname,"..","ClientSide","Static"))); //telling that my webapp will be using the files in the ClientSide/Static folder for static js files
 
-const {writeDB,readDB,updateDB,deleteDB} = require("./MongoOperations.js"); //including the MongoOperations.js file (for the DB operations)
-const {isLoggedIn,isCoordinator} = require("./Middlewares.js"); //including the Middlewares.js file (for the middlewares)
+const {isLoggedIn,redirectIfLoggedIn} = require("./Middlewares.js"); //including the Middlewares.js file (for the middlewares)
 //------------------------------------------------------------------------------------------------------------------------------
-
 
 // Setting the view engine to EJS
 app.set('view engine', 'ejs');
 
-const port = process.env.DEV_PORT || 3000
+require("./GoogleOAuthRoutes.js")(app); //requiring the GoogleOAuthRoutes.js file (for the google auth routes)
+require("./CoordinatorRoutes.js")(app); //requiring the CoordinatorRoutes.js file (for the coordinator page routes)
+require("./ProfileRoutes.js")(app); //requiring the ProfileRoutes.js file (for the profile page routes)
+require("./AnnouncementRoutes.js")(app); //requiring the AnnouncementRoutes.js file (for the announcement page routes)
+require("./HomeRoutes.js")(app); //requiring the HomeRoutes.js file (for the home page routes)
+
 app.listen(port, () => {  
     console.log("Server Started at port " + process.env.DEV_PORT);    
 });
 
-app.get("/", (req, res) => { //unprotected route
+app.get("/",redirectIfLoggedIn, (req, res) => { //unprotected route
   res.sendFile(path.join(__dirname,"..","ClientSide","Knuth.html"));
 });
 
-app.get("/home",isLoggedIn,(req, res) => { //protected route
-  res.render(path.join(__dirname,"..","ClientSide","home"),{email: req.user.emails[0].value})
-});
 
-app.get("/coordinators",isLoggedIn,(req,res) => {
-  res.render(path.join(__dirname,"..","ClientSide","Coordinators"),{email: req.user.emails[0].value});
-})
-
-app.get("/announcements",isLoggedIn,(req,res) => {
-  res.render(path.join(__dirname,"..","ClientSide","Announcements"),{email : req.user.emails[0].value,username: req.user.displayName, profilePicture : req.user.photos[0].value});//sending the user data to the frontend
-})
 
 app.get("/ConnectWithUs",isLoggedIn,(req,res) => {
-  res.render(path.join(__dirname,"..","ClientSide","ConnectWithUs"),{email: req.user.emails[0].value});
-})
-
-app.get("/profile/:email",isLoggedIn,(req,res) => {
-  console.log(req.params.email)
-  res.render(path.join(__dirname,"..","ClientSide","profile"),{});
-})
-
-
-app.get("/coordinatorsList",isLoggedIn,(req,res) => {
-  readDB("Main", "Coordinators", {}).then((coordinators) => {
-      res.json(coordinators);
-    }).catch((err) => {
-      res.status(400).send("Cant' Read DB");
-    })
-})
-
-app.post("/announce",isCoordinator,(req,res) => {
-  res.send("successfully posted");
+  res.render(path.join(__dirname,"..","ClientSide","ConnectWithUs"),{page: "connectWithUs", emailTo: req.user.emails[0].value});
 })
 
 app.get('/logout',isLoggedIn, (req, res, next) => {
@@ -72,17 +46,3 @@ app.get('/logout',isLoggedIn, (req, res, next) => {
     });
   });
 });
-
-//to trigger google auth
-app.get("/auth/google", passport.authenticate('google', { scope: ['email', 'profile'], prompt: 'select_account' })); //route for google auth trigger
-
-//to handle the callback from google
-app.get("/auth/google/callback", passport.authenticate('google', {
-  successRedirect: "/home", //redirect to protected route if login successful
-  failureRedirect: "/auth/google/failure" //redirect to failure route if login fails
-}));
-
-app.get("/auth/google/failure", (req, res) => {
-  res.send("Failed to authenticate..");
-})
-
