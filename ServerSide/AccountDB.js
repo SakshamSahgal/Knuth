@@ -13,12 +13,7 @@ function captureAccount(profile) //function that checks if account already visit
                 givenName: profile.name.givenName,
                 familyName: profile.name.familyName,
                 photo: profile.photos[0].value,
-                codeforces_ID: "",
-                codechef_ID: "",
-                atcoderID: "",
-                leetcodeID: "",
                 designation: "Member",
-                visitCount : 1,
                 LastVisited : Date.now()
             }
 
@@ -42,11 +37,11 @@ function captureAccount(profile) //function that checks if account already visit
         }
         else {
             console.log("User Already " + profile.emails[0].value + " Exists in DB")
-            updateDB("Main", "Users", { "email": profile.emails[0].value }, { $inc: { visitCount: 1 }, $set: { LastVisited: Date.now() } }).then((result) => {
+            updateDB("Main", "Users", { "email": profile.emails[0].value }, { $set: { LastVisited: Date.now() } }).then((result) => {
                 //console.log(result);
-                console.log("User " + profile.emails[0].value + " updated in DB");
+                console.log("User activity of " + profile.emails[0].value + " updated in DB");
             }).catch((err) => {
-                    console.log("Can't Update Users DB to update User " + profile.emails[0].value);
+                    console.log("Can't Update Users DB to update User activity of " + profile.emails[0].value);
                     console.log(err);
             })
         }

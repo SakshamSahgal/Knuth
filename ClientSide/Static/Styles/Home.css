@@ -5,7 +5,8 @@
 }
 
 .event {
-  border: 2px solid #4CAF50; /* Green border */
+  border: 2px solid #4CAF50;
+  /* Green border */
   border-radius: 10px;
   padding: 20px;
   margin-bottom: 20px;
@@ -20,7 +21,8 @@
   position: absolute;
   width: 24px;
   height: 24px;
-  background-color: #4CAF50; /* Green marker */
+  background-color: #4CAF50;
+  /* Green marker */
   border-radius: 50%;
   top: 50%;
   left: -12px;
@@ -28,7 +30,8 @@
 }
 
 .event-content {
-  flex: 1; /* Allow the content to expand within the card */
+  flex: 1;
+  /* Allow the content to expand within the card */
 }
 
 .event-header {
@@ -39,23 +42,63 @@
 
 .event-title {
   font-size: 24px;
-  margin: 0; /* Remove margin for title */
+  margin: 0;
+  /* Remove margin for title */
+}
+
+.posted-by {
+  font-style: italic;
+  margin-right: 15px;
+  margin-bottom: 5px;
 }
 
 .delete-button {
-  background-color: #ff6b6b; /* Red background color */
-  color: #fff; /* White text color */
+  background-color: #ff6b6b;
+  /* Red background color */
+  color: #fff;
+  /* White text color */
   border: none;
   border-radius: 5px;
-  padding: 5px 10px; /* Adjust padding for button size */
+  padding: 2px 2px;
+  /* Adjust padding for button size */
   cursor: pointer;
   font-weight: bold;
-  align-self: flex-start; /* Move button to the left */
+  align-self: flex-start;
+  /* Move button to the left */
   display: flex;
   align-items: center;
+  margin-top: 1px;
+  /* Add margin to separate button from content */
 }
 
 .delete-icon {
-  font-size: 18px; /* Smaller font size for the bin icon */
-  margin-right: 5px;
+  font-size: 18px;
+  /* Smaller font size for the bin icon */
+  margin-right: 0px;
+}
+
+.posted-by {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+}
+
+/* Custom CSS for button width matching the timeline */
+#postEventButton {
+  width: 100%;
+  max-width: 800px;
+  display: block;
+  margin: 0 auto;
+  position: relative; /* Add position relative for icon overlay */
+  padding-left: 2rem; /* Add padding to create space for the icon */
+}
+
+/* Lock icon CSS */
+.lock-icon {
+  position: absolute;
+  left: 1rem; /* Adjust the left position to place the icon */
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px; /* Adjust the font size of the lock icon */
+  pointer-events: none; /* Prevent the icon from being clickable */
 }
