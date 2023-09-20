@@ -8,3 +8,11 @@ function Post() {
         console.log(err);
     })
 }
+
+function closeIt(id) {
+    document.getElementById(id).hidden = true;
+  }
+
+function openIt(id) {
+    document.getElementById(id).hidden = false;
+  }

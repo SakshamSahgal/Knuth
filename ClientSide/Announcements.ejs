@@ -6,16 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Announcements</title>
 </head>
+<link rel="stylesheet" href="/Styles/common.css">
     <link rel="stylesheet" href="/Styles/announcements.css">
 <body>
     
     <%- include('./ReusableComponents/navbar.ejs',{ activePage : page, email: emailTo }) %>
-       
-    <div class="container mt-4">
-        <div class="row justify-content-center"> <!-- Use 'justify-content-center' class to center cards -->
-            <div class="col-md-6">
+    
+    <div class="overlay-container" id="overlay" hidden>
+        
+        <button class="btn float-right" onclick="closeIt('overlay')" style=""> <span> &#10006; </span> </button>
 
-                <!-- <div class="card mb-3 feed-card">
+        <div class="container-fluid d-flex justify-content-center align-items-center vh-100">
+            <div class="col-lg-6 col-md-8 col-sm-10 col-12">
+                <div class="card mb-3">
                     <div class="feed-header bg-dark text-white">
                         <div class="d-flex align-items-center">
                             <a href="/profile/<%= emailTo %>" class="d-flex align-items-center profile-link">
@@ -26,45 +29,47 @@
                                 </div>
                             </a>
                         </div>
-                        <div class="post-warning">
-                            <p class="text-warning mb-0 mt-2 text-center"><small class="mx-auto">Only coordinators can
-                                    post here</small></p>
-                        </div>
                     </div>
                     <div class="feed-content p-3">
                         <textarea class="form-control mb-3 mt-2" rows="3" placeholder="Write your post here..."></textarea>
                         <button type="button" class="btn btn-primary btn-block" onclick="Post()">Post</button>
                     </div>
-                </div> -->
-                
+                </div>
+            </div>
+        </div>
+    </div>
 
-                <button type="button" class="btn btn-primary btn-block mb-3 <%= (coordinator == false) ? 'locked-button' : '' %>">
+    <div class="container mt-4">
+        <div class="row justify-content-center"> <!-- Use 'justify-content-center' class to center cards -->
+            <div class="col-md-6">               
+
+                <button type="button" class="btn btn-primary btn-block mb-3 <%= (coordinator == false) ? 'locked-button' : '' %>" onclick="openIt('overlay')">
                     <span class="<%= (coordinator == false) ? '' : 'lockIcon' %>">&#x1F512;</span> Post
                 </button>
 
                 <% for(var i=0;i<2;i++){%>
                 
-                <div class="card mb-3 feed-card">
-                    <div class="feed-header">
-                        <div class="d-flex align-items-center">
-                            <img src="https://source.unsplash.com/50x50/?cloud" class="rounded-circle mr-2"
-                                alt="User Profile" style="width: 40px; height: 40px;">
-                            <div>
-                                <p class="mb-0">User 1 &lt;user1@example.com&gt;</p>
-                                <small class="mb-0">August 29, 2023 at 10:30 AM</small>
+                    <div class="card mb-3 feed-card">
+                        <div class="feed-header">
+                            <div class="d-flex align-items-center">
+                                <img src="https://source.unsplash.com/50x50/?cloud" class="rounded-circle mr-2"
+                                    alt="User Profile" style="width: 40px; height: 40px;">
+                                <div>
+                                    <p class="mb-0">User 1 &lt;user1@example.com&gt;</p>
+                                    <small class="mb-0">August 29, 2023 at 10:30 AM</small>
+                                </div>
+                                <button class="btn ml-auto" onclick="deleteCard(this)"> <span> &#10006; </span> </button>
                             </div>
-                            <button class="btn ml-auto" onclick="deleteCard(this)"> <span> &#10006; </span> </button>
+                        </div>
+                        <div class="feed-content">
+                            <h5 class="card-title">Post Title 1</h5>
+                            <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias, temporibus
+                                in, repellendus, consequatur assumenda earum ad animi aperiam id fuga ex aut officia commodi
+                                est ea natus debitis fugit? Error quod perspiciatis minima, veniam nihil ipsam culpa, eum
+                                vel aut amet temporibus explicabo ab necessitatibus qui! Quo et, esse exercitationem
+                                architecto doloribus iusto molestias earum quidem voluptatum, obcaecati labore rem.</p>
                         </div>
                     </div>
-                    <div class="feed-content">
-                        <h5 class="card-title">Post Title 1</h5>
-                        <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias, temporibus
-                            in, repellendus, consequatur assumenda earum ad animi aperiam id fuga ex aut officia commodi
-                            est ea natus debitis fugit? Error quod perspiciatis minima, veniam nihil ipsam culpa, eum
-                            vel aut amet temporibus explicabo ab necessitatibus qui! Quo et, esse exercitationem
-                            architecto doloribus iusto molestias earum quidem voluptatum, obcaecati labore rem.</p>
-                    </div>
-                </div>
 
                 <%}%>
                 

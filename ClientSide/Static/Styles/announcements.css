@@ -32,10 +32,14 @@
 
 /* CSS class to add the lock icon and disable the button */
 .locked-button {
-    pointer-events: none; /* Disable pointer events to make the button unclickable */
-    opacity: 0.7; /* Reduce opacity to indicate it's disabled */
-  }
-  
-  .lockIcon{
-    opacity: 0; /* Reduce opacity to indicate it's disabled */
-  }
+    pointer-events: none;
+    /* Disable pointer events to make the button unclickable */
+    opacity: 0.7;
+    /* Reduce opacity to indicate it's disabled */
+}
+
+.lockIcon {
+    opacity: 0;
+    /* Reduce opacity to indicate it's disabled */
+}
+
