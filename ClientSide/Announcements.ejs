@@ -15,7 +15,7 @@
         <div class="row justify-content-center"> <!-- Use 'justify-content-center' class to center cards -->
             <div class="col-md-6">
 
-                <div class="card mb-3 feed-card">
+                <!-- <div class="card mb-3 feed-card">
                     <div class="feed-header bg-dark text-white">
                         <div class="d-flex align-items-center">
                             <a href="/profile/<%= emailTo %>" class="d-flex align-items-center profile-link">
@@ -35,11 +35,14 @@
                         <textarea class="form-control mb-3 mt-2" rows="3" placeholder="Write your post here..."></textarea>
                         <button type="button" class="btn btn-primary btn-block" onclick="Post()">Post</button>
                     </div>
-                </div>
+                </div> -->
                 
 
+                <button type="button" class="btn btn-primary btn-block mb-3 <%= (coordinator == false) ? 'locked-button' : '' %>">
+                    <span class="<%= (coordinator == false) ? '' : 'lockIcon' %>">&#x1F512;</span> Post
+                </button>
 
-                <% for(var i=0;i<0;i++){%>
+                <% for(var i=0;i<2;i++){%>
                 
                 <div class="card mb-3 feed-card">
                     <div class="feed-header">
@@ -50,7 +53,7 @@
                                 <p class="mb-0">User 1 &lt;user1@example.com&gt;</p>
                                 <small class="mb-0">August 29, 2023 at 10:30 AM</small>
                             </div>
-                            <button class="btn btn-danger ml-auto" onclick="deleteCard(this)">Delete</button>
+                            <button class="btn ml-auto" onclick="deleteCard(this)"> <span> &#10006; </span> </button>
                         </div>
                     </div>
                     <div class="feed-content">
