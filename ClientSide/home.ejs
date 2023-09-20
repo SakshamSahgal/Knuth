@@ -17,8 +17,8 @@
   <div class="container mt-5">
     <!-- Button Above the Timeline -->
     <div class="mb-3">
-      <button id="postEventButton" class="btn btn-primary btn-block" disabled>
-        <span class="lock-icon">&#x1F512;</span> Post Event
+      <button id="postEventButton" class="btn btn-primary btn-block <%= (coordinator == false) ? 'locked-button' : '' %> ">
+        <span class="<%= (coordinator == false) ? '' : 'lockIcon' %>">&#x1F512;</span> Post Event
       </button>
     </div>
     
