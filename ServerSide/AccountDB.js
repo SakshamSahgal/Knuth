@@ -37,8 +37,7 @@ function captureAccount(profile) //function that checks if account already visit
         }
         else {
             console.log("User Already " + profile.emails[0].value + " Exists in DB")
-            updateDB("Main", "Users", { "email": profile.emails[0].value }, { $set: { LastVisited: Date.now() } }).then((result) => {
-                //console.log(result);
+            updateDB("Main", "Users", { "email": profile.emails[0].value }, { $set: { LastVisited: Date.now() } }).then((result) => { //if it is present then just update the lastvisited in DB
                 console.log("User activity of " + profile.emails[0].value + " updated in DB");
             }).catch((err) => {
                     console.log("Can't Update Users DB to update User activity of " + profile.emails[0].value);

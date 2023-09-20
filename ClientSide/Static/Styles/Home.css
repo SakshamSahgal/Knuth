@@ -93,12 +93,12 @@
   padding-left: 2rem; /* Add padding to create space for the icon */
 }
 
-/* Lock icon CSS */
-.lock-icon {
-  position: absolute;
-  left: 1rem; /* Adjust the left position to place the icon */
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 20px; /* Adjust the font size of the lock icon */
-  pointer-events: none; /* Prevent the icon from being clickable */
+/* CSS class to add the lock icon and disable the button */
+.locked-button {
+  pointer-events: none; /* Disable pointer events to make the button unclickable */
+  opacity: 0.7; /* Reduce opacity to indicate it's disabled */
+}
+
+.lockIcon{
+  opacity: 0; /* Reduce opacity to indicate it's disabled */
 }
