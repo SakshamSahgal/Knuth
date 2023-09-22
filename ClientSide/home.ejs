@@ -8,6 +8,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Home</title>
 </head>
+
+
 <link rel="stylesheet" href="/Styles/Home.css">
 
 <body>
@@ -26,33 +28,88 @@
     <div class="timeline">
       <% for(var i=0;i<events.length;i++) { %>
       <!-- Event Item 1 -->
-      <div class="event">
-        <div class="event-header">
-          <!-- Event Title -->
-          <h5 class="event-title">
-            <a href="<%= events[i].eventLink %>" target="_blank"><%= events[i].eventName %></a>
-          </h5>
-          <!-- Delete Button with Generic Bin Icon -->
-          <button class="btn">
-            <span> &#10006; </span> </button>
+      
+      <!-- <div class="event-card">
+        <div class="event-card-header">
+            <h5 class="event-title">
+                <a href="<%= events[i].eventLink %>" target="_blank"><%= events[i].eventName %></a>
+            </h5>
+            <button class="delete-btn">
+                <span>&#10006;</span>
+            </button>
         </div>
-        <div class="event-content">
-          <span class="badge badge-primary">Date: <%= events[i].eventDate %></span>
-          <p><%= events[i].eventDescription %></p>
-          <p><b><%= (events[i].winners.length) ? "Winners : " : "" %></b></p>
-          <ul>
-            <% for(var j=0;j<events[i].winners.length; j++){ %>
-              <% for(const key in events[i].winners[j]) { %>
-              <li><%= key %>: <%= events[i].winners[j][key] %></li>
-              <% } %>
+        <div class="event-card-content">
+            <p class="event-description"><%= events[i].eventDescription %></p>
+            <% if (events[i].winners.length) { %>
+            <div class="winners-section">
+                <h6><strong>Winners:</strong></h6>
+                <ul class="winners-list">
+                    <% for (var j = 0; j < events[i].winners.length; j++) { %>
+                      <% for (const key in events[i].winners[j]) { %>
+                      <li><strong><%= key %>:</strong> <%= events[i].winners[j][key] %></li>
+                      <% } %>
+                    <% } %>
+                </ul>
+            </div>
             <% } %>
-          </ul>
-          <!-- Posted by -->
-          <div class="posted-by badge badge-secondary">
-            Posted by: <%= events[i].postedBy %>
+        </div>
+        <div class="event-card-footer">
+            <div class="footer-info">
+                <span class="badge badge-primary">Date:</span> <%= events[i].eventDate %>
+                <span class="badge badge-secondary">Posted by:</span> <%= events[i].postedBy %>
+            </div>
+        </div>
+    </div> -->
+    <div class="card">
+      <!-- Header with Color -->
+      <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center event-header">
+        <h5 class="card-title"><a href="<%= events[i].eventLink %>" class="linkCSS" target="_blank"><%= events[i].eventName %></a></h5>
+        <button class="btn ml-auto" onclick="deleteCard(this)"><span> &#10006; </span></button>
+      </div>
+      
+      <!-- Event Description -->
+      <div class="card-body">
+        <p class="card-text"><%= events[i].eventDescription %></p>
+        <!-- Photos Section -->
+        <div class="photos-section">
+          <h6><strong>Photos:</strong></h6>
+          <div class="row">
+            <div class="col-md-4">
+              <img src="https://source.unsplash.com/770x590/?cloud" alt="Photo 1" class="img-fluid">
+            </div>
+            <div class="col-md-4">
+              <img src="https://source.unsplash.com/700x500/?cloud" alt="Photo 2" class="img-fluid">
+            </div>
+            <div class="col-md-4">
+              <img src="https://source.unsplash.com/50x509/?cloud" alt="Photo 3" class="img-fluid">
+            </div>
+            <!-- Add more photos as needed -->
           </div>
         </div>
+        
+        <% if (events[i].winners.length) { %>
+          <div class="winners-section mt-4">
+            <h6><strong>Winners:</strong></h6>
+            <ul class="winners-list">
+              <% for (var j = 0; j < events[i].winners.length; j++) { %>
+                <% for (const key in events[i].winners[j]) { %>
+                  <li><strong><%= key %> :</strong> <%= events[i].winners[j][key] %></li>
+                <% } %>
+              <% } %>
+            </ul>
+          </div>
+        <% } %>
       </div>
+      
+      <!-- Footer -->
+      <div class="card-footer text-muted d-flex justify-content-between">
+        <small>Event Date: September 21, 2023</small>
+        <small>Posted by: John Doe</small>
+      </div>
+    </div>
+    
+    <br>
+    
       <% } %>
     </div>
   </div>
