@@ -4,7 +4,7 @@ const multer = require("multer");
     const storageEngine = multer.diskStorage({ //setting up multer storage engine
         destination: 'uploads/',
         filename: (req, file, cb) => {
-            cb(null, '-' + Date.now() + '-' + file.originalname ); //naming each file with the current date (we append original name at end to automatically add the file extension)
+            cb(null, '_' + Date.now() + '_' + file.originalname ); //naming each file with the current date (we append original name at end to automatically add the file extension)
         }
     })
 
