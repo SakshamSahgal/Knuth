@@ -102,3 +102,16 @@
 .lockIcon{
   opacity: 0; /* Reduce opacity to indicate it's disabled */
 }
+
+.event-header {
+  background-color: #212529;
+  color: white;
+  padding: 10px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.linkCSS{
+  color: inherit;
+  text-decoration: none;
+}

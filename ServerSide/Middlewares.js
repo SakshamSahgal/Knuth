@@ -2,7 +2,7 @@ const {writeDB,readDB,updateDB,deleteDB} = require("./MongoOperations.js"); //in
 
 function isLoggedIn(req, res, next) { //Middleware to check if user is logged in
     if (req.user) //check if user is authenticated
-      return next();
+       next();
     else
       res.redirect("/"); //if not authenticated, redirect to login page
   }
@@ -14,10 +14,10 @@ function isCoordinator(req,res,next) { //middleware to check if currently logged
               if(coordinators.length > 0)
                   next();
               else
-                  res.send("you are not coordinator");
+                  return res.send("you are not coordinator");
           }).catch((err) => {
               console.log("Cant' Read DB");
-              res.status(400).send("Cant' Read DB");
+              return res.send("Cant' Read DB");
           })
   }
   else
@@ -28,7 +28,7 @@ function redirectIfLoggedIn(req, res, next) { //Middleware to check if user is l
   if (req.user) //check if user is authenticated
     return res.redirect("/home"); //redirect to homepage
   else
-    return next(); //if not authenticated, redirect to login page
+    next(); //if not authenticated, redirect to login page
 }
 
 
