@@ -10,9 +10,9 @@ module.exports = (app) => {
     const { upload, multerErrorHandling, TypeCheck } = require("./UploadImage/multer.js");
     const { uploadFile } = require("./UploadImage/imgur.js");
 
-    app.get("/announcements", isLoggedIn, (req, res) => {
+    app.get("/announcements", isLoggedIn, async (req, res) => {
 
-        readDB("Main", "Coordinators", { "list.gmail": req.user.emails[0].value }).then((coordinators) => { //querrying DB to check if the email of the logged in user is present in the coordinators list
+        readDB("Main", "Coordinators", { "list.gmail": req.user.emails[0].value }).then( async (coordinators) => { //querrying DB to check if the email of the logged in user is present in the coordinators list
 
             let templateJson = {
                 fileLimit: parseInt(process.env.ImageUploadLimit),
@@ -20,12 +20,13 @@ module.exports = (app) => {
                 page: "announcements", emailTo: req.user.emails[0].value,
                 username: req.user.displayName,
                 profilePicture: req.user.photos[0].value,
-                coordinator: (coordinators.length > 0)
+                coordinator: (coordinators.length > 0),
+                announcements : await readDB("Main", "Announcements", {})
             }
 
             res.render(path.join(__dirname, "..", "ClientSide", "Announcements"), templateJson);//sending the user data to the frontend
 
-        }).catch((err) => {
+        }).catch(async (err) => {
 
             let templateJson = {
                 fileLimit: parseInt(process.env.ImageUploadLimit),
@@ -33,7 +34,8 @@ module.exports = (app) => {
                 page: "announcements", emailTo: req.user.emails[0].value,
                 username: req.user.displayName,
                 profilePicture: req.user.photos[0].value,
-                coordinator: false
+                coordinator: false,
+                Announcements : await readDB("Main", "Announcements", {})
             }
 
             res.render(path.join(__dirname, "..", "ClientSide", "Announcements"), templateJson);//sending the user data to the frontend
@@ -56,6 +58,12 @@ module.exports = (app) => {
             title: req.body.title,
             description: req.body.post,
             images: [],
+            userPosted : {
+                name : req.user.displayName,
+                email : req.user.emails[0].value,
+                profilePicture: req.user.photos[0].value
+            },
+            postedOn: new Date().toLocaleString(),
         }
 
         for (let file of req.files) {
@@ -63,7 +71,7 @@ module.exports = (app) => {
             Announcement.images.push(uploadedImgdata);
         }
 
-        console.log(Announcement)
+        //console.log(Announcement)
 
         //writing to DB to store the announcement posted
         writeDB("Main", "Announcements", Announcement).then((result) => {

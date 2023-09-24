@@ -6,9 +6,6 @@ const path = require('path');
 
 async function uploadFile(localPath) {
 
-
-    console.log("local path = ", localPath);
-
     try {
         const json = await imgur.uploadFile(localPath); // Upload an image to Imgur asynchronously
 
