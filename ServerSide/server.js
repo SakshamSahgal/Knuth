@@ -38,11 +38,3 @@ app.get("/ConnectWithUs",isLoggedIn,(req,res) => {
   res.render(path.join(__dirname,"..","ClientSide","ConnectWithUs"),{page: "connectWithUs", emailTo: req.user.emails[0].value});
 })
 
-app.get('/logout',isLoggedIn, (req, res, next) => {
-  res.clearCookie('connect.sid');
-  req.logout(function (err) {
-    req.session.destroy(function (err) { // destroys the session
-      res.redirect("/");
-    });
-  });
-});

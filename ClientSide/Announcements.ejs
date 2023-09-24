@@ -63,7 +63,7 @@
                     <div class="card mb-3 feed-card">
                         <div class="feed-header">
                             <div class="d-flex align-items-center">
-                                <a href="/profile/<%= emailTo %>" class="d-flex align-items-center profile-link">
+                                <a href="/profile/<%= announcements[i].userPosted.email %>" class="d-flex align-items-center profile-link">
                                 <img src="<%=announcements[i].userPosted.profilePicture%>" class="rounded-circle mr-2" alt="User Profile" style="width: 40px; height: 40px;">
                                     <div>
                                         <p class="mb-0" style="font-size: 12px;"><%=announcements[i].userPosted.name%></p>
