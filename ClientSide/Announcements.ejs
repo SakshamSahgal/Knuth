@@ -12,6 +12,14 @@
     
     <%- include('./ReusableComponents/navbar.ejs',{ activePage : page, email: emailTo }) %>
     
+
+    <div class="loadOverlayContainer" id="loadOverlay" hidden> 
+        <!-- You can customize the spinner size and color -->
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
     <div class="overlay-container" id="overlay" hidden>
         
         <button class="btn float-right" onclick="closeIt('overlay')"> <span> &#10006; </span> </button>

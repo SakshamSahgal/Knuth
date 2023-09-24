@@ -11,7 +11,7 @@ async function uploadFile(localPath) {
         const json = await imgur.uploadFile(localPath); // Upload an image to Imgur asynchronously
 
         console.log(`Image ${localPath} uploaded successfully!`);
-        console.log(json);
+        //console.log(json);
 
         fs.unlinkSync(localPath); // Deleting the file from the server
 
