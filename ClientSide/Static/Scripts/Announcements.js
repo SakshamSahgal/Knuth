@@ -1,34 +1,18 @@
 
-//making a put request with axios
 
+// close overly
 function closeIt(id) {
   document.getElementById(id).hidden = true;
 }
 
+//open overlay
 function openIt(id) {
   document.getElementById(id).hidden = false;
 }
 
-// Function to handle form submission
-function handleSubmit(event) {
-  event.preventDefault();
-  const form = document.getElementById('myForm'); // Select form by its id
-  const formData = new FormData(form);
 
-  axios.post('/PostAnnouncements', formData)
-    .then(response => {
-      console.log('Response:', response.data);
-      // Handle success here
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      // Handle errors here
-    });
-}
-
-
-// Add event listener to the form
-const form = document.getElementById('myForm'); // Select form by its id
+//function to handle the form submission
+const form = document.getElementById('myForm'); 
 form.addEventListener('submit', (e) => {
 
   e.preventDefault(); //preventing form refresh
@@ -39,10 +23,22 @@ form.addEventListener('submit', (e) => {
 
     alert(response.data);
     closeIt('overlay')
-
+    window.location.reload();
   })
     .catch((err) => {
       console.log(err);
     });
 
 });
+
+//function to delete the announcement
+function deleteCard(id) {
+
+  axios.delete(`/DeleteAnnouncement/${id}`).then((response) => {
+    alert(response.data);
+    window.location.reload();
+  }).catch((err) => {
+    console.log(err);
+  })
+
+}

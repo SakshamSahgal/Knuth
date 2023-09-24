@@ -70,7 +70,9 @@
                                         <p class="mb-0" style="font-size: 12px;"><%=announcements[i].userPosted.email%></p>
                                     </div>
                                 </a>
-                                <button class="btn ml-auto" onclick="deleteCard(this)" id="<%=announcements[i]._id%>"> <span> &#10006; </span> </button>
+                                <% if(emailTo == announcements[i].userPosted.email) { %>
+                                    <button class="btn ml-auto" onclick="deleteCard('<%=announcements[i].id%>')" id="<%=announcements[i].id%>"> <span> &#10006; </span> </button>
+                                <% } %>
                             </div>
                         </div>
                         <div class="feed-content">

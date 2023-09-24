@@ -2,26 +2,28 @@
 
 module.exports = (app) => {
 
-    const { readDB, writeDB } = require("./MongoOperations");
+    const { writeDB, readDB, deleteDB } = require("./MongoOperations");
     const { isLoggedIn, isCoordinator } = require("./Middlewares.js");
     const path = require("path");
     const fs = require('fs');
     require("dotenv").config();
     const { upload, multerErrorHandling, TypeCheck } = require("./UploadImage/multer.js");
-    const { uploadFile } = require("./UploadImage/imgur.js");
+    const { uploadFile, deleteImageFromImgur } = require("./UploadImage/imgur.js");
+    
 
     app.get("/announcements", isLoggedIn, async (req, res) => {
 
-        readDB("Main", "Coordinators", { "list.gmail": req.user.emails[0].value }).then( async (coordinators) => { //querrying DB to check if the email of the logged in user is present in the coordinators list
+        readDB("Main", "Coordinators", { "list.gmail": req.user.emails[0].value }).then(async (coordinators) => { //querrying DB to check if the email of the logged in user is present in the coordinators list
 
             let templateJson = {
                 fileLimit: parseInt(process.env.ImageUploadLimit),
                 fileSize: parseInt(process.env.ImageSizeLimitInBytes) / (1024 * 1024),
-                page: "announcements", emailTo: req.user.emails[0].value,
+                page: "announcements",
+                emailTo: req.user.emails[0].value,
                 username: req.user.displayName,
                 profilePicture: req.user.photos[0].value,
                 coordinator: (coordinators.length > 0),
-                announcements : await readDB("Main", "Announcements", {})
+                announcements: await readDB("Main", "Announcements", {})
             }
 
             res.render(path.join(__dirname, "..", "ClientSide", "Announcements"), templateJson);//sending the user data to the frontend
@@ -35,7 +37,7 @@ module.exports = (app) => {
                 username: req.user.displayName,
                 profilePicture: req.user.photos[0].value,
                 coordinator: false,
-                Announcements : await readDB("Main", "Announcements", {})
+                Announcements: await readDB("Main", "Announcements", {})
             }
 
             res.render(path.join(__dirname, "..", "ClientSide", "Announcements"), templateJson);//sending the user data to the frontend
@@ -55,12 +57,13 @@ module.exports = (app) => {
     app.post("/PostAnnouncements", isLoggedIn, isCoordinator, upload.array("images", parseInt(process.env.ImageUploadLimit)), multerErrorHandling, TypeCheck, async (req, res) => {
 
         let Announcement = {
+            id : Date.now(),
             title: req.body.title,
             description: req.body.post,
             images: [],
-            userPosted : {
-                name : req.user.displayName,
-                email : req.user.emails[0].value,
+            userPosted: {
+                name: req.user.displayName,
+                email: req.user.emails[0].value,
                 profilePicture: req.user.photos[0].value
             },
             postedOn: new Date().toLocaleString(),
@@ -71,11 +74,10 @@ module.exports = (app) => {
             Announcement.images.push(uploadedImgdata);
         }
 
-        //console.log(Announcement)
+
 
         //writing to DB to store the announcement posted
         writeDB("Main", "Announcements", Announcement).then((result) => {
-            // console.log(result)
             res.send("Announcement Posted")
         }).catch((err) => {
             console.log("Can't Write to Announcements ");
@@ -83,4 +85,36 @@ module.exports = (app) => {
             res.send("Can't post Announcements, DB error");
         })
     })
-};
+
+    //delete announcement route , takes post id , deletes the images from igmur and then deletes the post from DB
+
+    app.delete("/DeleteAnnouncement/:id", isLoggedIn, isCoordinator, (req, res) => {
+
+        readDB("Main", "Announcements", { "id": parseInt(req.params.id) }).then(async (found) => { //finding if the announcement exists 
+
+            if (found.length > 0) { //announcement found
+
+                if (found[0].userPosted.email == req.user.emails[0].value) { //this Announcement was posted by this user only
+
+                    for (let image of found[0].images)  //deleting the images from imgur
+                        await deleteImageFromImgur(image.deletehash, process.env.imgurClientID);
+
+                    deleteDB("Main", "Announcements", { "id": parseInt(req.params.id) }).then((result) => { //deleting the announcement from DB
+                        res.send("Announcement Deleted successfully")
+                    })
+                    .catch((err) => {
+                        console.log("Can't Delete from Announcements ");
+                        console.log(err);
+                        res.send("Can't Delete Announcements, DB error");
+                    })
+                }
+                else
+                    res.status(400).send("You can't delete this announcement because it was not posted by you");
+            }
+            else
+                res.status(400).send("Announcement Doesn't Exist");
+
+        })
+
+    })
+}
