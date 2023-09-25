@@ -7,13 +7,13 @@ passport.use(new GoogleStrategy({
   clientSecret: process.env.CLIENT_SECRET,
   callbackURL: "http://localhost:3000/auth/google/callback"
 }, (accessToken, refreshToken, profile, done) => {
-  console.log("called 1");
+  // console.log("called 1");
   captureAccount(profile); //function that checks if account already visited the site, if not, adds it to the DB
   return done(null, profile);
 }));
 
 passport.serializeUser((user, done) => { //To determine what data should be stored in the session. 
-  console.log("called 2");
+  // console.log("called 2");
   done(null, user);
 });
 

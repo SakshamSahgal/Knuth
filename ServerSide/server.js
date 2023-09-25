@@ -23,6 +23,7 @@ require("./CoordinatorRoutes.js")(app); //requiring the CoordinatorRoutes.js fil
 require("./ProfileRoutes.js")(app); //requiring the ProfileRoutes.js file (for the profile page routes)
 require("./AnnouncementRoutes.js")(app); //requiring the AnnouncementRoutes.js file (for the announcement page routes)
 require("./HomeRoutes.js")(app); //requiring the HomeRoutes.js file (for the home page routes)
+require("./connectWithUsRoutes.js")(app) //requiring the connectWithUsRoutes.js file (for the connectWithUs page routes)
 
 app.listen(port, () => {  
     console.log("Server Started at port " + process.env.DEV_PORT);    
@@ -34,7 +35,4 @@ app.get("/",redirectIfLoggedIn, (req, res) => { //unprotected route
 
 
 
-app.get("/ConnectWithUs",isLoggedIn,(req,res) => {
-  res.render(path.join(__dirname,"..","ClientSide","ConnectWithUs"),{page: "connectWithUs", emailTo: req.user.emails[0].value});
-})
 
