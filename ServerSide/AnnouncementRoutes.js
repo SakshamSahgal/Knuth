@@ -2,6 +2,7 @@
 
 module.exports = (app) => {
 
+    crypto = require('crypto');
     const { writeDB, readDB, deleteDB } = require("./MongoOperations");
     const { isLoggedIn, isCoordinator } = require("./Middlewares.js");
     const path = require("path");
@@ -9,7 +10,7 @@ module.exports = (app) => {
     require("dotenv").config();
     const { upload, multerErrorHandling, TypeCheck } = require("./UploadImage/multer.js");
     const { uploadFile, deleteImageFromImgur } = require("./UploadImage/imgur.js");
-    
+    const {FieldLengthCheck} = require("./UploadImage/FormMidddlewares.js")
 
     app.get("/announcements", isLoggedIn, async (req, res) => {
 
@@ -33,7 +34,8 @@ module.exports = (app) => {
             let templateJson = {
                 fileLimit: parseInt(process.env.ImageUploadLimit),
                 fileSize: parseInt(process.env.ImageSizeLimitInBytes) / (1024 * 1024),
-                page: "announcements", emailTo: req.user.emails[0].value,
+                page: "announcements", 
+                emailTo: req.user.emails[0].value,
                 username: req.user.displayName,
                 profilePicture: req.user.photos[0].value,
                 coordinator: false,
@@ -52,12 +54,12 @@ module.exports = (app) => {
     //upload.array("images", parseInt(process.env.ImageUploadLimit)) : multer middleware to upload the images
     //multerErrorHandling : to check if there are any errors in image upload like file size limit exceeded, or file limit exceeded
     //TypeCheck : to check if the uploaded files are of supported type
+    //FieldLengthCheck : to check if the title and post fields are not empty and are of valid length
 
-
-    app.post("/PostAnnouncements", isLoggedIn, isCoordinator, upload.array("images", parseInt(process.env.ImageUploadLimit)), multerErrorHandling, TypeCheck, async (req, res) => {
+    app.post("/PostAnnouncements", isLoggedIn, isCoordinator, upload.array("images", parseInt(process.env.ImageUploadLimit)), multerErrorHandling, TypeCheck, FieldLengthCheck, async (req, res) => {
 
         let Announcement = {
-            id : Date.now(),
+            id : crypto.randomUUID(),
             title: req.body.title,
             description: req.body.post,
             images: [],
@@ -90,7 +92,9 @@ module.exports = (app) => {
 
     app.delete("/DeleteAnnouncement/:id", isLoggedIn, isCoordinator, (req, res) => {
 
-        readDB("Main", "Announcements", { "id": parseInt(req.params.id) }).then(async (found) => { //finding if the announcement exists 
+        readDB("Main", "Announcements", { "id": (req.params.id).toString() }).then(async (found) => { //finding if the announcement exists 
+
+            console.log(found);
 
             if (found.length > 0) { //announcement found
 
@@ -99,7 +103,7 @@ module.exports = (app) => {
                     for (let image of found[0].images)  //deleting the images from imgur
                         await deleteImageFromImgur(image.deletehash, process.env.imgurClientID);
 
-                    deleteDB("Main", "Announcements", { "id": parseInt(req.params.id) }).then((result) => { //deleting the announcement from DB
+                    deleteDB("Main", "Announcements", { "id": (req.params.id).toString() }).then((result) => { //deleting the announcement from DB
                         res.send("Announcement Deleted successfully")
                     })
                     .catch((err) => {
