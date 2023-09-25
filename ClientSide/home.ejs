@@ -83,32 +83,32 @@
               
             </div>
 
-
-            <div id="carouselExampleIndicators<%=i%>" class="carousel slide imageCarousel" data-ride="carousel">
-              <ol class="carousel-indicators">
-                  <% for(var j=0; j < events[i].images.length ; j++ ) { %>
-                      <li data-target="#carouselExampleIndicators<%=i%>" data-slide-to="<%=j%>" class=" <%= (j == 0) ? 'active' : ''  %>"></li>
-                  <% } %>
-              </ol>
-              <div class="carousel-inner">
-                  <% for(var j=0; j < events[i].images.length ; j++ ) { %>
-                      
-                      <div class="carousel-item <%= (j == 0) ? 'active' : '' %>">
-                        <img class="d-block w-100" src="<%=events[i].images[j].link%>">
-                      </div>
-                      
-                  <% } %>
+            <% if(events[i].images.length != 0) { %>
+              <div id="carouselExampleIndicators<%=i%>" class="carousel slide imageCarousel" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    <% for(var j=0; j < events[i].images.length ; j++ ) { %>
+                        <li data-target="#carouselExampleIndicators<%=i%>" data-slide-to="<%=j%>" class=" <%= (j == 0) ? 'active' : ''  %>"></li>
+                    <% } %>
+                </ol>
+                <div class="carousel-inner">
+                    <% for(var j=0; j < events[i].images.length ; j++ ) { %>
+                        
+                        <div class="carousel-item <%= (j == 0) ? 'active' : '' %>">
+                          <img class="d-block w-100" src="<%=events[i].images[j].link%>">
+                        </div>
+                        
+                    <% } %>
+                </div>
+                <a class="carousel-control-prev" href="#carouselExampleIndicators<%=i%>" role="button" data-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleIndicators<%=i%>" role="button" data-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Next</span>
+                </a>
               </div>
-              <a class="carousel-control-prev" href="#carouselExampleIndicators<%=i%>" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-              </a>
-              <a class="carousel-control-next" href="#carouselExampleIndicators<%=i%>" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-              </a>
-            </div>
-            
+            <% } %>
             <!-- Footer -->
             <div class="card-footer text-muted d-flex justify-content-between">
               <small style="font-size: 11px;"><%= events[i].postedOn %></small>

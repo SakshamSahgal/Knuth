@@ -89,7 +89,8 @@
                             <h5 class="card-title"><%=announcements[i].title%></h5>
                             <pre class="card-text" style="white-space: pre-wrap;"><%=announcements[i].description%></pre>
                         </div>
-                       
+                        
+                        <% if(announcements[i].images.length != 0) { %>
                         <div id="carouselExampleIndicators<%=i%>" class="carousel slide imageCarousel" data-ride="carousel">
                             <ol class="carousel-indicators">
                                 <% for(var j=0; j < announcements[i].images.length ; j++ ) { %>
@@ -113,8 +114,8 @@
                               <span class="carousel-control-next-icon" aria-hidden="true"></span>
                               <span class="sr-only">Next</span>
                             </a>
-                          </div>
-
+                        </div>
+                        <% } %>
                         <!-- Card Footer -->
                         <div class="card-footer">
                             <!-- Add your footer content here -->
