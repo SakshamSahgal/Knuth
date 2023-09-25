@@ -73,7 +73,7 @@
             <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center event-header">
               <h5 class="card-title"><a href="<%= events[i].titleLink %>" class="linkCSS" target="_blank"><%= events[i].title %></a></h5>
               <% if(emailTo == events[i].userPosted.email) { %>
-                <button class="btn ml-auto" onclick="deleteCard('<%=events[i].id%>')"><span> &#10006; </span></button>
+                <button class="btn ml-auto" onclick="deleteCard('<%=events[i].id%>')" style="background-color: #3c4349"><span> &#10006; </span></button>
               <% } %>
             </div>
             
