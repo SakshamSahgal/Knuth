@@ -11,7 +11,7 @@ const multer = require("multer");
     const upload = multer({ //middleware to upload files
         storage: storageEngine,
         limits: {
-            fileSize: parseInt(process.env.ImageSizeLimitInBytes) , //setting up file size limit to 1MB
+            fileSize: parseInt(process.env.ImageSizeLimitInBytes) , //setting up file size limit to xMB
             files: parseInt(process.env.ImageUploadLimit)
         },
     })

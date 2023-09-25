@@ -1,16 +1,15 @@
-
-
 // close overly
 function closeIt(id) {
-  document.getElementById(id).hidden = true;
-}
+    document.getElementById(id).hidden = true;
+  }
+  
+  //open overlay
+  function openIt(id) {
+    document.getElementById(id).hidden = false;
+  }
+  
 
-//open overlay
-function openIt(id) {
-  document.getElementById(id).hidden = false;
-}
-
-
+  
 //function to handle the form submission
 const form = document.getElementById('myForm'); 
 form.addEventListener('submit', (e) => {
@@ -21,7 +20,7 @@ form.addEventListener('submit', (e) => {
 
   openIt('loadOverlay') //revealing the loadOverlay
 
-  axios.post("/PostAnnouncements", formData).then((response) => {
+  axios.post("/postEvent", formData).then((response) => {
 
     closeIt('loadOverlay') //removing the loadOverlay
     alert(response.data);
@@ -34,12 +33,12 @@ form.addEventListener('submit', (e) => {
 
 });
 
-//function to delete the announcement
+//function to delete the Event
 function deleteCard(id) {
   
   openIt('loadOverlay') //revealing the loadOverlay
 
-  axios.delete(`/DeleteAnnouncement/${id}`).then((response) => {
+  axios.delete(`/DeleteEvent/${id}`).then((response) => {
 
     closeIt('loadOverlay') //removing the loadOverlay
     alert(response.data);

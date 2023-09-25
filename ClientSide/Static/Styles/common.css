@@ -32,3 +32,18 @@
     background-color: rgba(7, 7, 7, 0.55); /* Black w/opacity */
     backdrop-filter: blur(6px);
 }
+
+.loadOverlayContainer {
+    height: 100%;
+    width: 100%;
+    z-index: 10;
+    position: fixed; /* Stay in place */
+    left: 0;
+    top: 0;
+    background-color: rgba(7, 7, 7, 0.55); /* Black w/opacity */
+    backdrop-filter: blur(6px);
+    display: flex;
+    justify-content: center; /* Horizontally center */
+    align-items: center; /* Vertically center */
+    height: 100vh; /* Make the container full height of the viewport */
+}

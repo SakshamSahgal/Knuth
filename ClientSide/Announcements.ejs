@@ -6,12 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Announcements</title>
 </head>
-<link rel="stylesheet" href="/Styles/common.css">
+    <link rel="stylesheet" href="/Styles/common.css">
     <link rel="stylesheet" href="/Styles/announcements.css">
 <body>
     
     <%- include('./ReusableComponents/navbar.ejs',{ activePage : page, email: emailTo }) %>
     
+
+    <div class="loadOverlayContainer" id="loadOverlay" hidden> 
+        <!-- You can customize the spinner size and color -->
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
     <div class="overlay-container" id="overlay" hidden>
         
         <button class="btn float-right" onclick="closeIt('overlay')"> <span> &#10006; </span> </button>
@@ -54,8 +62,10 @@
             <div class="col-md-6">               
 
                 <!-- post event button -->
-                <button type="button" class="btn btn-primary btn-block mb-3 <%= (coordinator == false) ? 'locked-button' : '' %>" onclick="openIt('overlay')">
-                    <span class="<%= (coordinator == false) ? '' : 'lockIcon' %>">&#x1F512;</span> Post
+                <button type="button" class="btn btn-primary btn-block mb-3" <%= (coordinator == false) ? 'disabled' : '' %> onclick="openIt('overlay')">
+                    
+                    <% if(coordinator == false){ %> <span>&#x1F512;</span>  <% } %> Post
+                        
                 </button>
 
                 <% for(var i=0;i<announcements.length ;i++){%>
@@ -70,12 +80,14 @@
                                         <p class="mb-0" style="font-size: 12px;"><%=announcements[i].userPosted.email%></p>
                                     </div>
                                 </a>
-                                <button class="btn ml-auto" onclick="deleteCard(this)" id="<%=announcements[i]._id%>"> <span> &#10006; </span> </button>
+                                <% if(emailTo == announcements[i].userPosted.email) { %>
+                                    <button class="btn ml-auto" onclick="deleteCard('<%=announcements[i].id%>')" id="<%=announcements[i].id%>"> <span> &#10006; </span> </button>
+                                <% } %>
                             </div>
                         </div>
                         <div class="feed-content">
                             <h5 class="card-title"><%=announcements[i].title%></h5>
-                            <p class="card-text"><%=announcements[i].description%></p>
+                            <pre class="card-text" style="white-space: pre-wrap;"><%=announcements[i].description%></pre>
                         </div>
                        
                         <div id="carouselExampleIndicators<%=i%>" class="carousel slide imageCarousel" data-ride="carousel">
