@@ -18,8 +18,6 @@ passport.serializeUser((user, done) => { //To determine what data should be stor
 });
 
 passport.deserializeUser((user, done) => { //to retrive full user data based on the stored identifier
-  console.log("called 3");
-  // console.log(user);
   done(null, user);
 });
 

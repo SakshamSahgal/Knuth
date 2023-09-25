@@ -9,8 +9,6 @@
   <title>HOME</title>
 </head>
 
-
-
   <body>
 
     <link rel="stylesheet" href="/Styles/Home.css">
@@ -74,12 +72,14 @@
             <!-- Header with Color -->
             <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center event-header">
               <h5 class="card-title"><a href="<%= events[i].titleLink %>" class="linkCSS" target="_blank"><%= events[i].title %></a></h5>
-              <button class="btn ml-auto" onclick="deleteCard('<%=events[i].id%>')"><span> &#10006; </span></button>
+              <% if(emailTo == events[i].userPosted.email) { %>
+                <button class="btn ml-auto" onclick="deleteCard('<%=events[i].id%>')"><span> &#10006; </span></button>
+              <% } %>
             </div>
             
             <!-- Event Description -->
             <div class="card-body">
-              <p class="card-text"><%= events[i].description %></p>
+              <pre class="card-text" style="white-space: pre-wrap;"><%= events[i].description %></pre>
               
             </div>
 
@@ -111,8 +111,16 @@
             
             <!-- Footer -->
             <div class="card-footer text-muted d-flex justify-content-between">
-              <small><%= events[i].postedOn %></small>
-              <small>Posted by: <%=events[i].userPosted.name%> </small>
+              <small style="font-size: 11px;"><%= events[i].postedOn %></small>
+              <small style="display: flex; align-items: center; font-size: 11px;">
+                Posted by : &nbsp;
+                <a href="/profile/<%= events[i].userPosted.email %>" class="d-flex align-items-center profile-link">
+                  <div>
+                    <p class="mb-0" style="font-size: 11px;"><%=events[i].userPosted.name%></p>
+                  </div>
+                </a>
+              </small>
+              
             </div>
           </div>
       
