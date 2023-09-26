@@ -72,4 +72,35 @@ async function deleteDB(Database, Collection, Query) { //Delete Entry
     }
 }
 
-module.exports = {writeDB, readDB, updateDB, deleteDB};
+async function countDocuments(Database, Collection, Query) { //Count Entries
+    try {
+        await client.connect();
+        const db = client.db(Database);
+        const collection = db.collection(Collection);
+
+        const result = await collection.countDocuments(Query);
+
+        return result;
+
+    } catch (error) {
+        console.error("Error:", error);
+        throw error; // Rethrow the error for the caller to handle
+    }
+}
+
+async function SkipRead(Database, Collection, Query, Skip, Limit) { //Read Entry
+    try {
+        await client.connect();
+        const db = client.db(Database);
+        const collection = db.collection(Collection);
+
+        const result = await collection.find(Query).skip(Skip).limit(Limit).toArray();
+
+        return result;
+    } catch (error) {
+        console.error("Error:", error);
+        throw error; // Rethrow the error for the caller to handle
+    }
+}
+
+module.exports = {writeDB, readDB, updateDB, deleteDB, countDocuments, SkipRead};
