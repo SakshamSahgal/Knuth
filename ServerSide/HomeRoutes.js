@@ -2,7 +2,7 @@
 module.exports = (app) => {
 
   crypto = require('crypto');
-  const { readDB, writeDB, deleteDB } = require("./MongoOperations");
+  const { readDB, writeDB, deleteDB , countDocuments, SkipRead} = require("./MongoOperations");
   const { isLoggedIn, isCoordinator } = require("./Middlewares.js");
   const { upload, multerErrorHandling, TypeCheck } = require("./UploadImage/multer.js");
   const { FieldLengthCheck } = require("./UploadImage/FormMidddlewares.js")
@@ -10,49 +10,31 @@ module.exports = (app) => {
   const path = require("path");
   require("dotenv").config();
 
-  app.get("/home", isLoggedIn, (req, res) => { //protected route
-    readDB("Main", "Events", {}).then((events) => { //querying DB to fetch all the events
-      readDB("Main", "Coordinators", { "list.gmail": req.user.emails[0].value }).then((coordinators) => { //querrying DB to check if the email of the logged in user is present in the coordinators list
+  app.get("/home/:page?", isLoggedIn,async (req, res) => { //protected route
 
-        let Template = {
-          page: "home",
-          emailTo: req.user.emails[0].value,
-          events: events,
-          coordinator: (coordinators.length > 0),
-          fileLimit: parseInt(process.env.ImageUploadLimit),
-          fileSize: parseInt(process.env.ImageSizeLimitInBytes) / (1024 * 1024)
-        }
+      var NoOfEntries = await countDocuments("Main","Events",{}) //Counting the number of entries in the database     
+      var numberOfPage = Math.ceil(Number(NoOfEntries)/Number(process.env.limitPerPage)) //Calculating the number of pages
+      var curPage = (req.params.page == undefined) ? 1 : Math.max(Math.min(Number(req.params.page),numberOfPage),1) //Clamping the page number between 1 and 10
+      var toSkip = (curPage - 1) * Number(process.env.limitPerPage);
 
-        res.render(path.join(__dirname, "..", "ClientSide", "home"), Template)
+      console.log("No of Entries " , NoOfEntries, "numberOfPage ", numberOfPage, "curPage " , curPage,"toSkip " ,toSkip)
 
-      }).catch((err) => {
-
-        let Template = {
-          page: "home",
-          emailTo: req.user.emails[0].value,
-          events: [],
-          coordinator: false,
-          fileLimit: parseInt(process.env.ImageUploadLimit),
-          fileSize: parseInt(process.env.ImageSizeLimitInBytes) / (1024 * 1024)
-        }
-
-        res.render(path.join(__dirname, "..", "ClientSide", "home"), Template)
-
-      })
-    }).catch((err) => {
-
+      var coordinators = await readDB("Main", "Coordinators", { "list.gmail": req.user.emails[0].value });  //querrying DB to check if the email of the logged in user is present in the coordinators list
+            
       let Template = {
         page: "home",
         emailTo: req.user.emails[0].value,
-        events: [],
-        coordinator: false,
+        events: await SkipRead("Main","Events",{},toSkip,Number(process.env.limitPerPage)), //Reading the database
+        coordinator: (coordinators.length > 0),
         fileLimit: parseInt(process.env.ImageUploadLimit),
-        fileSize: parseInt(process.env.ImageSizeLimitInBytes) / (1024 * 1024)
+        fileSize: parseInt(process.env.ImageSizeLimitInBytes) / (1024 * 1024),
+        NumberOfPages : numberOfPage,
+        CurPage : curPage,
       }
 
-      res.render(path.join(__dirname, "..", "ClientSide", "home"), Template)
-    })
+      console.log(Template)
 
+      res.render(path.join(__dirname, "..", "ClientSide", "home"), Template)
   });
 
   app.post("/postEvent", isLoggedIn, isCoordinator, upload.array("images", parseInt(process.env.ImageUploadLimit)), multerErrorHandling, TypeCheck, FieldLengthCheck, async (req, res) => {

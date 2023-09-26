@@ -132,6 +132,31 @@
 
   </body>
 
+  <nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+
+      <!-- Previous -->
+      <li class="page-item <% if(CurPage == 1){ %> disabled  <% } %> ">
+        <a class="page-link" href="/home/<%=CurPage - 1%>" tabindex="-1" aria-disabled="true">Previous</a>
+      </li>
+
+      <% for(var i=1;i<=NumberOfPages;i++){ %>
+
+            <% if(i == CurPage){ %>
+                <li class="page-item active" aria-current="page"><a class="page-link" href="/home/<%=i%>"><%=i%> <span class="sr-only">(current)</span></a></li>
+            <% } else{ %>
+                <li class="page-item"><a class="page-link" href="/home/<%=i%>"><%=i%></a></li>
+            <% } %>
+
+      <% } %>
+    
+      <!-- Next -->
+      <li class="page-item <% if(CurPage == NumberOfPages){ %> disabled  <% } %> " >
+        <a class="page-link" href="/home/<%=Number(CurPage) + Number(1)%>">Next</a>
+      </li>
+    </ul>
+</nav>
+
   <!-- axios CDN -->
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="/Scripts/home.js"></script>

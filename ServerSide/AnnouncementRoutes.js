@@ -3,7 +3,7 @@
 module.exports = (app) => {
 
     crypto = require('crypto');
-    const { writeDB, readDB, deleteDB } = require("./MongoOperations");
+    const { writeDB, readDB, deleteDB, countDocuments, SkipRead } = require("./MongoOperations");
     const { isLoggedIn, isCoordinator } = require("./Middlewares.js");
     const path = require("path");
     const fs = require('fs');
@@ -12,38 +12,32 @@ module.exports = (app) => {
     const { uploadFile, deleteImageFromImgur } = require("./UploadImage/imgur.js");
     const {FieldLengthCheck} = require("./UploadImage/FormMidddlewares.js")
 
-    app.get("/announcements", isLoggedIn, async (req, res) => {
+    app.get("/announcements/:page?", isLoggedIn, async (req, res) => {
 
-        readDB("Main", "Coordinators", { "list.gmail": req.user.emails[0].value }).then(async (coordinators) => { //querrying DB to check if the email of the logged in user is present in the coordinators list
+      var NoOfEntries = await countDocuments("Main","Announcements",{}) //Counting the number of entries in the database     
+      var numberOfPage = Math.ceil(Number(NoOfEntries)/Number(process.env.limitPerPage)) //Calculating the number of pages
+      var curPage = (req.params.page == undefined) ? 1 : Math.max(Math.min(Number(req.params.page),numberOfPage),1) //Clamping the page number between 1 and 10
+      var toSkip = (curPage - 1) * Number(process.env.limitPerPage);
+      
+      console.log("No of Entries " , NoOfEntries, "numberOfPage ", numberOfPage, "curPage " , curPage,"toSkip " ,toSkip)
+      
+      var coordinators = await readDB("Main", "Coordinators", { "list.gmail": req.user.emails[0].value }); //querrying DB to check if the email of the logged in user is present in the coordinators list
+      
+      let templateJson = {
+        fileLimit: parseInt(process.env.ImageUploadLimit),
+        fileSize: parseInt(process.env.ImageSizeLimitInBytes) / (1024 * 1024),
+        page: "announcements",
+        emailTo: req.user.emails[0].value,
+        username: req.user.displayName,
+        profilePicture: req.user.photos[0].value,
+        coordinator: (coordinators.length > 0),
+        announcements: await SkipRead("Main","Announcements",{},toSkip,Number(process.env.limitPerPage)), //Reading the database
+        NumberOfPages : numberOfPage,
+        CurPage : curPage,
+    }
 
-            let templateJson = {
-                fileLimit: parseInt(process.env.ImageUploadLimit),
-                fileSize: parseInt(process.env.ImageSizeLimitInBytes) / (1024 * 1024),
-                page: "announcements",
-                emailTo: req.user.emails[0].value,
-                username: req.user.displayName,
-                profilePicture: req.user.photos[0].value,
-                coordinator: (coordinators.length > 0),
-                announcements: await readDB("Main", "Announcements", {})
-            }
+    res.render(path.join(__dirname, "..", "ClientSide", "Announcements"), templateJson);//sending the user data to the frontend
 
-            res.render(path.join(__dirname, "..", "ClientSide", "Announcements"), templateJson);//sending the user data to the frontend
-
-        }).catch(async (err) => {
-
-            let templateJson = {
-                fileLimit: parseInt(process.env.ImageUploadLimit),
-                fileSize: parseInt(process.env.ImageSizeLimitInBytes) / (1024 * 1024),
-                page: "announcements", 
-                emailTo: req.user.emails[0].value,
-                username: req.user.displayName,
-                profilePicture: req.user.photos[0].value,
-                coordinator: false,
-                Announcements: await readDB("Main", "Announcements", {})
-            }
-
-            res.render(path.join(__dirname, "..", "ClientSide", "Announcements"), templateJson);//sending the user data to the frontend
-        })
     })
 
 
