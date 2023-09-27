@@ -19,7 +19,7 @@ module.exports = (app) => {
       var curPage = (req.params.page == undefined) ? 1 : Math.max(Math.min(Number(req.params.page),numberOfPage),1) //Clamping the page number between 1 and 10
       var toSkip = (curPage - 1) * Number(process.env.limitPerPage);
       
-      console.log("No of Entries " , NoOfEntries, "numberOfPage ", numberOfPage, "curPage " , curPage,"toSkip " ,toSkip)
+      //console.log("No of Entries " , NoOfEntries, "numberOfPage ", numberOfPage, "curPage " , curPage,"toSkip " ,toSkip)
       
       var coordinators = await readDB("Main", "Coordinators", { "list.gmail": req.user.emails[0].value }); //querrying DB to check if the email of the logged in user is present in the coordinators list
       
@@ -62,7 +62,7 @@ module.exports = (app) => {
                 email: req.user.emails[0].value,
                 profilePicture: req.user.photos[0].value
             },
-            postedOn: new Date().toLocaleString(),
+            postedOn: (Date.now()).toString(),
         }
 
         for (let file of req.files) {
@@ -88,7 +88,7 @@ module.exports = (app) => {
 
         readDB("Main", "Announcements", { "id": (req.params.id).toString() }).then(async (found) => { //finding if the announcement exists 
 
-            console.log(found);
+            //console.log(found);
 
             if (found.length > 0) { //announcement found
 
