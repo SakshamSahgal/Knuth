@@ -31,7 +31,7 @@ module.exports = (app) => {
         username: req.user.displayName,
         profilePicture: req.user.photos[0].value,
         coordinator: (coordinators.length > 0),
-        announcements: await SkipRead("Main","Announcements",{},toSkip,Number(process.env.limitPerPage)), //Reading the database
+        announcements: await SkipRead("Main","Announcements",{},{ postedOn: -1 },toSkip,Number(process.env.limitPerPage)), //Reading the database
         NumberOfPages : numberOfPage,
         CurPage : curPage,
     }
@@ -62,7 +62,7 @@ module.exports = (app) => {
                 email: req.user.emails[0].value,
                 profilePicture: req.user.photos[0].value
             },
-            postedOn: (Date.now()).toString(),
+            postedOn: new Date,
         }
 
         for (let file of req.files) {

@@ -20,11 +20,13 @@ module.exports = (app) => {
       //console.log("No of Entries " , NoOfEntries, "numberOfPage ", numberOfPage, "curPage " , curPage,"toSkip " ,toSkip)
 
       var coordinators = await readDB("Main", "Coordinators", { "list.gmail": req.user.emails[0].value });  //querrying DB to check if the email of the logged in user is present in the coordinators list
-            
+      
+      
+
       let Template = {
         page: "home",
         emailTo: req.user.emails[0].value,
-        events: await SkipRead("Main","Events",{},toSkip,Number(process.env.limitPerPage)), //Reading the database
+        events: await SkipRead("Main","Events",{},{ postedOn: -1 },toSkip,Number(process.env.limitPerPage)), //Reading the database
         coordinator: (coordinators.length > 0),
         fileLimit: parseInt(process.env.ImageUploadLimit),
         fileSize: parseInt(process.env.ImageSizeLimitInBytes) / (1024 * 1024),
@@ -39,10 +41,6 @@ module.exports = (app) => {
 
   app.post("/postEvent", isLoggedIn, isCoordinator, upload.array("images", parseInt(process.env.ImageUploadLimit)), multerErrorHandling, TypeCheck, FieldLengthCheck, async (req, res) => {
 
-    // console.log(req.body.title);
-    // console.log(req.body.titleLink);
-    // console.log(req.body.post);
-
     let Event = {
       id: crypto.randomUUID(),
       title: req.body.title,
@@ -54,7 +52,7 @@ module.exports = (app) => {
         email: req.user.emails[0].value,
         profilePicture: req.user.photos[0].value
       },
-      postedOn: new Date().toLocaleString(),
+      postedOn: new Date,
     }
 
     for (let file of req.files) {
