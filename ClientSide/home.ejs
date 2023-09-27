@@ -111,7 +111,8 @@
             <% } %>
             <!-- Footer -->
             <div class="card-footer text-muted d-flex justify-content-between">
-              <small style="font-size: 11px;"><%= events[i].postedOn %></small>
+              <small style="font-size: 11px;"><%=(events[i].postedOn).toLocaleDateString() %></small>
+              <small style="font-size: 11px;"><%=(events[i].postedOn).toLocaleTimeString() %></small>
               <small style="display: flex; align-items: center; font-size: 11px;">
                 Posted by : &nbsp;
                 <a href="/profile/<%= events[i].userPosted.email %>" class="d-flex align-items-center profile-link">

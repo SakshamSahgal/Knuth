@@ -119,10 +119,10 @@
                         <!-- Card Footer -->
                         <div class="card-footer">
                             <!-- Add your footer content here -->
-                            <small class="mb-0" style="font-size: 12px;"><%=announcements[i].postedOn%></small>
+                            <small class="mb-0" style="font-size: 12px;"><%=(announcements[i].postedOn).toLocaleDateString()%></small>
+                            <small class="mb-0" style="font-size: 12px;"><%=(announcements[i].postedOn).toLocaleTimeString()%></small>
                         </div>
                     </div>
-                    
 
                 <%}%>
                 

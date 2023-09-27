@@ -88,13 +88,13 @@ async function countDocuments(Database, Collection, Query) { //Count Entries
     }
 }
 
-async function SkipRead(Database, Collection, Query, Skip, Limit) { //Read Entry
+async function SkipRead(Database, Collection, Query, sortQuery, Skip, Limit) { //Read Entry
     try {
         await client.connect();
         const db = client.db(Database);
         const collection = db.collection(Collection);
 
-        const result = await collection.find(Query).skip(Skip).limit(Limit).toArray();
+        const result = await collection.find(Query).sort(sortQuery).skip(Skip).limit(Limit).toArray();
 
         return result;
     } catch (error) {
