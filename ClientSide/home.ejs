@@ -12,16 +12,16 @@
   <body>
 
     <link rel="stylesheet" href="/Styles/Home.css">
-    <link rel="stylesheet" href="/Styles/common.css">
 
     <%- include('./ReusableComponents/navbar.ejs',{ activePage : page, email: emailTo }) %>
 
-    <div class="loadOverlayContainer" id="loadOverlay" hidden> 
+  <div class="loadOverlayContainer" id="loadOverlay" hidden> 
       <!-- You can customize the spinner size and color -->
       <div class="spinner-border text-primary" role="status">
           <span class="visually-hidden">Loading...</span>
       </div>
   </div>
+
 
     <div class="overlay-container" id="overlay" hidden>
       
@@ -56,7 +56,8 @@
 
     </div>
 
-    <div class="container mt-5">
+  
+  <div class="container mt-5">
       <!-- Button Above the Timeline -->
       <div class="mb-3">
         <button type="button" id="postEventButton" class="btn btn-primary btn-block" <%= (coordinator == false) ? 'disabled' : '' %> onclick="openIt('overlay')">
@@ -125,38 +126,39 @@
             </div>
           </div>
       
-      <br>
+        <br>
       
         <% } %>
+        <br>
       </div>
     </div>
-
+    
   </body>
 
-  <nav aria-label="Page navigation">
-    <ul class="pagination justify-content-center">
-
-      <!-- Previous -->
-      <li class="page-item <% if(CurPage == 1){ %> disabled  <% } %> ">
-        <a class="page-link" href="/home/<%=CurPage - 1%>" tabindex="-1" aria-disabled="true">Previous</a>
-      </li>
-
-      <% for(var i=1;i<=NumberOfPages;i++){ %>
-
-            <% if(i == CurPage){ %>
-                <li class="page-item active" aria-current="page"><a class="page-link" href="/home/<%=i%>"><%=i%> <span class="sr-only">(current)</span></a></li>
-            <% } else{ %>
-                <li class="page-item"><a class="page-link" href="/home/<%=i%>"><%=i%></a></li>
-            <% } %>
-
-      <% } %>
-    
-      <!-- Next -->
-      <li class="page-item <% if(CurPage == NumberOfPages){ %> disabled  <% } %> " >
-        <a class="page-link" href="/home/<%=Number(CurPage) + Number(1)%>">Next</a>
-      </li>
-    </ul>
-</nav>
+  <div id="fixed-nav-container">
+    <nav aria-label="Page navigation">
+      <ul class="pagination justify-content-center">
+        <!-- Previous -->
+        <li class="page-item <% if(CurPage == 1){ %> disabled  <% } %> ">
+          <a class="page-link" href="/home/<%=CurPage - 1%>" tabindex="-1" aria-disabled="true">Previous</a>
+        </li>
+  
+        <% for(var i=1;i<=NumberOfPages;i++){ %>
+          <% if(i == CurPage){ %>
+            <li class="page-item active" aria-current="page"><a class="page-link" href="/home/<%=i%>"><%=i%> <span class="sr-only">(current)</span></a></li>
+          <% } else{ %>
+            <li class="page-item"><a class="page-link" href="/home/<%=i%>"><%=i%></a></li>
+          <% } %>
+        <% } %>
+  
+        <!-- Next -->
+        <li class="page-item <% if(CurPage == NumberOfPages){ %> disabled  <% } %> " >
+          <a class="page-link" href="/home/<%=Number(CurPage) + Number(1)%>">Next</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  
 
   <!-- axios CDN -->
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>

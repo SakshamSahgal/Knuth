@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connect With US</title>
 </head>
-<body style="font-family: 'Helvetica', sans-serif; background-color: #f9f9f9; color: #333333;">
+<body >
 
     <%- include('./ReusableComponents/navbar.ejs',{ activePage : page, email: emailTo }) %>
 
@@ -92,9 +92,6 @@
         
       </div>
     </section>
-
+    <%- include('./ReusableComponents/Credit.ejs') %>
   </body>
-  <!-- //axios CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script src="/Scripts/Coordinators.js"></script>
 </html>

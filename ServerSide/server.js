@@ -25,13 +25,23 @@ require("./AnnouncementRoutes.js")(app); //requiring the AnnouncementRoutes.js f
 require("./HomeRoutes.js")(app); //requiring the HomeRoutes.js file (for the home page routes)
 require("./connectWithUsRoutes.js")(app) //requiring the connectWithUsRoutes.js file (for the connectWithUs page routes)
 
+const {Mail} = require("./NodeMailer/mail.js")
+
 app.listen(port, () => {  
     console.log("Server Started at port " + process.env.DEV_PORT);    
+    // let data = {
+    //   to : ["sakshamsahgal2001@gmail.com","sakshamsahgal5@gmail.com"],
+    //   subject: "testing",
+    //   message: "testing tet",
+    // }
+    // Mail(data);
 });
 
 app.get("/",redirectIfLoggedIn, (req, res) => { //unprotected route
   res.sendFile(path.join(__dirname,"..","ClientSide","Knuth.html"));
 });
+
+
 
 
 

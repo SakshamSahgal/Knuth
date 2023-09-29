@@ -11,6 +11,7 @@ module.exports = (app) => {
     const { upload, multerErrorHandling, TypeCheck } = require("./UploadImage/multer.js");
     const { uploadFile, deleteImageFromImgur } = require("./UploadImage/imgur.js");
     const {FieldLengthCheck} = require("./UploadImage/FormMidddlewares.js")
+    const {Mail} = require("./NodeMailer/mail.js")
 
     app.get("/announcements/:page?", isLoggedIn, async (req, res) => {
 
@@ -34,6 +35,7 @@ module.exports = (app) => {
         announcements: await SkipRead("Main","Announcements",{},{ postedOn: -1 },toSkip,Number(process.env.limitPerPage)), //Reading the database
         NumberOfPages : numberOfPage,
         CurPage : curPage,
+        SubscriptionState : await readDB("Main","Subscribers",{email : req.user.emails[0].value}).then((found) => {return found.length > 0}), //Checking if the user is subscribed to announcements
     }
 
     res.render(path.join(__dirname, "..", "ClientSide", "Announcements"), templateJson);//sending the user data to the frontend
@@ -63,23 +65,58 @@ module.exports = (app) => {
                 profilePicture: req.user.photos[0].value
             },
             postedOn: new Date,
+            AnnounceToSubscribers : (req.body.AnnounceToSubscribers) ? true : false,
         }
 
+        // console.log(Announcement)
+
+        //uploading all the images to server one at a time
         for (let file of req.files) {
             let uploadedImgdata = await uploadFile(path.join(__dirname, "..", "uploads", file.filename)); //uploading the image to imgur and getting the id , link and deletehash and then deleting from the server
             Announcement.images.push(uploadedImgdata);
         }
 
-
-
         //writing to DB to store the announcement posted
-        writeDB("Main", "Announcements", Announcement).then((result) => {
-            res.send("Announcement Posted")
+        writeDB("Main", "Announcements", Announcement).then(async (result) => {
+
+            if (Announcement.AnnounceToSubscribers) { //if the coordinator wants to announce to subscribers
+
+                    let subscribers = await readDB("Main", "Subscribers", {}); //reading the subscribers list
+                    
+                    let MailData = {
+                        to : [],
+                        subject : "Knuth Progarming Hub : " + Announcement.title,
+                        message : Announcement.description,
+                        images : [],
+                    }
+
+                    for (let subscriber of subscribers) { //sending mail to all the subscribers
+                        MailData.to.push(subscriber.email)
+                    }
+
+                    for(let image of Announcement.images) { //adding all the images to the mail
+                        
+                        let img = {
+                            filename : image.link.split("/")[3],
+                            path : image.link,
+                        }
+
+                        MailData.images.push(img)
+                    }
+
+                    console.log(MailData)
+        
+                    await Mail(MailData) //calling the function to send the mail
+                }
+    
+                return res.send("Announcement Posted")
+
         }).catch((err) => {
             console.log("Can't Write to Announcements ");
             console.log(err);
             res.send("Can't post Announcements, DB error");
         })
+
     })
 
     //delete announcement route , takes post id , deletes the images from igmur and then deletes the post from DB
@@ -115,4 +152,55 @@ module.exports = (app) => {
         })
 
     })
+
+    app.post("/SubscribeAnnouncement", isLoggedIn, (req, res) => {
+
+        console.log("subscribe requested by " + req.user.emails[0].value)
+        
+        readDB("Main", "Subscribers", { "email": req.user.emails[0].value }).then((found) => { //finding if the user is already subscribed
+
+            if (found.length > 0) //user already subscribed
+                res.send("You are already subscribed to Announcements");
+            else { //user not subscribed
+
+                let subscriber = {
+                    email: req.user.emails[0].value,
+                    name: req.user.displayName,
+                    profilePicture: req.user.photos[0].value,
+                    subscribedOn: new Date,
+                }
+                    
+                writeDB("Main", "Subscribers", subscriber).then((result) => { //writing to DB to store the subscriber
+                    res.send("Subscribed to Announcements")
+                }).catch((err) => {
+                    console.log("Can't Write to Subscribers ");
+                    console.log(err);
+                    res.send("Can't Subscribe to Announcements, DB error");
+                })
+            }
+        })
+
+    })
+
+    app.delete("/UnsubscribeAnnouncement", isLoggedIn, (req, res) => {
+
+        console.log("unsubscribe requested by " + req.user.emails[0].value)
+
+        readDB("Main", "Subscribers", { "email": req.user.emails[0].value }).then((found) => { //finding if the user is already subscribed
+
+            if (found.length > 0) { //user already subscribed
+
+                deleteDB("Main", "Subscribers", { "email": req.user.emails[0].value }).then((result) => { //deleting the subscriber from DB
+                    res.send("Unsubscribed from Announcements")
+                })
+                .catch((err) => {
+                    console.log("Can't Delete from Subscribers ");
+                    console.log(err);
+                    res.send("Can't Unsubscribe from Announcements, DB error");
+                })
+            }
+            else //user not subscribed
+                res.send("You are not subscribed to Announcements");
+        })
+    });
 }

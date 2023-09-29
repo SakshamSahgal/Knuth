@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Announcements</title>
 </head>
-    <link rel="stylesheet" href="/Styles/common.css">
     <link rel="stylesheet" href="/Styles/announcements.css">
 <body>
     
@@ -47,6 +46,16 @@
                             <span class="badge badge-info"> each image size must <= <%=fileSize%>MB </span>
                             <span class="badge badge-info"> only .png .jpg .jpeg allowed </span>
                             <input type="file" name="images" accept=".png, .jpg, .jpeg" multiple class="form-control mb-3 mt-2"> 
+
+                            <div class="text-center"> <!-- Center-align content -->
+                                <br>
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" name="AnnounceToSubscribers" id="AnnounceToSubscribers">
+                                    <label class="form-check-label" for="AnnounceToSubscribers"> <i class="fas fa-bullhorn" style="margin-right: 5px;"></i> Announce to Subscribers </label>
+                                </div>
+                                <br>
+                                
+                            </div>
                             <input type="submit" value="Post" class="form-control mb-3 mt-2 btn btn-primary btn-block">
                         </form>
                         
@@ -60,6 +69,7 @@
     <div class="container mt-4">
         <div class="row justify-content-center"> <!-- Use 'justify-content-center' class to center cards -->
             <div class="col-md-6">               
+                
 
                 <!-- post event button -->
                 <button type="button" class="btn btn-primary btn-block mb-3" <%= (coordinator == false) ? 'disabled' : '' %> onclick="openIt('overlay')">
@@ -68,8 +78,44 @@
                         
                 </button>
 
+                <div class="text-center">
+                    <div class="d-flex justify-content-center">
+                        <div class="custom-control custom-switch d-flex align-items-center">
+                            <input type="checkbox" class="custom-control-input" id="subscribeToggle" <%if(SubscriptionState){%>checked <%}%> >
+                            <label class="custom-control-label" for="subscribeToggle">Subscribe to Announcements</label>
+                            <!-- Transparent Circular Info Button -->
+                            <button type="button" class="btn btn-circle" style="height: 32px; padding: 0; margin-left: 5px;" data-toggle="modal" data-target="#AnnouncementinfoModal">
+                                <img width="25" height="25" src="https://img.icons8.com/windows/25/info.png" alt="info"/>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            
+            <!-- Announcement Info Modal -->
+            <div class="modal fade" id="AnnouncementinfoModal" tabindex="-1" role="dialog" aria-labelledby="AnnouncementinfoModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="infoModalLabel">Information</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Place your information content here -->
+                                <p>Subscribe to get notified(via email) when new announcements are posted by coordinators.</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+
+            <br>
+
                 <% for(var i=0;i<announcements.length ;i++){%>
-                
+                    <!-- Cards -->
                     <div class="card mb-3 feed-card">
                         <div class="feed-header">
                             <div class="d-flex align-items-center">
@@ -77,11 +123,13 @@
                                 <img src="<%=announcements[i].userPosted.profilePicture%>" class="rounded-circle mr-2" alt="User Profile" style="width: 40px; height: 40px;">
                                     <div>
                                         <p class="mb-0" style="font-size: 12px;"><%=announcements[i].userPosted.name%></p>
-                                        <p class="mb-0" style="font-size: 12px;"><%=announcements[i].userPosted.email%></p>
+                                        <p class="mb-0" style="font-size: 10px;"><%=announcements[i].userPosted.email%></p>
                                     </div>
                                 </a>
                                 <% if(emailTo == announcements[i].userPosted.email) { %>
-                                    <button class="btn ml-auto" onclick="deleteCard('<%=announcements[i].id%>')" id="<%=announcements[i].id%>" style="background-color: #3c4349"> <span> &#10006; </span> </button>
+                                    
+                                    <button class="btn btn-sm ml-auto" onclick="deleteCard('<%=announcements[i].id%>')" id="<%=announcements[i].id%>" style="background-color: #3c4349;"> <span> &#10006; </span> </button>
+
                                 <% } %>
                             </div>
                         </div>
@@ -125,38 +173,42 @@
                     </div>
 
                 <%}%>
-                
-
+               
             </div>
+
         </div>
     </div>
-
+    <br>
 </body>
 
-<nav aria-label="Page navigation">
-    <ul class="pagination justify-content-center">
+<div id="fixed-nav-container">
 
-      <!-- Previous -->
-      <li class="page-item <% if(CurPage == 1){ %> disabled  <% } %> ">
-        <a class="page-link" href="/announcements/<%=CurPage - 1%>" tabindex="-1" aria-disabled="true">Previous</a>
-      </li>
-
-      <% for(var i=1;i<=NumberOfPages;i++){ %>
-
-            <% if(i == CurPage){ %>
-                <li class="page-item active" aria-current="page"><a class="page-link" href="/announcements/<%=i%>"><%=i%> <span class="sr-only">(current)</span></a></li>
-            <% } else{ %>
-                <li class="page-item"><a class="page-link" href="/announcements/<%=i%>"><%=i%></a></li>
-            <% } %>
-
-      <% } %>
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
     
-      <!-- Next -->
-      <li class="page-item <% if(CurPage == NumberOfPages){ %> disabled  <% } %> " >
-        <a class="page-link" href="/announcements/<%=Number(CurPage) + Number(1)%>">Next</a>
-      </li>
-    </ul>
-</nav>
+          <!-- Previous -->
+          <li class="page-item <% if(CurPage == 1){ %> disabled  <% } %> ">
+            <a class="page-link" href="/announcements/<%=CurPage - 1%>" tabindex="-1" aria-disabled="true">Previous</a>
+          </li>
+    
+          <% for(var i=1;i<=NumberOfPages;i++){ %>
+    
+                <% if(i == CurPage){ %>
+                    <li class="page-item active" aria-current="page"><a class="page-link" href="/announcements/<%=i%>"><%=i%> <span class="sr-only">(current)</span></a></li>
+                <% } else{ %>
+                    <li class="page-item"><a class="page-link" href="/announcements/<%=i%>"><%=i%></a></li>
+                <% } %>
+    
+          <% } %>
+          
+          <!-- Next -->
+          <li class="page-item <% if(CurPage == NumberOfPages){ %> disabled  <% } %> " >
+            <a class="page-link" href="/announcements/<%=Number(CurPage) + Number(1)%>">Next</a>
+          </li>
+        </ul>
+    </nav>
+
+</div>
 
 <!-- axios CDN -->
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>

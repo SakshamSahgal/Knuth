@@ -19,7 +19,8 @@ form.addEventListener('submit', (e) => {
   const formData = new FormData(form);
 
   openIt('loadOverlay') //revealing the loadOverlay
-
+  closeIt('overlay') //closing the overlay
+  
   axios.post("/postEvent", formData).then((response) => {
 
     closeIt('loadOverlay') //removing the loadOverlay

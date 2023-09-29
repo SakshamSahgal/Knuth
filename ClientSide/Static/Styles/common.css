@@ -25,7 +25,7 @@
 .overlay-container {
     height: 100%;
     width: 100%;
-    z-index: 5;
+    z-index: 30;
     position: fixed; /* Stay in place */
     left: 0;
     top: 0;
@@ -36,7 +36,7 @@
 .loadOverlayContainer {
     height: 100%;
     width: 100%;
-    z-index: 10;
+    z-index: 50;
     position: fixed; /* Stay in place */
     left: 0;
     top: 0;
@@ -46,4 +46,31 @@
     justify-content: center; /* Horizontally center */
     align-items: center; /* Vertically center */
     height: 100vh; /* Make the container full height of the viewport */
+}
+
+/* Add a class for the fixed navbar */
+.fixed-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10; /* Adjust z-index as needed */
+}
+
+/* Add a style to give space for the fixed navbar */
+body {
+    padding-top: 70px; /* Adjust the value to match the height of your navbar */
+}
+
+
+/* Add CSS to make the navigation bar fixed at the bottom and thinner */
+#fixed-nav-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: white; /* Set the background color as needed */
+    z-index: 10; /* Adjust the z-index as needed to avoid overlap with other elements */
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2); /* Adjust the shadow and thickness as needed */
+    height: 34px; /* Adjust the height to make it thinner */
 }
