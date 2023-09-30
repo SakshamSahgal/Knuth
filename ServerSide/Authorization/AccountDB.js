@@ -51,4 +51,5 @@ function captureAccount(profile) //function that checks if account already visit
             console.log(err);
         })
 }
+
 module.exports = { captureAccount }
