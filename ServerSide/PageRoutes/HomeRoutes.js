@@ -54,7 +54,7 @@ module.exports = (app) => {
     }
 
     for (let file of req.files) {
-      let uploadedImgdata = await uploadFile(path.join(__dirname, "..", "uploads", file.filename)); //uploading the image to imgur and getting the id , link and deletehash and then deleting from the server
+      let uploadedImgdata = await uploadFile(path.join(__dirname, "..", "..", "uploads", file.filename)); //uploading the image to imgur and getting the id , link and deletehash and then deleting from the server
       Event.images.push(uploadedImgdata);
     }
 
