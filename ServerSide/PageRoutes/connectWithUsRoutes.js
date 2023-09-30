@@ -1,12 +1,12 @@
-const { readDB } = require("./MongoOperations");
+const { readDB } = require("../MongoOperations");
 
 module.exports = (app) => {
 
-const {readDB} = require("./MongoOperations.js");
-const {isLoggedIn} = require("./Middlewares.js")
+const {readDB} = require("../MongoOperations.js");
+const {isLoggedIn,updateLastActivity} = require("../Middlewares.js")
 const path = require("path");
 
-app.get("/ConnectWithUs",isLoggedIn,(req,res) => {
+app.get("/ConnectWithUs",isLoggedIn,updateLastActivity,(req,res) => {
     
     readDB("Main","ConnectWithUs",{}).then((result) => {
 
@@ -28,7 +28,7 @@ app.get("/ConnectWithUs",isLoggedIn,(req,res) => {
                 Codeforces: null,
             }
 
-            res.render(path.join(__dirname,"..","ClientSide","ConnectWithUs"),template);
+            res.render(path.join(__dirname,"..","..","ClientSide","ConnectWithUs"),template);
         }
         else
         {
@@ -44,7 +44,7 @@ app.get("/ConnectWithUs",isLoggedIn,(req,res) => {
                 Codeforces: result[0].Codeforces,
             }
           
-            res.render(path.join(__dirname,"..","ClientSide","ConnectWithUs"),template);
+            res.render(path.join(__dirname,"..","..","ClientSide","ConnectWithUs"),template);
         }
     }).catch((err) => {
         
@@ -62,7 +62,7 @@ app.get("/ConnectWithUs",isLoggedIn,(req,res) => {
             Codeforces: null,
         }
 
-        res.render(path.join(__dirname,"..","ClientSide","ConnectWithUs"),template);
+        res.render(path.join(__dirname,"..","..","ClientSide","ConnectWithUs"),template);
     })
   });
 

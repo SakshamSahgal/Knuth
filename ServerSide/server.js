@@ -12,18 +12,18 @@ app.use(session({ secret: process.env.SESSION_SECRET , resave: false, saveUninit
 app.use(express.json({limit : '1mb'})); //telling that my webapp will be sending/recieving data in json format (limiting to 1MB)
 app.use(express.static(path.join(__dirname,"..","ClientSide","Static"))); //telling that my webapp will be using the files in the ClientSide/Static folder for static js files
 
-const {isLoggedIn,redirectIfLoggedIn} = require("./Middlewares.js"); //including the Middlewares.js file (for the middlewares)
+const {redirectIfLoggedIn} = require("./Middlewares.js"); //including the Middlewares.js file (for the middlewares)
 //------------------------------------------------------------------------------------------------------------------------------
 
 // Setting the view engine to EJS
 app.set('view engine', 'ejs');
 
-require("./Authorization/GoogleOAuthRoutes.js")(app);   //requiring the GoogleOAuthRoutes.js file (for the google auth routes)
-require("./CoordinatorRoutes.js")(app);                 //requiring the CoordinatorRoutes.js file (for the coordinator page routes)
-require("./ProfileRoutes.js")(app);                     //requiring the ProfileRoutes.js file (for the profile page routes)
-require("./AnnouncementRoutes.js")(app);                //requiring the AnnouncementRoutes.js file (for the announcement page routes)
-require("./HomeRoutes.js")(app);                        //requiring the HomeRoutes.js file (for the home page routes)
-require("./connectWithUsRoutes.js")(app)                //requiring the connectWithUsRoutes.js file (for the connectWithUs page routes)
+require("./Authorization/GoogleOAuthRoutes.js")(app);              //requiring the GoogleOAuthRoutes.js file (for the google auth routes)
+require("./PageRoutes/CoordinatorRoutes.js")(app);                 //requiring the CoordinatorRoutes.js file (for the coordinator page routes)
+require("./PageRoutes/ProfileRoutes.js")(app);                     //requiring the ProfileRoutes.js file (for the profile page routes)
+require("./PageRoutes/AnnouncementRoutes.js")(app);                //requiring the AnnouncementRoutes.js file (for the announcement page routes)
+require("./PageRoutes/HomeRoutes.js")(app);                        //requiring the HomeRoutes.js file (for the home page routes)
+require("./PageRoutes/connectWithUsRoutes.js")(app)                //requiring the connectWithUsRoutes.js file (for the connectWithUs page routes)
 
 app.listen(port, () => {
     console.log("Server Started at port " + port);    

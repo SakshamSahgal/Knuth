@@ -31,5 +31,17 @@ function redirectIfLoggedIn(req, res, next) { //Middleware to check if user is l
     next(); //if not authenticated, redirect to login page
 }
 
+function updateLastActivity(req,res,next) //middleware to update the last activity of the user
+{
+    updateDB("Main", "Users", { "email": req.user.emails[0].value }, { $set: { LastVisited: new Date() } }).then((result) => { //if it is present then just update the lastvisited in DB
+        console.log("last activity of " + req.user.emails[0].value + " updated in DB");
+        next();
+    }).catch((err) => {
+            console.log("Can't Update Users DB to update User activity of " + req.user.emails[0].value);
+            console.log(err);
+            next();
+    })
+}
 
-module.exports = {isLoggedIn,isCoordinator,redirectIfLoggedIn}
+
+module.exports = {isLoggedIn,isCoordinator,redirectIfLoggedIn,updateLastActivity}

@@ -1,8 +1,8 @@
 
 module.exports = (app) => {
 
-    const {readDB} = require("./MongoOperations");
-    const {isLoggedIn} = require("./Middlewares.js");
+    const {readDB} = require("../MongoOperations");
+    const {isLoggedIn,updateLastActivity} = require("../Middlewares.js");
     const path = require("path");
 
     app.get('/logout',isLoggedIn, (req, res, next) => {
@@ -14,7 +14,7 @@ module.exports = (app) => {
       });
     });
     
-    app.get("/profile/:email",isLoggedIn,(req,res) => {
+    app.get("/profile/:email",isLoggedIn,updateLastActivity,(req,res) => {
 
         readDB("Main", "Users", {"email": req.params.email}).then((found) => { //finding the user in the DB
 
@@ -30,7 +30,7 @@ module.exports = (app) => {
               myProfile : (req.params.email == req.user.emails[0].value)
             }
             
-            res.render(path.join(__dirname,"..","ClientSide","profile"),Template);
+            res.render(path.join(__dirname,"..","..","ClientSide","profile"),Template);
           }
           else{
             res.status(400).send("User Doesn't Exist");

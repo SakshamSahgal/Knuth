@@ -2,15 +2,15 @@
 module.exports = (app) => {
 
   crypto = require('crypto');
-  const { readDB, writeDB, deleteDB , countDocuments, SkipRead} = require("./MongoOperations");
-  const { isLoggedIn, isCoordinator } = require("./Middlewares.js");
-  const { upload, multerErrorHandling, TypeCheck } = require("./UploadImage/multer.js");
-  const { FieldLengthCheck } = require("./UploadImage/FormMidddlewares.js")
-  const { uploadFile, deleteImageFromImgur } = require("./UploadImage/imgur.js");
+  const { readDB, writeDB, deleteDB , countDocuments, SkipRead} = require("../MongoOperations");
+  const { isLoggedIn, isCoordinator,updateLastActivity } = require("../Middlewares.js");
+  const { upload, multerErrorHandling, TypeCheck } = require("../UploadImage/multer.js");
+  const { FieldLengthCheck } = require("../UploadImage/FormMidddlewares.js")
+  const { uploadFile, deleteImageFromImgur } = require("../UploadImage/imgur.js");
   const path = require("path");
   require("dotenv").config();
 
-  app.get("/home/:page?", isLoggedIn,async (req, res) => { //protected route
+  app.get("/home/:page?", isLoggedIn,updateLastActivity,async (req, res) => { //protected route
 
       var NoOfEntries = await countDocuments("Main","Events",{}) //Counting the number of entries in the database     
       var numberOfPage = Math.ceil(Number(NoOfEntries)/Number(process.env.limitPerPage)) //Calculating the number of pages
@@ -34,10 +34,10 @@ module.exports = (app) => {
 
       //console.log(Template)
 
-      res.render(path.join(__dirname, "..", "ClientSide", "home"), Template)
+      res.render(path.join(__dirname, "..","..","ClientSide", "home.ejs"), Template)
   });
 
-  app.post("/postEvent", isLoggedIn, isCoordinator, upload.array("images", parseInt(process.env.ImageUploadLimit)), multerErrorHandling, TypeCheck, FieldLengthCheck, async (req, res) => {
+  app.post("/postEvent", isLoggedIn, isCoordinator, upload.array("images", parseInt(process.env.ImageUploadLimit)), multerErrorHandling, TypeCheck, FieldLengthCheck, updateLastActivity, async (req, res) => {
 
     let Event = {
       id: crypto.randomUUID(),
@@ -70,7 +70,7 @@ module.exports = (app) => {
 
   //delete Event route , takes post id , deletes the images from igmur and then deletes the post from DB
 
-  app.delete("/DeleteEvent/:id", isLoggedIn, isCoordinator, (req, res) => {
+  app.delete("/DeleteEvent/:id", isLoggedIn, isCoordinator,updateLastActivity, (req, res) => {
 
     readDB("Main", "Events", { "id": (req.params.id).toString() }).then(async (found) => { //finding if the Event exists 
 

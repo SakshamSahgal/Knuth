@@ -3,17 +3,17 @@
 module.exports = (app) => {
 
     crypto = require('crypto');
-    const { writeDB, readDB, deleteDB, countDocuments, SkipRead } = require("./MongoOperations");
-    const { isLoggedIn, isCoordinator } = require("./Middlewares.js");
+    const { writeDB, readDB, deleteDB, countDocuments, SkipRead } = require("../MongoOperations");
+    const { isLoggedIn, isCoordinator, updateLastActivity } = require("../Middlewares.js");
     const path = require("path");
     const fs = require('fs');
     require("dotenv").config();
-    const { upload, multerErrorHandling, TypeCheck } = require("./UploadImage/multer.js");
-    const { uploadFile, deleteImageFromImgur } = require("./UploadImage/imgur.js");
-    const {FieldLengthCheck} = require("./UploadImage/FormMidddlewares.js")
-    const {Mail} = require("./NodeMailer/mail.js")
+    const { upload, multerErrorHandling, TypeCheck } = require("../UploadImage/multer.js");
+    const { uploadFile, deleteImageFromImgur } = require("../UploadImage/imgur.js");
+    const {FieldLengthCheck} = require("../UploadImage/FormMidddlewares.js")
+    const {Mail} = require("../NodeMailer/mail.js")
 
-    app.get("/announcements/:page?", isLoggedIn, async (req, res) => {
+    app.get("/announcements/:page?", isLoggedIn, updateLastActivity, async (req, res) => {
 
       var NoOfEntries = await countDocuments("Main","Announcements",{}) //Counting the number of entries in the database     
       var numberOfPage = Math.ceil(Number(NoOfEntries)/Number(process.env.limitPerPage)) //Calculating the number of pages
@@ -38,10 +38,9 @@ module.exports = (app) => {
         SubscriptionState : await readDB("Main","Subscribers",{email : req.user.emails[0].value}).then((found) => {return found.length > 0}), //Checking if the user is subscribed to announcements
     }
 
-    res.render(path.join(__dirname, "..", "ClientSide", "Announcements"), templateJson);//sending the user data to the frontend
+    res.render(path.join(__dirname, "..", "..", "ClientSide", "Announcements"), templateJson);//sending the user data to the frontend
 
     })
-
 
 
     //Using multiple middlewares for the PostAnnouncements route
@@ -51,8 +50,9 @@ module.exports = (app) => {
     //multerErrorHandling : to check if there are any errors in image upload like file size limit exceeded, or file limit exceeded
     //TypeCheck : to check if the uploaded files are of supported type
     //FieldLengthCheck : to check if the title and post fields are not empty and are of valid length
+    //updateLastActivity : to update the last activity date time of user in DB
 
-    app.post("/PostAnnouncements", isLoggedIn, isCoordinator, upload.array("images", parseInt(process.env.ImageUploadLimit)), multerErrorHandling, TypeCheck, FieldLengthCheck, async (req, res) => {
+    app.post("/PostAnnouncements", isLoggedIn, isCoordinator, upload.array("images", parseInt(process.env.ImageUploadLimit)), multerErrorHandling, TypeCheck, FieldLengthCheck, updateLastActivity, async (req, res) => {
 
         let Announcement = {
             id : crypto.randomUUID(),
@@ -121,7 +121,7 @@ module.exports = (app) => {
 
     //delete announcement route , takes post id , deletes the images from igmur and then deletes the post from DB
 
-    app.delete("/DeleteAnnouncement/:id", isLoggedIn, isCoordinator, (req, res) => {
+    app.delete("/DeleteAnnouncement/:id", isLoggedIn, isCoordinator, updateLastActivity, (req, res) => {
 
         readDB("Main", "Announcements", { "id": (req.params.id).toString() }).then(async (found) => { //finding if the announcement exists 
 
@@ -153,7 +153,7 @@ module.exports = (app) => {
 
     })
 
-    app.post("/SubscribeAnnouncement", isLoggedIn, (req, res) => {
+    app.post("/SubscribeAnnouncement", isLoggedIn, updateLastActivity, (req, res) => {
 
         console.log("subscribe requested by " + req.user.emails[0].value)
         
@@ -182,7 +182,7 @@ module.exports = (app) => {
 
     })
 
-    app.delete("/UnsubscribeAnnouncement", isLoggedIn, (req, res) => {
+    app.delete("/UnsubscribeAnnouncement", isLoggedIn, updateLastActivity, (req, res) => {
 
         console.log("unsubscribe requested by " + req.user.emails[0].value)
 
