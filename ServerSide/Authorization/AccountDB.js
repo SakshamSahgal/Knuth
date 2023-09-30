@@ -1,10 +1,10 @@
-const { readDB, writeDB, updateDB, deleteDB } = require("./MongoOperations.js"); //including the MongoOperations.js file (for the DB operations)
+const { readDB, writeDB, updateDB } = require("../MongoOperations.js"); //including the MongoOperations.js file (for the DB operations)
 
 function captureAccount(profile) //function that checks if account already visited the site, if not, adds it to the DB of users
 {
     readDB("Main", "Users", { "email": profile.emails[0].value }).then((users) => { //querrying DB to check if the email of the logged in user is present in the users list
-        if (users.length == 0) //if not present, add it to the DB
-        {
+        
+        if (users.length == 0){ //if not present, add it to the DB
             console.log("User " + profile.emails[0].value + " Doesn't already exist in DB")
 
             const user = {
@@ -14,7 +14,7 @@ function captureAccount(profile) //function that checks if account already visit
                 familyName: profile.name.familyName,
                 photo: profile.photos[0].value,
                 designation: "Member",
-                LastVisited : Date.now()
+                LastVisited : new Date()
             }
 
             readDB("Main", "Coordinators", { "list.gmail": (profile.emails[0].value) }).then((found) => { //Querrying DB to check if the user is a coordinator
@@ -36,8 +36,10 @@ function captureAccount(profile) //function that checks if account already visit
                 })
         }
         else {
+            
             console.log("User Already " + profile.emails[0].value + " Exists in DB")
-            updateDB("Main", "Users", { "email": profile.emails[0].value }, { $set: { LastVisited: Date.now() } }).then((result) => { //if it is present then just update the lastvisited in DB
+
+            updateDB("Main", "Users", { "email": profile.emails[0].value }, { $set: { LastVisited: new Date() } }).then((result) => { //if it is present then just update the lastvisited in DB
                 console.log("User activity of " + profile.emails[0].value + " updated in DB");
             }).catch((err) => {
                     console.log("Can't Update Users DB to update User activity of " + profile.emails[0].value);

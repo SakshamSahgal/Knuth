@@ -20,8 +20,6 @@ module.exports = (app) => {
       //console.log("No of Entries " , NoOfEntries, "numberOfPage ", numberOfPage, "curPage " , curPage,"toSkip " ,toSkip)
 
       var coordinators = await readDB("Main", "Coordinators", { "list.gmail": req.user.emails[0].value });  //querrying DB to check if the email of the logged in user is present in the coordinators list
-      
-      
 
       let Template = {
         page: "home",

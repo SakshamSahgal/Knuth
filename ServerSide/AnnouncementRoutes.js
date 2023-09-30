@@ -104,7 +104,7 @@ module.exports = (app) => {
                         MailData.images.push(img)
                     }
 
-                    console.log(MailData)
+                    //console.log(MailData)
         
                     await Mail(MailData) //calling the function to send the mail
                 }

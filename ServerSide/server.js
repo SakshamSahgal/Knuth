@@ -18,31 +18,17 @@ const {isLoggedIn,redirectIfLoggedIn} = require("./Middlewares.js"); //including
 // Setting the view engine to EJS
 app.set('view engine', 'ejs');
 
-require("./GoogleOAuthRoutes.js")(app); //requiring the GoogleOAuthRoutes.js file (for the google auth routes)
-require("./CoordinatorRoutes.js")(app); //requiring the CoordinatorRoutes.js file (for the coordinator page routes)
-require("./ProfileRoutes.js")(app); //requiring the ProfileRoutes.js file (for the profile page routes)
-require("./AnnouncementRoutes.js")(app); //requiring the AnnouncementRoutes.js file (for the announcement page routes)
-require("./HomeRoutes.js")(app); //requiring the HomeRoutes.js file (for the home page routes)
-require("./connectWithUsRoutes.js")(app) //requiring the connectWithUsRoutes.js file (for the connectWithUs page routes)
+require("./Authorization/GoogleOAuthRoutes.js")(app);   //requiring the GoogleOAuthRoutes.js file (for the google auth routes)
+require("./CoordinatorRoutes.js")(app);                 //requiring the CoordinatorRoutes.js file (for the coordinator page routes)
+require("./ProfileRoutes.js")(app);                     //requiring the ProfileRoutes.js file (for the profile page routes)
+require("./AnnouncementRoutes.js")(app);                //requiring the AnnouncementRoutes.js file (for the announcement page routes)
+require("./HomeRoutes.js")(app);                        //requiring the HomeRoutes.js file (for the home page routes)
+require("./connectWithUsRoutes.js")(app)                //requiring the connectWithUsRoutes.js file (for the connectWithUs page routes)
 
-const {Mail} = require("./NodeMailer/mail.js")
-
-app.listen(port, () => {  
-    console.log("Server Started at port " + process.env.DEV_PORT);    
-    // let data = {
-    //   to : ["sakshamsahgal2001@gmail.com","sakshamsahgal5@gmail.com"],
-    //   subject: "testing",
-    //   message: "testing tet",
-    // }
-    // Mail(data);
+app.listen(port, () => {
+    console.log("Server Started at port " + port);    
 });
 
 app.get("/",redirectIfLoggedIn, (req, res) => { //unprotected route
   res.sendFile(path.join(__dirname,"..","ClientSide","Knuth.html"));
 });
-
-
-
-
-
-
