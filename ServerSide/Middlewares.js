@@ -42,6 +42,17 @@ function updateLastActivity(req,res,next) //middleware to update the last activi
             next();
     })
 }
+function isAdmin(req,res,next) //middleware to check if currently logged in user is a admin
+{
+   readDB("Main", "Admins", {"email": req.user.emails[0].value}).then((admins) => { //querrying DB to check if the email of the logged in user is present in the admins collection
+           if(admins.length > 0)
+               next();
+           else
+               return res.send("you are not admin");
+       }).catch((err) => {
+           console.log("Cant' Read DB");
+           return res.send("Cant' Read DB");
+       })
+}
 
-
-module.exports = {isLoggedIn,isCoordinator,redirectIfLoggedIn,updateLastActivity}
+module.exports = {isLoggedIn,isCoordinator,redirectIfLoggedIn,updateLastActivity,isAdmin}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscriber Details</title>
+    <!-- Add Bootstrap CSS CDN link here -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <%- include('./ReusableComponents/BootstrapCDN.ejs') %>
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <h1>Subscribers to the Announcement Section</h1>
+        
+                <p>Total Subscribers: <%= subscribers.length %></p> <!-- Display the count of subscribers -->
+    
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Subscribed On</th>
+                                <th>Profile Picture</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% subscribers.forEach(subscriber => { %>
+                                <tr>
+                                    <td><%= subscriber.name %></td>
+                                    <td><%= subscriber.email %></td>
+                                    <td><%= (subscriber.subscribedOn).toLocaleDateString() %> | <%=(subscriber.subscribedOn).toLocaleTimeString()%></td>
+                                    <td><img src="<%= subscriber.profilePicture %>" alt="<%= subscriber.name %>'s Profile Picture" class="img-thumbnail"></td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

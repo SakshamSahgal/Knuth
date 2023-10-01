@@ -24,6 +24,7 @@ require("./PageRoutes/ProfileRoutes.js")(app);                     //requiring t
 require("./PageRoutes/AnnouncementRoutes.js")(app);                //requiring the AnnouncementRoutes.js file (for the announcement page routes)
 require("./PageRoutes/HomeRoutes.js")(app);                        //requiring the HomeRoutes.js file (for the home page routes)
 require("./PageRoutes/connectWithUsRoutes.js")(app)                //requiring the connectWithUsRoutes.js file (for the connectWithUs page routes)
+require("./PageRoutes/AdminRoutes.js")(app);                       //requiring the AdminRoutes.js file (for the admin page routes)
 
 app.listen(port, () => {
     console.log("Server Started at port " + port);    

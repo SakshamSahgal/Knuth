@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <%- include('./ReusableComponents/BootstrapCDN.ejs') %>
+  <title>User Details</title>
+</head>
+<body>
+    
+    <div class="container mt-5">
+        <h1>All User Details</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">User Statistics</h3>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <h4 class="text-center">User Count</h4>
+                                <p class="text-center"><span class="badge badge-primary"><%= userCount %></span></p>
+                            </div>
+                            <div class="col-md-4">
+                                <h4 class="text-center">Online</h4>
+                                <p class="text-center"><span class="badge badge-success"><%= online %></span></p>
+                            </div>
+                            <div class="col-md-4">
+                                <h4 class="text-center">Offline</h4>
+                                <p class="text-center"><span class="badge badge-danger"><%= offline %></span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <% for (let i = 0; i < users.length; i++) { %>
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <a href="/profile/<%=users[i].email%>">
+                                <img src="<%= users[i].photo %>" class="img-fluid rounded-circle mb-3" alt="<%= users[i].displayName %>">
+                                <h3><%= users[i].displayName %></h3>
+                            </a>
+                            <p><strong>Email:</strong> <%= users[i].email %></p>
+                            <p><strong>Designation:</strong> <%= users[i].designation %></p>
+                            <p><strong>Last Visited:</strong> <%= (users[i].LastVisited).toLocaleDateString()  %> | <%= (users[i].LastVisited).toLocaleTimeString()  %></p>
+                            <p><strong>Activity Status :</strong>
+                                <span class="badge <%= (users[i].ActivityStatus=='ONLINE') ? 'badge-success' : 'badge-danger'  %>">
+                                    <%= (users[i].ActivityStatus) %>
+                                </span>
+                            </p>
+                            <p> <strong>Last Active :</strong> <%=users[i].timeSinceLastActive%> minutes ago</p>
+                        </div>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    </div>
+    
+</body>
+</html>
+<script>
+    
+
+  </script>

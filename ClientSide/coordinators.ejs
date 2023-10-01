@@ -12,46 +12,46 @@
     <%- include('./ReusableComponents/navbar.ejs',{ activePage : page, email: emailTo }) %>
     <br><br>
     <div class="container">
-        <ul class="nav-tabs nav nav-justified bg-light" id="YearTabs">
-          
-
-          <% for(var i=0;i<coordinators.length;i++) { %>
+          <ul class="nav-tabs nav nav-justified bg-light" id="YearTabs">
             
-            <li class="nav-item">
-              <a href="#id_<%=i%>" class="nav-link <%= (i == 0) ? 'active' : ''  %>" data-bs-toggle="tab"> <%= coordinators[i].year %>  </a>
-             </li>
 
-          <% } %>
-        </ul>
+            <% for(var i=0;i<coordinators.length;i++) { %>
+              
+              <li class="nav-item">
+                <a href="#id_<%=i%>" class="nav-link <%= (i == 0) ? 'active' : ''  %>" data-bs-toggle="tab"> <%= coordinators[i].year %>  </a>
+              </li>
 
-        <div class="tab-content" id="YearTabContents">
-          
-          <% for(var i=0;i<coordinators.length;i++) { %>
+            <% } %>
+          </ul>
 
-            <div class="tab-pane <%= (i == 0) ? 'show active' : '' %> fade" id="id_<%=i%>">         
-              <div class="container mt-5">
-                  <ul class="list-group" id="<%= coordinators[i].year %>">    
-                    
-                    <% for(var j=0;j<coordinators[i].list.length;j++) { %>
+          <div class="tab-content" id="YearTabContents">
+            
+            <% for(var i=0;i<coordinators.length;i++) { %>
 
-                    <li class="list-group-item d-flex align-items-center my-3 rounded border border-dark">
-                      <div class="flex-grow-1">
-                          <h5><%= coordinators[i].list[j].name %></h5>
-                      </div>
-                      <div>
-                          <a href="<%=coordinators[i].list[j].linkedIn%>" class="me-2" target="_blank"><i class="fab fa-linkedin"></i></a>
-                      </div>
-                    </li>
-                    
-                    <% } %>
+              <div class="tab-pane <%= (i == 0) ? 'show active' : '' %> fade" id="id_<%=i%>">         
+                <div class="container mt-5">
+                    <ul class="list-group" id="<%= coordinators[i].year %>">    
+                      
+                      <% for(var j=0;j<coordinators[i].list.length;j++) { %>
 
-                  </ul>
-              </div>        
-            </div>
+                      <li class="list-group-item d-flex align-items-center my-3 rounded border border-dark">
+                        <div class="flex-grow-1">
+                            <h5><%= coordinators[i].list[j].name %></h5>
+                        </div>
+                        <div>
+                            <a href="<%=coordinators[i].list[j].linkedIn%>" class="me-2" target="_blank"><i class="fab fa-linkedin"></i></a>
+                        </div>
+                      </li>
+                      
+                      <% } %>
 
-          <% } %>
+                    </ul>
+                </div>        
+              </div>
 
-        </div>
-    </div>
+            <% } %>
+
+          </div>
+      </div>
 </body>
 </html>

@@ -42,6 +42,21 @@ async function readDB(Database, Collection, Query) { //Read Entry
     }
 }
 
+async function readwithSortDB(Database, Collection, FindQuery, SortQuerry) { //Read Entry
+    try {
+        await client.connect();
+        const db = client.db(Database);
+        const collection = db.collection(Collection);
+
+        const result = await collection.find(FindQuery).sort(SortQuerry).toArray();
+
+        return result;
+    } catch (error) {
+        console.error("Error:", error);
+        throw error; // Rethrow the error for the caller to handle
+    }
+}
+
 async function updateDB(Database, Collection, FindQuery, UpdateQuery) { //Update Entry
     try {
         await client.connect();
@@ -103,4 +118,4 @@ async function SkipRead(Database, Collection, Query, sortQuery, Skip, Limit) { /
     }
 }
 
-module.exports = {writeDB, readDB, updateDB, deleteDB, countDocuments, SkipRead};
+module.exports = {writeDB, readDB, updateDB, deleteDB, countDocuments, SkipRead , readwithSortDB};
