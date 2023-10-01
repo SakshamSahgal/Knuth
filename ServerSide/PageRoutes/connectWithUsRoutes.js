@@ -1,5 +1,3 @@
-const { readDB } = require("../MongoOperations");
-
 module.exports = (app) => {
 
 const {readDB} = require("../MongoOperations.js");
@@ -12,54 +10,38 @@ app.get("/ConnectWithUs",isLoggedIn,updateLastActivity,(req,res) => {
 
         // console.log(result)
 
-        if(result.length == 0)
-        {
-            console.log("No Data found");
-
-            let template = {
-                page: "connectWithUs",
-                emailTo: req.user.emails[0].value,
-                Telegram: null,
-                WhatsApp: null,
-                Discord: null,
-                GitHub: null,
-                LinkedIn: null,
-                LinkTree: null, 
-                Codeforces: null,
-            }
-
-            res.render(path.join(__dirname,"..","..","ClientSide","ConnectWithUs"),template);
+        let template = {
+            page: "connectWithUs",
+            emailTo: (result.length == 0) ? null : req.user.emails[0].value,
+            Telegram: (result.length == 0) ? null : result[0].Telegram,
+            WhatsApp: (result.length == 0) ? null : result[0].WhatsApp,
+            Discord: (result.length == 0) ? null : result[0].Discord,
+            GitHub: (result.length == 0) ? null : result[0].GitHub,
+            LinkedIn: (result.length == 0) ? null : result[0].LinkedIn,
+            LinkTree: (result.length == 0) ? null : result[0].LinkTree, 
+            Codeforces: (result.length == 0) ? null : result[0].Codeforces,
+            Gmail: (result.length == 0) ? null : result[0].Gmail,
+            Instagram: (result.length == 0) ? null : result[0].Instagram,
         }
-        else
-        {
-            let template = {
-                page: "connectWithUs",
-                emailTo: req.user.emails[0].value,
-                Telegram: result[0].Telegram,
-                WhatsApp: result[0].WhatsApp,
-                Discord: result[0].Discord,
-                GitHub: result[0].GitHub,
-                LinkedIn: result[0].LinkedIn,
-                LinkTree: result[0].LinkTree, 
-                Codeforces: result[0].Codeforces,
-            }
           
             res.render(path.join(__dirname,"..","..","ClientSide","ConnectWithUs"),template);
-        }
+        
     }).catch((err) => {
         
         console.log(err);
 
         let template = {
             page: "connectWithUs",
-            emailTo: req.user.emails[0].value,
-            Telegram: null,
-            WhatsApp: null,
-            Discord: null,
-            GitHub: null,
-            LinkedIn: null,
-            LinkTree: null, 
-            Codeforces: null,
+            emailTo: "",
+            Telegram: "",
+            WhatsApp: "",
+            Discord: "",
+            GitHub: "",
+            LinkedIn: "",
+            LinkTree: "", 
+            Codeforces: "",
+            Gmail: "",
+            Instagram: "",
         }
 
         res.render(path.join(__dirname,"..","..","ClientSide","ConnectWithUs"),template);
