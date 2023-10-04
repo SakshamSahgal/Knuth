@@ -8,132 +8,132 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HOME</title>
 </head>
-<style>
-    /* Add spacing and styling to the cards */
-    .card {
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s;
-    }
-
-    .card:hover {
-    transform: scale(1.02); /* Add a slight hover effect */
-    }
-
-    .card-title {
-    font-size: 1.25rem; /* Increase title font size */
-    margin-bottom: 0.5rem; /* Add spacing between title and content */
-    }
-
-    .card-text {
-    font-size: 0.875rem; /* Reduce text font size */
-    }
-
-    .card-link {
-    text-decoration: none; /* Remove underline from links */
-    }
-
-      /* Custom CSS for equal height cards */
-      .equal-height-cards {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between; /* Adjust as needed */
-    }
-
-    .equal-height-cards .col-md-4 {
-        flex: 1;
-        margin-bottom: 15px; /* Add margin between cards if desired */
-    }
-
-    .equal-height-cards .card {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-    }
-
-</style>
-  <body>
+<link rel="stylesheet" href="/Styles/home.css">
+<body>
 
 
-    <%- include('./ReusableComponents/navbar.ejs',{ activePage : page, email: emailTo }) %>
+<%- include('./ReusableComponents/navbar.ejs',{ activePage : page, email: emailTo }) %>
 
-    <div class="container mt-5">
+
+<!-- Modals for CP Tools -->
+<% for (var i = 0; i < CPTools.length; i++) { %>
+    <div class="modal fade" id="<%=(CPTools[i].title).replace(/\s/g, '');%>" tabindex="-1" role="dialog" aria-labelledby="<%=(CPTools[i].title).replace(/\s/g, '');%>" aria-hidden="true">
+        <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Information</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p><%= CPTools[i].description %></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+       </div>
+<% } %>
+
+<!-- Modals for Websites for Practice -->
+<% for (var i = 0; i < websitesForPractice.length; i++) { %>
+<div class="modal fade" id="<%=(websitesForPractice[i].title).replace(/\s/g, '');%>" tabindex="-1" role="dialog" aria-labelledby="<%=(websitesForPractice[i].title).replace(/\s/g, '');%>" aria-hidden="true">
+    <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Information</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p><%= websitesForPractice[i].description %></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+   </div>
+<% } %>
+
+
+<div class="container mt-5">
      
-
-        <div class="container mt-5">
-            <div class="row">
-                <div class="col-md-12 mb-4">
-                    <div class="card">
-                        <div class="card-body text-center">
-                            <br><h5 class="card-title" style="font-size: 16px;">Websites for Practice</h5><br>
-                            <div class="row equal-height-cards">
-                                <% for (var i = 0; i < websitesForPractice.length; i++) { %>
-                                    <div class="col-md-4 mb-3">
-                                        <div class="card">
-                                            <img src="<%= websitesForPractice[i].image %>" class="card-img-top mx-auto" style="max-width: 100px; max-height: 100px;">
-                                            <div class="card-body">
-                                                <a href="<%= websitesForPractice[i].link %>"><h5 class="card-title" style="font-size: 14px;"><%= websitesForPractice[i].title %></h5></a>
-                                                <p class="card-text small" style="font-size: 12px;"><%= websitesForPractice[i].description %></p>
-                                            </div>
+        <div class="row">
+            <div class="col-md-12 mb-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <br><h5 class="card-title" style="font-size: 16px;">Websites for Practice</h5><br>
+                        <div class="row equal-height-cards">
+                            <% for (var i = 0; i < websitesForPractice.length; i++) { %>
+                                <div class="col-md-4 mb-3">
+                                    <div class="card">
+                                        <img src="<%= websitesForPractice[i].image %>" class="card-img-top mx-auto" style="max-width: 100px; max-height: 100px;">
+                                        <div class="card-body">
+                                            <a href="<%= websitesForPractice[i].link %>" target="_blank"><h5 class="card-title" style="font-size: 14px;"><%= websitesForPractice[i].title %></h5></a>
+                                            <!-- <p class="card-text small" style="font-size: 12px;"><%= websitesForPractice[i].description %></p> -->
+                                            <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#<%=(websitesForPractice[i].title).replace(/\s/g, '');%>"> Expand </button>
                                         </div>
                                     </div>
-                                <% } %>
-                            </div>
+                                </div>
+                            <% } %>
                         </div>
                     </div>
                 </div>
             </div>
-            
-            
-
-
         </div>
-        
-      <!-- Card 2: Instructions for joining Codeforces group -->
-      <div class="row">
-          <div class="col-md-12 mb-4">
-              <div class="card">
-                  <div class="card-body">
-                      <h5 class="card-title">Instructions for Joining Codeforces Group</h5>
-                      <ul>
-                          <li>Create an account on Codeforces.</li>
-                          <li>Mention your college name in your Codeforces profile.</li>
-                          <li>Visit Codeforces Group and send a request as a participant.</li>
-                          <li>Inform someone on the Telegram group with your handle that you have sent a request to join.</li>
-                      </ul>
-                  </div>
-              </div>
-          </div>
-      </div>
 
+            
 
-
-      <!-- Card 3: Tools -->
-      <div class="row">
-          <div class="col-md-12">
-              <div class="card">
-                  <div class="card-body text-center">
-                     <br> <h5 class="card-title">Tools</h5> <br>
-                      <div class="row equal-height-cards">
+        <!-- Card 2: Tools -->
+        <div class="row">
+            <div class="col-md-12 mb-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                    <br> <h5 class="card-title">Tools</h5> <br>
+                        <div class="row equal-height-cards">
                         <% for (var i = 0; i < CPTools.length; i++) { %>
                             <div class="col-md-4 mb-3">
                                 <div class="card">
                                     <img src="<%= CPTools[i].image %>" class="card-img-top mx-auto" style="max-width: 100px; max-height: 100px;">
                                     <div class="card-body">
-                                        <a href="<%= CPTools[i].link %>"><h5 class="card-title" style="font-size: 14px;"><%= CPTools[i].title %></h5></a>
-                                        <p class="card-text small" style="font-size: 12px;"><%= CPTools[i].description %></p>
+                                        <a href="<%= CPTools[i].link %>"  target="_blank"><h5 class="card-title" style="font-size: 14px;"><%= CPTools[i].title %></h5></a>
+                                        <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#<%=(CPTools[i].title).replace(/\s/g, '');%>"> Expand </button>
                                     </div>
                                 </div>
                             </div>
                         <% } %>
+                        </div>
                     </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </div>
-    
-  </body>
+                </div>
+            </div>
+        </div>
+            
+        
+
+        <!-- Card 3: Instructions for joining Codeforces group -->
+        <div class="row">
+            <div class="col-md-12 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Instructions for Joining Codeforces Group</h5>
+                        <ul>
+                            <li>Create an account on Codeforces.</li>
+                            <li>Mention your college name in your Codeforces profile.</li>
+                            <li>Visit Codeforces Group and send a request as a participant.</li>
+                            <li>Inform someone on the Telegram group with your handle that you have sent a request to join.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</body>
 
 </html>

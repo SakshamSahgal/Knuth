@@ -1,0 +1,42 @@
+/* Add spacing and styling to the cards */
+.card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+    }
+
+    .card:hover {
+    transform: scale(1.02); /* Add a slight hover effect */
+    }
+
+    .card-title {
+    font-size: 1.25rem; /* Increase title font size */
+    margin-bottom: 0.5rem; /* Add spacing between title and content */
+    }
+
+    .card-text {
+    font-size: 0.875rem; /* Reduce text font size */
+    }
+
+    .card-link {
+    text-decoration: none; /* Remove underline from links */
+    }
+
+      /* Custom CSS for equal height cards */
+      .equal-height-cards {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between; /* Adjust as needed */
+    }
+
+    .equal-height-cards .col-md-4 {
+        flex: 1;
+        margin-bottom: 15px; /* Add margin between cards if desired */
+    }
+
+    .equal-height-cards .card {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
