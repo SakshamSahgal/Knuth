@@ -8,160 +8,132 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HOME</title>
 </head>
-
-  <body>
-
-    <link rel="stylesheet" href="/Styles/Home.css">
-
-    <%- include('./ReusableComponents/navbar.ejs',{ activePage : page, email: emailTo }) %>
-
-  <div class="loadOverlayContainer" id="loadOverlay" hidden> 
-      <!-- You can customize the spinner size and color -->
-      <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Loading...</span>
-      </div>
-  </div>
+<link rel="stylesheet" href="/Styles/home.css">
+<body>
 
 
-    <div class="overlay-container" id="overlay" hidden>
-      
-      <button class="btn float-right" onclick="closeIt('overlay')"> <span> &#10006; </span> </button>
+<%- include('./ReusableComponents/navbar.ejs',{ activePage : page, email: emailTo }) %>
 
-          <div class="container-fluid d-flex justify-content-center align-items-center vh-100">
-            <div class="col-lg-6 col-md-8 col-sm-10 col-12">
-                  <div class="card mb-3">
-                      <div class="feed-header bg-dark text-white d-flex justify-content-between align-items-center">
-                          <div class="d-flex align-items-center mx-auto">
-                              <span>POST EVENT</span>
-                          </div>
-                          <button class="btn" onclick="closeIt('overlay')"> <span> &#10006; </span> </button>
-                      </div>
-                      <div class="feed-content p-3">
-                          
-                          <form id="myForm">
-                              <textarea class="form-control mb-3 mt-2" name="title" rows="1" placeholder="Write your Title here..." required></textarea>
-                              <textarea class="form-control mb-3 mt-2" name="titleLink" rows="1" placeholder="Paste Title Link Here (if any)..."></textarea>
-                              <textarea class="form-control mb-3 mt-2" name="post" rows="4" placeholder="Write your event post here..." required></textarea>
-                              <span class="badge badge-info"> atmost <%=fileLimit%> files are allowed </span>
-                              <span class="badge badge-info"> each image size must <= <%=fileSize%>MB </span>
-                              <span class="badge badge-info"> only .png .jpg .jpeg allowed </span>
-                              <input type="file" name="images" accept=".png, .jpg, .jpeg" multiple class="form-control mb-3 mt-2"> 
-                              <input type="submit" value="Post" class="form-control mb-3 mt-2 btn btn-primary btn-block">
-                          </form>
-                          
-                      </div>
-                  </div>
-            </div>
-          </div>
 
-    </div>
-
-  
-  <div class="container mt-5">
-      <!-- Button Above the Timeline -->
-      <div class="mb-3">
-        <button type="button" id="postEventButton" class="btn btn-primary btn-block" <%= (coordinator == false) ? 'disabled' : '' %> onclick="openIt('overlay')">
-          <% if(coordinator == false){ %> <span>&#x1F512;</span>  <% } %> Post Event
-        </button>
-      </div>
-      
-      <!-- Timeline -->
-      <div class="timeline">
-        <% for(var i=0;i<events.length;i++) { %>
-
-          <div class="card">
-            <!-- Header with Color -->
-            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center event-header">
-              <h5 class="card-title"><a href="<%= events[i].titleLink %>" class="linkCSS" target="_blank"><%= events[i].title %></a></h5>
-              <% if(emailTo == events[i].userPosted.email) { %>
-                <button class="btn ml-auto" onclick="deleteCard('<%=events[i].id%>')" style="background-color: #3c4349"><span> &#10006; </span></button>
-              <% } %>
-            </div>
-            
-            <!-- Event Description -->
-            <div class="card-body">
-              <pre class="card-text" style="white-space: pre-wrap;"><%= events[i].description %></pre>
-              
-            </div>
-
-            <% if(events[i].images.length != 0) { %>
-              <div id="carouselExampleIndicators<%=i%>" class="carousel slide imageCarousel" data-ride="carousel">
-                <ol class="carousel-indicators">
-                    <% for(var j=0; j < events[i].images.length ; j++ ) { %>
-                        <li data-target="#carouselExampleIndicators<%=i%>" data-slide-to="<%=j%>" class=" <%= (j == 0) ? 'active' : ''  %>"></li>
-                    <% } %>
-                </ol>
-                <div class="carousel-inner">
-                    <% for(var j=0; j < events[i].images.length ; j++ ) { %>
-                        
-                        <div class="carousel-item <%= (j == 0) ? 'active' : '' %>">
-                          <img class="d-block w-100" src="<%=events[i].images[j].link%>">
-                        </div>
-                        
-                    <% } %>
+<!-- Modals for CP Tools -->
+<% for (var i = 0; i < CPTools.length; i++) { %>
+    <div class="modal fade" id="<%=(CPTools[i].title).replace(/\s/g, '');%>" tabindex="-1" role="dialog" aria-labelledby="<%=(CPTools[i].title).replace(/\s/g, '');%>" aria-hidden="true">
+        <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Information</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p><%= CPTools[i].description %></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
                 </div>
-                <a class="carousel-control-prev" href="#carouselExampleIndicators<%=i%>" role="button" data-slide="prev">
-                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                  <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#carouselExampleIndicators<%=i%>" role="button" data-slide="next">
-                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                  <span class="sr-only">Next</span>
-                </a>
-              </div>
-            <% } %>
-            <!-- Footer -->
-            <div class="card-footer text-muted d-flex justify-content-between">
-              <small style="font-size: 11px;"><%=(events[i].postedOn).toLocaleDateString() %></small>
-              <small style="font-size: 11px;"><%=(events[i].postedOn).toLocaleTimeString() %></small>
-              <small style="display: flex; align-items: center; font-size: 11px;">
-                Posted by : &nbsp;
-                <a href="/profile/<%= events[i].userPosted.email %>" class="d-flex align-items-center profile-link">
-                  <div>
-                    <p class="mb-0" style="font-size: 11px;"><%=events[i].userPosted.name%></p>
-                  </div>
-                </a>
-              </small>
-              
             </div>
-          </div>
-      
-        <br>
-      
-        <% } %>
-        <br>
-      </div>
+       </div>
+<% } %>
+
+<!-- Modals for Websites for Practice -->
+<% for (var i = 0; i < websitesForPractice.length; i++) { %>
+<div class="modal fade" id="<%=(websitesForPractice[i].title).replace(/\s/g, '');%>" tabindex="-1" role="dialog" aria-labelledby="<%=(websitesForPractice[i].title).replace(/\s/g, '');%>" aria-hidden="true">
+    <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Information</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p><%= websitesForPractice[i].description %></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+   </div>
+<% } %>
+
+
+<div class="container mt-5">
+     
+        <div class="row">
+            <div class="col-md-12 mb-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <br><h5 class="card-title" style="font-size: 16px;">Websites for Practice</h5><br>
+                        <div class="row equal-height-cards">
+                            <% for (var i = 0; i < websitesForPractice.length; i++) { %>
+                                <div class="col-md-4 mb-3">
+                                    <div class="card">
+                                        <img src="<%= websitesForPractice[i].image %>" class="card-img-top mx-auto" style="max-width: 100px; max-height: 100px;">
+                                        <div class="card-body">
+                                            <a href="<%= websitesForPractice[i].link %>" target="_blank"><h5 class="card-title" style="font-size: 14px;"><%= websitesForPractice[i].title %></h5></a>
+                                            <!-- <p class="card-text small" style="font-size: 12px;"><%= websitesForPractice[i].description %></p> -->
+                                            <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#<%=(websitesForPractice[i].title).replace(/\s/g, '');%>"> Expand </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+            
+
+        <!-- Card 2: Tools -->
+        <div class="row">
+            <div class="col-md-12 mb-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                    <br> <h5 class="card-title">Tools</h5> <br>
+                        <div class="row equal-height-cards">
+                        <% for (var i = 0; i < CPTools.length; i++) { %>
+                            <div class="col-md-4 mb-3">
+                                <div class="card">
+                                    <img src="<%= CPTools[i].image %>" class="card-img-top mx-auto" style="max-width: 100px; max-height: 100px;">
+                                    <div class="card-body">
+                                        <a href="<%= CPTools[i].link %>"  target="_blank"><h5 class="card-title" style="font-size: 14px;"><%= CPTools[i].title %></h5></a>
+                                        <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#<%=(CPTools[i].title).replace(/\s/g, '');%>"> Expand </button>
+                                    </div>
+                                </div>
+                            </div>
+                        <% } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            
+        
+
+        <!-- Card 3: Instructions for joining Codeforces group -->
+        <div class="row">
+            <div class="col-md-12 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Instructions for Joining Codeforces Group</h5>
+                        <ul>
+                            <li>Create an account on Codeforces.</li>
+                            <li>Mention your college name in your Codeforces profile.</li>
+                            <li>Visit Codeforces Group and send a request as a participant.</li>
+                            <li>Inform someone on the Telegram group with your handle that you have sent a request to join.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    
-  </body>
 
-  <div id="fixed-nav-container">
-    <nav aria-label="Page navigation">
-      <ul class="pagination justify-content-center">
-        <!-- Previous -->
-        <li class="page-item <% if(CurPage == 1){ %> disabled  <% } %> ">
-          <a class="page-link" href="/home/<%=CurPage - 1%>" tabindex="-1" aria-disabled="true">Previous</a>
-        </li>
-  
-        <% for(var i=1;i<=NumberOfPages;i++){ %>
-          <% if(i == CurPage){ %>
-            <li class="page-item active" aria-current="page"><a class="page-link" href="/home/<%=i%>"><%=i%> <span class="sr-only">(current)</span></a></li>
-          <% } else{ %>
-            <li class="page-item"><a class="page-link" href="/home/<%=i%>"><%=i%></a></li>
-          <% } %>
-        <% } %>
-  
-        <!-- Next -->
-        <li class="page-item <% if(CurPage == NumberOfPages){ %> disabled  <% } %> " >
-          <a class="page-link" href="/home/<%=Number(CurPage) + Number(1)%>">Next</a>
-        </li>
-      </ul>
-    </nav>
-  </div>
-  
 
-  <!-- axios CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script src="/Scripts/home.js"></script>
+
+</body>
 
 </html>

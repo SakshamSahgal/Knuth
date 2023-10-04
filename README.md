@@ -3,7 +3,7 @@
 
 ## Deployment
 
-The Knuth application has been deployed on Render and can be accessed at [link](https://knuth-programming-hub.onrender.com/).
+The Knuth web application has been deployed on Render and can be accessed at [link](https://knuth-programming-hub.onrender.com/).
 
 ## Knuth Configuration Parameters
 
