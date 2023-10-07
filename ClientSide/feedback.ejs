@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback</title>
+    <!-- Include Bootstrap CSS -->
+    <%- include('./ReusableComponents/BootstrapCDN.ejs') %>
+    <link rel="stylesheet" href="/Styles/Feedback.css">
+</head>
+<%- include('./ReusableComponents/navbar.ejs',{ activePage : page, email: emailTo }) %>
+<body>
+
+    <div class="loadOverlayContainer" id="loadOverlay" hidden> 
+        <!-- You can customize the spinner size and color -->
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="feedback-form">
+            <h1>Feedback Form</h1>
+            <form id="feedbackForm">
+                <div class="mb-3">
+                    <label for="feedbackType" class="form-label">Feedback Type</label>
+                    <select class="form-select" id="feedbackType" name="feedbackType" required>
+                        <% for(var i=0;i<feedbackTypes.length;i++){ %>
+                            <option value="<%=feedbackTypes[i]%>" <% if(feedbackTypes[i] == selectedFeedbackType) { %> selected <%}%> > <%= feedbackTypes[i] %> </option>
+                        <%}%>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="feedback" class="form-label">Your Feedback</label>
+                    <textarea class="form-control" id="feedback" name="feedback" rows="6" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Submit Feedback</button>
+            </form>
+        </div>
+    </div>
+    <%- include('./ReusableComponents/Credit.ejs') %>
+</body>
+</html>
+
+  <!-- axios CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="/Scripts/Feedback.js"></script>

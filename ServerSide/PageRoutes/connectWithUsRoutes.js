@@ -12,7 +12,7 @@ app.get("/ConnectWithUs",isLoggedIn,updateLastActivity,(req,res) => {
 
         let template = {
             page: "connectWithUs",
-            emailTo: (result.length == 0) ? null : req.user.emails[0].value,
+            emailTo: req.user.emails[0].value,
             Telegram: (result.length == 0) ? null : result[0].Telegram,
             WhatsApp: (result.length == 0) ? null : result[0].WhatsApp,
             Discord: (result.length == 0) ? null : result[0].Discord,
@@ -32,7 +32,7 @@ app.get("/ConnectWithUs",isLoggedIn,updateLastActivity,(req,res) => {
 
         let template = {
             page: "connectWithUs",
-            emailTo: "",
+            emailTo: req.user.emails[0].value,
             Telegram: "",
             WhatsApp: "",
             Discord: "",
