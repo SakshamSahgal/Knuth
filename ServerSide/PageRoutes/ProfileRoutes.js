@@ -6,6 +6,9 @@ module.exports = (app) => {
     const path = require("path");
 
     app.get('/logout',isLoggedIn, (req, res, next) => {
+
+      console.log(req.user.emails[0].value + " is logging out")
+
       res.clearCookie('connect.sid');
       req.logout(function (err) {
         req.session.destroy(function (err) { // destroys the session
@@ -15,6 +18,8 @@ module.exports = (app) => {
     });
     
     app.get("/profile/:email",isLoggedIn,updateLastActivity,(req,res) => {
+
+        console.log(req.user.emails[0].value + " is viewing the profile page of " + req.params.email)
 
         readDB("Main", "Users", {"email": req.params.email}).then((found) => { //finding the user in the DB
 

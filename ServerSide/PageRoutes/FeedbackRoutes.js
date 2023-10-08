@@ -9,6 +9,8 @@ module.exports = (app) => {
 
     app.get("/feedback",isLoggedIn,updateLastActivity, (req, res) => { 
 
+        console.log(req.user.emails[0].value + " is viewing the feedback page")
+
         let template = {
             page: "feedback",
             emailTo: req.user.emails[0].value,

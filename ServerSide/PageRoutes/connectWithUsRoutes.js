@@ -6,6 +6,8 @@ const path = require("path");
 
 app.get("/ConnectWithUs",isLoggedIn,updateLastActivity,(req,res) => {
     
+    console.log(req.user.emails[0].value + " is viewing the ConnectWithUs page")
+
     readDB("Main","ConnectWithUs",{}).then((result) => {
 
         // console.log(result)

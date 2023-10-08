@@ -8,6 +8,8 @@ module.exports = (app) => {
 
   app.get("/home", isLoggedIn,updateLastActivity,async (req, res) => { //protected route
 
+      console.log(req.user.emails[0].value + " is viewing the home page")
+
       let Template = {
         page: "home",
         emailTo: req.user.emails[0].value,

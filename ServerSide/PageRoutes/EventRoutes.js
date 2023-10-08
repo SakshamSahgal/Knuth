@@ -11,10 +11,13 @@ module.exports = (app) => {
 
     app.get("/events/:page?",isLoggedIn,updateLastActivity,async (req, res) => {
         
-        var NoOfEntries = await countDocuments("Main","Events",{}) //Counting the number of entries in the database     
-        var numberOfPage = Math.ceil(Number(NoOfEntries)/Number(process.env.limitPerPage)) //Calculating the number of pages
-        var curPage = (req.params.page == undefined) ? 1 : Math.max(Math.min(Number(req.params.page),numberOfPage),1) //Clamping the page number between 1 and 10
-        var toSkip = (curPage - 1) * Number(process.env.limitPerPage);
+      
+      var NoOfEntries = await countDocuments("Main","Events",{}) //Counting the number of entries in the database     
+      var numberOfPage = Math.ceil(Number(NoOfEntries)/Number(process.env.limitPerPage)) //Calculating the number of pages
+      var curPage = (req.params.page == undefined) ? 1 : Math.max(Math.min(Number(req.params.page),numberOfPage),1) //Clamping the page number between 1 and 10
+      var toSkip = (curPage - 1) * Number(process.env.limitPerPage);
+      
+      console.log(req.user.emails[0].value + " is viewing the events page " + curPage)
 
         //console.log("No of Entries " , NoOfEntries, "numberOfPage ", numberOfPage, "curPage " , curPage,"toSkip " ,toSkip)
 

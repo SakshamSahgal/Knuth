@@ -14,12 +14,14 @@ module.exports = (app) => {
     const {Mail} = require("../NodeMailer/mail.js")
 
     app.get("/announcements/:page?", isLoggedIn, updateLastActivity, async (req, res) => {
-
-      var NoOfEntries = await countDocuments("Main","Announcements",{}) //Counting the number of entries in the database     
-      var numberOfPage = Math.ceil(Number(NoOfEntries)/Number(process.env.limitPerPage)) //Calculating the number of pages
-      var curPage = (req.params.page == undefined) ? 1 : Math.max(Math.min(Number(req.params.page),numberOfPage),1) //Clamping the page number between 1 and 10
-      var toSkip = (curPage - 1) * Number(process.env.limitPerPage);
       
+        
+        var NoOfEntries = await countDocuments("Main","Announcements",{}) //Counting the number of entries in the database     
+        var numberOfPage = Math.ceil(Number(NoOfEntries)/Number(process.env.limitPerPage)) //Calculating the number of pages
+        var curPage = (req.params.page == undefined) ? 1 : Math.max(Math.min(Number(req.params.page),numberOfPage),1) //Clamping the page number between 1 and 10
+        var toSkip = (curPage - 1) * Number(process.env.limitPerPage);
+        
+        console.log(req.user.emails[0].value + " is viewing the announcements page " + curPage)
       //console.log("No of Entries " , NoOfEntries, "numberOfPage ", numberOfPage, "curPage " , curPage,"toSkip " ,toSkip)
       
       var coordinators = await readDB("Main", "Coordinators", { "list.gmail": req.user.emails[0].value }); //querrying DB to check if the email of the logged in user is present in the coordinators list
