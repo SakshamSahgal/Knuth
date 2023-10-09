@@ -1,7 +1,6 @@
 module.exports = (app) => {
 
     const urlToPing = process.env.Host + "/ping";
-    // console.log("URL to ping: " + urlToPing)
     const axios = require('axios');
 
     async function pingUrl() {
