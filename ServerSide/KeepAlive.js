@@ -28,5 +28,5 @@ module.exports = (app) => {
         res.send("pong");
     })
 
-    setInterval(pingUrl, parseInt(process.env.PingBotDuration)); // Ping every 10 seconds
+    setInterval(pingUrl, parseInt(process.env.PingBotDuration)); // Ping every x minutes
 }
