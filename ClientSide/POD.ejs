@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('./ReusableComponents/BootstrapCDN.ejs') %>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connect With US</title>
+</head>
+<style>
+    .custom-card {
+        height: 200px; /* Adjust the height as needed */
+        border: 1px solid #e5e5e5; /* Add a border for separation */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+        transition: transform 0.2s; /* Add a hover effect */
+    }
+
+    .custom-card:hover {
+        transform: translateY(-5px); /* Apply a lift on hover */
+    }
+
+    .custom-card .card-body {
+        padding: 1.25rem; /* Adjust padding for a better appearance */
+    }
+</style>
+<body>
+
+    <%- include('./ReusableComponents/navbar.ejs',{ activePage : page, email: emailTo }) %>
+
+    <div class="container mt-4">
+        <div class="row justify-content-center"> <!-- Use 'justify-content-center' class to center cards -->
+            <div class="col-md-6">             
+                
+                <!-- post event button -->
+                <button type="button" class="btn btn-primary btn-block mb-3" <%= (coordinator == false) ? 'disabled' : '' %> onclick="openIt('overlay')">
+            
+                    <% if(coordinator == false){ %> <span>&#x1F512;</span>  <% } %> Post
+                        
+                </button>
+
+                <ul class="list-group">
+                    
+                    <%for(let i=0;i<5;i++){%>
+                    
+                        <li class="list-group-item">
+                            <div class="row align-items-center">
+                                <div class="col-12 col-sm-3 text-center">
+                                    <img src="https://i.imgur.com/LhGSrhz.png" alt="Platform Icon 1" class="img-fluid" style="max-width: 100%;">
+                                </div>
+                                <div class="col-12 col-sm-7 text-center">
+                                    <a href=""><h5 class="mb-0">Problem Name 1</h5></a>
+                                </div>
+                                <div class="col-12 col-sm-2 text-center">
+                                    Rating: 4.5
+                                </div>
+                            </div>
+                        </li>
+                        
+                    <br>
+                    <%}%>
+                </ul>
+                
+                
+                
+                  
+            
+            </div>
+        </div>
+    </div>
+
+
+  </body>
+</html>
