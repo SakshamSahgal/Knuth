@@ -27,7 +27,7 @@ require("./PageRoutes/connectWithUsRoutes.js")(app)                //requiring t
 require("./PageRoutes/AdminRoutes.js")(app);                       //requiring the AdminRoutes.js file (for the admin page routes)
 require("./PageRoutes/EventRoutes.js")(app);                       //requiring the EventRoutes.js file (for the event page routes)
 require("./PageRoutes/FeedbackRoutes.js")(app);                    //requiring the FeedbackRoutes.js file (for the feedback page routes)
-require("./PageRoutes/POD.js")(app);                               //requiring the POD.js file (for the POD page routes)
+require("./PageRoutes/PODRoutes.js")(app);                               //requiring the POD.js file (for the POD page routes)
 require("./KeepAlive.js")(app);                                    //requiring the KeepAlive.js file (for pinging the server at intervals function)
 
 
