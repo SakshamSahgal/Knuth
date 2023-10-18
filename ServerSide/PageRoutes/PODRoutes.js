@@ -31,7 +31,7 @@ module.exports = (app) => {
             NumberOfPages : numberOfPage,
             CurPage : curPage,
         }
-        res.render(path.join(__dirname,"..","..","ClientSide","pod.ejs"),template);
+        res.render(path.join(__dirname,"..","..","ClientSide","POD.ejs"),template);
     })
 
     //
