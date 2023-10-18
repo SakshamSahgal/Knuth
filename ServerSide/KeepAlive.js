@@ -10,7 +10,7 @@ module.exports = (app) => {
                     'pingedBy': 'Keep-Alive-Bot', // Custom header
                 },
             });
-            console.log(`Ping successful! Keep-Alive-Bot return status Status code: ${response.status}`);
+            // console.log(`Ping successful! Keep-Alive-Bot return status Status code: ${response.status}`);
         } catch (error) {
             console.error(`Ping failed: ${error.message}`);
         }
@@ -20,7 +20,7 @@ module.exports = (app) => {
     app.get("/ping", (req, res) => {
 
         if (req.headers.pingedby == "Keep-Alive-Bot") {
-            console.log("Keep-Alive-Bot visited!");
+            // console.log("Keep-Alive-Bot visited!");
         } else {
             console.log("Someone visited!");
         }

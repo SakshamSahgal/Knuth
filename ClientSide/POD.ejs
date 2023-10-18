@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('./ReusableComponents/BootstrapCDN.ejs') %>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connect With US</title>
+</head>
+<link rel="stylesheet" href="/Styles/pod.css">
+<body>
+
+    <%- include('./ReusableComponents/navbar.ejs',{ activePage : page, email: emailTo }) %>
+
+    <div class="loadOverlayContainer" id="loadOverlay" hidden> 
+        <!-- You can customize the spinner size and color -->
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    <div class="container mt-4">
+        <div class="row justify-content-center"> <!-- Use 'justify-content-center' class to center cards -->
+            <div class="col-md-6">             
+                
+                <!-- post event button -->
+                <button type="button" class="btn btn-primary btn-block mb-3" <%= (coordinator == false) ? 'disabled' : '' %> onclick="openIt('overlay')">
+            
+                    <% if(coordinator == false){ %> <span>&#x1F512;</span>  <% } %> Post
+                        
+                </button>
+
+                <ul class="list-group">
+                    
+                    <%for(let i=0;i<problems.length;i++){%>
+
+                        <li class="list-group-item" style="position: relative;">
+                            <div class="row align-items-center">
+                                <div class="col-12 col-sm-3 text-center">
+                                    <img src="<%=problems[i].platformicon%>" class="img-fluid" style="max-width: 100%;">
+                                </div>
+                                <div class="col-12 col-sm-7">
+                                    <a href="<%=problems[i].link%>" target="_blank"><h5 class="mb-0"><%=problems[i].title%></h5></a>
+                                    Rating: <%=problems[i].rating%>
+                                </div>
+                                <% if(emailTo == problems[i].userPosted.email) { %>
+                                <button class="btn btn-danger" onclick="deleteCard('<%=problems[i].id%>')" style="position: absolute; top: 0; bottom: 0; right: 0; width: 50px;"><span>&#128465;</span></button>
+                                <%}%>
+                            </div>
+                        </li>
+                        
+                        
+                        
+                    <br>
+
+                    <%}%>
+                </ul>
+                  
+            
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay-container" id="overlay" hidden>
+        
+        <button class="btn float-right" onclick="closeIt('overlay')"> <span> &#10006; </span> </button>
+
+        <div class="container-fluid d-flex justify-content-center align-items-center vh-100">
+            <div class="col-lg-6 col-md-8 col-sm-10 col-12">
+                <div class="card mb-3">
+                    <div class="feed-header bg-dark text-white d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                        </div>
+                        <button class="btn" onclick="closeIt('overlay')"> <span> &#10006; </span> </button>
+                    </div>
+                    <div class="feed-content p-3">
+                        
+                        <form id="myForm">
+
+                            <textarea class="form-control mb-3 mt-2" name="title" rows="1" placeholder="Problem Title here..." required></textarea>
+                            <textarea class="form-control mb-3 mt-2" name="rating" rows="1" placeholder="Problem Rating here..." required></textarea>
+                            <textarea class="form-control mb-3 mt-2" name="link" rows="1" placeholder="Problem Link here..." required></textarea>
+                            
+                            <select class="form-select" id="feedbackType" name="platform" required>
+                                <% for(var i=0;i<platforms.length;i++){ %>
+                                    <option value="<%=platforms[i]%>" <% if(platforms[i] == selectedPlatformType) { %> selected <%}%> > <%= platforms[i] %> </option>
+                                <%}%>
+                            </select>
+
+                            <div class="text-center"> <!-- Center-align content -->
+                                <br>
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" name="AnnounceToSubscribers" id="AnnounceToSubscribers">
+                                    <label class="form-check-label" for="AnnounceToSubscribers"> <i class="fas fa-bullhorn" style="margin-right: 5px;"></i> Announce to Subscribers </label>
+                                </div>
+                                <br>
+                                
+                            </div>
+                            <input type="submit" value="Post" class="form-control mb-3 mt-2 btn btn-primary btn-block">
+                        </form>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+  </body>
+
+  <div id="fixed-nav-container">
+    <nav aria-label="Page navigation">
+      <ul class="pagination justify-content-center">
+        <!-- Previous -->
+        <li class="page-item <% if(CurPage == 1){ %> disabled  <% } %> ">
+          <a class="page-link" href="/<%=page%>/<%=CurPage - 1%>" tabindex="-1" aria-disabled="true">Previous</a>
+        </li>
+  
+        <% for(var i=1;i<=NumberOfPages;i++){ %>
+          <% if(i == CurPage){ %>
+            <li class="page-item active" aria-current="page"><a class="page-link" href="/<%=page%>/<%=i%>"><%=i%> <span class="sr-only">(current)</span></a></li>
+          <% } else{ %>
+            <li class="page-item"><a class="page-link" href="/<%=page%>/<%=i%>"><%=i%></a></li>
+          <% } %>
+        <% } %>
+  
+        <!-- Next -->
+        <li class="page-item <% if(CurPage == NumberOfPages){ %> disabled  <% } %> " >
+          <a class="page-link" href="/<%=page%>/<%=Number(CurPage) + Number(1)%>">Next</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+</html>
+<!-- axios CDN -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="/Scripts/pod.js"></script>
