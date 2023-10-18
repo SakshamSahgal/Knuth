@@ -1,0 +1,14 @@
+.custom-card {
+    height: 200px; /* Adjust the height as needed */
+    border: 1px solid #e5e5e5; /* Add a border for separation */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+    transition: transform 0.2s; /* Add a hover effect */
+}
+
+.custom-card:hover {
+    transform: translateY(-5px); /* Apply a lift on hover */
+}
+
+.custom-card .card-body {
+    padding: 1.25rem; /* Adjust padding for a better appearance */
+}

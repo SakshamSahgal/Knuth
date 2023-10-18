@@ -26,7 +26,24 @@ form.addEventListener('submit', (e) => {
         closeIt('overlay')
         window.location.reload();
     })
-        .catch((err) => {
-            console.log(err);
-        });
+    .catch((err) => {
+        console.log(err);
+    });
 });
+
+//function to delete the Event
+function deleteCard(id) {
+  
+    openIt('loadOverlay') //revealing the loadOverlay
+  
+    axios.delete(`/deletePOD/${id}`).then((response) => {
+  
+      closeIt('loadOverlay') //removing the loadOverlay
+      alert(response.data);
+      window.location.reload();
+    
+    }).catch((err) => {
+      console.log(err);
+    })
+  
+  }

@@ -1,12 +1,15 @@
+const { chownSync } = require('fs');
+
 module.exports = (app) => {
 
     const crypto = require('crypto');
     const path = require('path');
     const { isLoggedIn, isCoordinator } = require("../Middlewares.js");
-    const { readDB, writeDB, SkipRead, countDocuments} = require("../MongoOperations.js");
+    const { readDB, writeDB,deleteDB, SkipRead, countDocuments} = require("../MongoOperations.js");
     const { updateLastActivity } = require("../Middlewares.js");
     const {upload, multerErrorHandling } = require("../UploadImage/multer.js");
-    
+    const {Mail} = require("../NodeMailer/mail.js")
+
     app.get("/pod/:page?",isLoggedIn,updateLastActivity,async (req, res) => {
 
         var NoOfEntries = await countDocuments("Main","POD",{}) //Counting the number of entries in the database     
@@ -28,21 +31,36 @@ module.exports = (app) => {
             NumberOfPages : numberOfPage,
             CurPage : curPage,
         }
-
         res.render(path.join(__dirname,"..","..","ClientSide","pod.ejs"),template);
     })
 
-    app.post("/postPOD",upload.none(),multerErrorHandling,isLoggedIn,isCoordinator,updateLastActivity, async (req, res) => {
-        console.log(req.body);
+    //
+    const checkParameters = (req, res, next) => { //middleware to check the length of the fields
+            
+        if(req.body.title.length > parseInt(process.env.TitleLength)) //checking if the title is too long
+            return res.send("Title is too long");
+        if(req.body.rating.length > parseInt(process.env.RatingLength)) //checking if the rating is too long
+            return res.send("Rating is too long");
+        if(req.body.title.length == 0)                                //checking if the title is too short
+            return res.send("Title is too short");
+        if(req.body.rating.length == 0)                               //checking if the rating is too short
+            return res.send("rating is too short");
+            
+        next();
+    }
 
+    app.post("/postPOD",upload.none(),multerErrorHandling,isLoggedIn,isCoordinator,updateLastActivity,checkParameters, async (req, res) => {
 
+        // console.log(req.body);
+
+        
         let POD = {
             id : crypto.randomUUID(),
             title : req.body.title,
             rating : req.body.rating,
             link : req.body.link,
             platform : req.body.platform,
-            platformicon : (await readDB("Resources","CustomIcons",{platform : req.body.platform}))[0].image,
+            platformicon : "/GUI/Icons/" + req.body.platform + ".png",
             AnnounceToSubscribers : (req.body.AnnounceToSubscribers) ? true : false,
             userPosted: {
                 name: req.user.displayName,
@@ -51,15 +69,62 @@ module.exports = (app) => {
             },
             postedOn: new Date,
         }
+        
+        console.log(req.user.emails[0].value + " is posting the POD " + POD.id)
+        
+        if(POD.AnnounceToSubscribers) //if the user wants to announce the POD to the subscribers
+        {
+            let subscribers = await readDB("Main","Subscribers",{}); //reading the subscribers list
+            console.log(subscribers)
+            let MailData = {
+                to : [],
+                subject : "Knuth Progarming Hub : Problem of the Day",
+                message : "Problem of the Day is \n\n Problem Name : " + POD.title + "\n\n Problem Link : " + POD.link + "\n\n" + "Happy Coding!",
+            }
 
-        console.log(POD)
-
-        const result = await writeDB("Main","POD",POD);
-        console.log(result);
-
+            for (let subscriber of subscribers) { //sending mail to all the subscribers
+                MailData.to.push(subscriber.email)
+            }
 
 
+            await Mail(MailData) //calling the function to send the mail
 
-        res.send("posted POD")
+            const result = await writeDB("Main","POD",POD);
+            res.send("posted POD!")
+        }
+        else
+        {
+            const result = await writeDB("Main","POD",POD);
+            res.send("posted POD!")
+        }
+
+        
+       
+        // console.log(result);
+
+    })
+
+    //delete POD route , takes POD id , deletes the POD from DB
+    app.delete("/deletePOD/:id",isLoggedIn,isCoordinator,updateLastActivity, async (req, res) => {
+
+        console.log(req.user.emails[0].value + " is deleting the POD " + req.params.id)
+        readDB("Main", "POD", { "id": (req.params.id).toString() }).then(async (found) => { //finding if the POD exists 
+
+            if(found.length == 0) //POD not found
+                return res.send("POD not found");
+            else
+            {
+                if(found[0].userPosted.email != req.user.emails[0].value) //this POD was not posted by this user
+                    return res.send("You are not allowed to delete this POD becasue you are not the one who posted it");
+                else
+                {
+                    const result = await deleteDB("Main","POD",{id : (req.params.id).toString()});
+                    console.log(req.user.emails[0].value + " deleted the POD " + req.params.id)
+                    // /console.log(result);
+                    return res.send("deleted POD!")
+                }
+            }
+        })
+
     })
 }

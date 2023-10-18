@@ -6,22 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connect With US</title>
 </head>
-<style>
-    .custom-card {
-        height: 200px; /* Adjust the height as needed */
-        border: 1px solid #e5e5e5; /* Add a border for separation */
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
-        transition: transform 0.2s; /* Add a hover effect */
-    }
-
-    .custom-card:hover {
-        transform: translateY(-5px); /* Apply a lift on hover */
-    }
-
-    .custom-card .card-body {
-        padding: 1.25rem; /* Adjust padding for a better appearance */
-    }
-</style>
+<link rel="stylesheet" href="/Styles/pod.css">
 <body>
 
     <%- include('./ReusableComponents/navbar.ejs',{ activePage : page, email: emailTo }) %>
@@ -47,20 +32,23 @@
                 <ul class="list-group">
                     
                     <%for(let i=0;i<problems.length;i++){%>
-                    
-                        <li class="list-group-item">
+
+                        <li class="list-group-item" style="position: relative;">
                             <div class="row align-items-center">
                                 <div class="col-12 col-sm-3 text-center">
                                     <img src="<%=problems[i].platformicon%>" class="img-fluid" style="max-width: 100%;">
                                 </div>
-                                <div class="col-12 col-sm-7 text-center">
+                                <div class="col-12 col-sm-7">
                                     <a href="<%=problems[i].link%>" target="_blank"><h5 class="mb-0"><%=problems[i].title%></h5></a>
-                                </div>
-                                <div class="col-12 col-sm-2 text-center">
                                     Rating: <%=problems[i].rating%>
                                 </div>
+                                <% if(emailTo == problems[i].userPosted.email) { %>
+                                <button class="btn btn-danger" onclick="deleteCard('<%=problems[i].id%>')" style="position: absolute; top: 0; bottom: 0; right: 0; width: 50px;"><span>&#128465;</span></button>
+                                <%}%>
                             </div>
                         </li>
+                        
+                        
                         
                     <br>
 
@@ -85,6 +73,7 @@
                         <button class="btn" onclick="closeIt('overlay')"> <span> &#10006; </span> </button>
                     </div>
                     <div class="feed-content p-3">
+                        
                         <form id="myForm">
 
                             <textarea class="form-control mb-3 mt-2" name="title" rows="1" placeholder="Problem Title here..." required></textarea>
