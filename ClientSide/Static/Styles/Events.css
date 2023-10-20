@@ -93,6 +93,14 @@
   padding-left: 2rem; /* Add padding to create space for the icon */
 }
 
+.banner{
+  width: 100%;
+  max-width: 800px;
+  display: block;
+  margin: 0 auto;
+  position: relative; /* Add position relative for icon overlay */
+}
+
 .event-header {
   background-color: #212529;
   color: white;

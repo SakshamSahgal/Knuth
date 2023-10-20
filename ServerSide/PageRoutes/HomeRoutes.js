@@ -14,7 +14,7 @@ module.exports = (app) => {
         page: "home",
         emailTo: req.user.emails[0].value,
         websitesForPractice : await readDB("Resources","websitesForPractice",{}),
-        CPTools : await readDB("Resources","CPTools",{})
+        CPTools : await readDB("Resources","CPTools",{}),
       }
 
       res.render(path.join(__dirname, "..","..","ClientSide", "home.ejs"), Template)
