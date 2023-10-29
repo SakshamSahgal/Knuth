@@ -23,7 +23,7 @@ module.exports = (app) => {
 
         let template = {
             page: "pod", //to tell the navbar to highlight POD
-            platforms : ["Codeforces","Atcoder","Codechef","Hackerrank","HackerEarth","SPOJ"],
+            platforms : ["Codeforces","Atcoder","Codechef","Hackerrank","HackerEarth","SPOJ","Leetcode","CSES"],
             selectedPlatformType : "Codeforces",
             emailTo: req.user.emails[0].value,
             coordinator : (coordinators.length > 0) ,
@@ -53,7 +53,6 @@ module.exports = (app) => {
 
         // console.log(req.body);
 
-        
         let POD = {
             id : crypto.randomUUID(),
             title : req.body.title,
