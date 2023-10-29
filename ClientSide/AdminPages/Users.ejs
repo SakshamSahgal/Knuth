@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <%- include('./ReusableComponents/BootstrapCDN.ejs') %>
+  <%- include('../ReusableComponents/BootstrapCDN.ejs') %>
   <title>User Details</title>
 </head>
 <body>
@@ -50,7 +50,7 @@
                                     <%= (users[i].ActivityStatus) %>
                                 </span>
                             </p>
-                            <p> <strong>Last Active :</strong> <%=users[i].timeSinceLastActive%> minutes ago</p>
+                            <p> <strong>Last Active :</strong> <%=users[i].timeSinceLastActive%> </p>
                         </div>
                     </div>
                 </div>
