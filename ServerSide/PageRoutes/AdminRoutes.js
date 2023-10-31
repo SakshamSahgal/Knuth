@@ -1,8 +1,10 @@
 module.exports = (app) => {
 
     const {isLoggedIn,isAdmin} = require("../Middlewares.js");
-    const {countDocuments,readwithSortDB} = require("../MongoOperations.js");
+    const {countDocuments,readwithSortDB, readDB, deleteDB} = require("../MongoOperations.js");
     const path = require("path");
+    const {Mail} = require("../NodeMailer/mail.js")
+    const { ObjectId } = require('mongodb');
 
     app.get("/admin/users",isLoggedIn,isAdmin, async (req, res) => {
 
@@ -27,6 +29,29 @@ module.exports = (app) => {
             subscribers : await readwithSortDB("Main", "Subscribers", {},{subscribedOn : -1}), //Sort by subscribedOn in descending order
         }
         res.render(path.join(__dirname,"..","..","ClientSide","AdminPages","Subscribers.ejs"), template);
+    })
+
+    app.get("/admin/approvals",isLoggedIn,isAdmin, async (req, res) => {
+        let template = {
+            pendingApprovals : await readDB("Main","Approvals",{})
+        }
+        res.render(path.join(__dirname,"..","..","ClientSide","AdminPages","Approvals.ejs"), template);
+    })
+
+    app.post('/approveMail',isLoggedIn,isAdmin, async (req, res) => {
+        mailData = await readDB("Main","Approvals",{_id : new ObjectId(req.body.id)});
+        console.log(mailData);
+        if(mailData.length > 0)
+            await Mail(mailData[0]);
+        const deleteResult = await deleteDB("Main","Approvals",{_id : new ObjectId(req.body.id)});
+        console.log(deleteResult);
+        res.send("Successfully Accepted")
+    })
+
+    app.post("/rejectMail",isLoggedIn,isAdmin, async (req, res) => {
+        const deleteResult = await deleteDB("Main","Approvals",{_id : new ObjectId(req.body.id)});
+        console.log(deleteResult);
+        res.send("Successfully Rejected")
     })
 
     function isUserOnline(targetDate) {
