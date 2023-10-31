@@ -1,8 +1,30 @@
-# Knuth
+# **Knuth Programming Hub**
 
 ## Deployment
 
 > The Knuth web application has been deployed on Render and can be accessed at [link](https://knuth-programming-hub-9p08.onrender.com/).
+
+ 
+
+**Website is Designed, Developed, and Maintained by Saksham Sahgal**
+
+## Purpose
+
+> The Knuth Programming Hub (KPH) website serves the following functions:
+> 
+> 1. Hosting links to Competitive Programming practice websites.
+> 2. Providing useful tools for Competitive Programming.
+> 3. Showcasing Events Organized.
+> 4. Sharing Announcements.
+> 5. Featuring the "Problem of the Day," curated by KPH.
+
+
+
+## Mission
+
+> Our sole mission is to foster and promote a vibrant coding culture at JIIT Noida.
+
+
 
 ## Knuth Configuration Parameters
 

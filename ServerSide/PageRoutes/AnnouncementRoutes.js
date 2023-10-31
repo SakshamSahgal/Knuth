@@ -11,7 +11,6 @@ module.exports = (app) => {
     const { upload, multerErrorHandling, TypeCheck } = require("../UploadImage/multer.js");
     const { uploadFile, deleteImageFromImgur } = require("../UploadImage/imgur.js");
     const {FieldLengthCheck} = require("../UploadImage/FormMidddlewares.js")
-    const {Mail} = require("../NodeMailer/mail.js")
 
     app.get("/announcements/:page?", isLoggedIn, updateLastActivity, async (req, res) => {
       
@@ -89,7 +88,7 @@ module.exports = (app) => {
                         to : [],
                         subject : "Knuth Progarming Hub : " + Announcement.title,
                         message : Announcement.description,
-                        images : [],
+                        images : []
                     }
 
                     for (let subscriber of subscribers) { //sending mail to all the subscribers
@@ -106,9 +105,9 @@ module.exports = (app) => {
                         MailData.images.push(img)
                     }
 
-                    //console.log(MailData)
+                    console.log(MailData)
         
-                    await Mail(MailData) //calling the function to send the mail
+                    await writeDB("Main","Approvals",MailData);
                 }
     
                 return res.send("Announcement Posted")

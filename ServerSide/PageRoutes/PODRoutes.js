@@ -8,7 +8,6 @@ module.exports = (app) => {
     const { readDB, writeDB,deleteDB, SkipRead, countDocuments} = require("../MongoOperations.js");
     const { updateLastActivity } = require("../Middlewares.js");
     const {upload, multerErrorHandling } = require("../UploadImage/multer.js");
-    const {Mail} = require("../NodeMailer/mail.js")
 
     app.get("/pod/:page?",isLoggedIn,updateLastActivity,async (req, res) => {
 
@@ -73,34 +72,30 @@ module.exports = (app) => {
         
         if(POD.AnnounceToSubscribers) //if the user wants to announce the POD to the subscribers
         {
-            let subscribers = await readDB("Main","Subscribers",{}); //reading the subscribers list
-            console.log(subscribers)
             let MailData = {
                 to : [],
                 subject : "Knuth Progarming Hub : Problem of the Day",
                 message : "Problem of the Day is \n\n Problem Name : " + POD.title + "\n\n Problem Link : " + POD.link + "\n\n" + "Happy Coding!",
+                images : []
             }
+            
+            let subscribers = await readDB("Main","Subscribers",{}); //reading the subscribers list
 
             for (let subscriber of subscribers) { //sending mail to all the subscribers
                 MailData.to.push(subscriber.email)
             }
 
-
-            await Mail(MailData) //calling the function to send the mail
-
-            const result = await writeDB("Main","POD",POD);
-            res.send("posted POD!")
+            console.log(MailData)
+            await writeDB("Main","Approvals",MailData);
         }
-        else
-        {
-            const result = await writeDB("Main","POD",POD);
+        try {
+            await writeDB("Main","POD",POD);
             res.send("posted POD!")
+        } catch (error) {
+            console.log(error)
+            return res.send("Error while posting POD")
         }
-
         
-       
-        // console.log(result);
-
     })
 
     //delete POD route , takes POD id , deletes the POD from DB
