@@ -4,7 +4,7 @@
 
 > The Knuth web application has been deployed on Render and can be accessed at [link](https://knuth-programming-hub-9p08.onrender.com/).
 
- 
+Documentation can be accessed at [link](https://sakshamsahgal.github.io/Knuth/)
 
 **Website is Designed, Developed, and Maintained by Saksham Sahgal**
 
