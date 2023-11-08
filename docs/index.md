@@ -4,4 +4,8 @@
 
 [How to run the project locally](RunningLocally.md)
 
+[What does Each Configuration Parameter Means?](./ConfigurationParameter.md)
+
+[Packages Used](./PackagesUsed.md)
+
 
