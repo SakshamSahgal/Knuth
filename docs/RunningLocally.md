@@ -26,30 +26,10 @@
   RatingLength = 50
   ```
 
-
-
-
-
 > **Note:** The value of these configuration parameters are very sensitive information and without these values the project won't be functional.
 
+### [What does each configuration parameter means?](./ConfigurationParameter.md)
 
-
- 
-
-## What does each configuration parameter means?
-
-- `URI` : 
-  - This is the Uniform Resource Identifier provided by MongoDB that the project uses to connect to the Database.
-  - The string is used to connect to Knuth's cluster containing the Knuth's Database.
-  - It looks something like this - 
-  - `mongodb+srv://<username>:<password>@knuthcluster.bdqayma.mongodb.net/?retryWrites=true&w=majority`
-- `DEV_PORT` : 
-  - specifies the port used by the server to host the application.
-- 
-- `CLIENT_ID`  and `CLIENT_SECRET`: 
-  - To make the google authentication work, you have to use Oauth API from google console.
-  - Make a new project in google console.
-  - you will get a Client_ID and Client Secret from there.
-- `SESSION_SECRET`
-  - this is a string that is used by express session middleware used to sign and encrypt the session data before it is stored on the client side.
-  - to run locally you can set it to anything you want.
+> Build Command - npm install
+> 
+> Start Command - node ServerSide/server.js
