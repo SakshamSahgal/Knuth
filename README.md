@@ -6,7 +6,7 @@
 
 **Website is Designed, Developed, and Maintained by [Saksham Sahgal](https://www.linkedin.com/in/saksham-sahgal-aaa23b164/)**
 
-DOCS
+## DOCS
 
 > Documentation can be accessed at [link](https://sakshamsahgal.github.io/Knuth/)
 
