@@ -1,3 +1,10 @@
+<style>
+  body {
+    background-color: black;
+    color: white;
+  }
+</style>
+
 # What does each configuration parameter means?
 
 - `URI` :

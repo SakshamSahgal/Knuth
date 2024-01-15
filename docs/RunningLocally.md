@@ -1,3 +1,10 @@
+<style>
+  body {
+    background-color: black;
+    color: white;
+  }
+</style>
+
 # Running The project Locally
 
 - Clone the repository locally by using the git command -

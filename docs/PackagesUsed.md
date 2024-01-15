@@ -1,3 +1,10 @@
+<style>
+  body {
+    background-color: black;
+    color: white;
+  }
+</style>
+
 # Packages Used
 
 > Packages Used can be found in package.json
