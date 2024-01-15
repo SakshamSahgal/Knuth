@@ -1,9 +1,10 @@
-remote_theme: "pmarsceill/just-the-docs@main"
+remote_theme: "mmistakes/minimal-mistakes@main"
 
 title: Documentation
 description: this is the official documentation on how to use this repo.
 
 theme:
-  name: jekyll-theme-cayman
+  name: minimal-mistakes
+  color_scheme: dark
 
 # Additional configurations if needed
