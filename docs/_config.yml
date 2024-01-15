@@ -1,4 +1,4 @@
+theme: jekyll-theme-yat
 remote_theme: "jeffreytse/jekyll-theme-yat"
-
-title: Documentation
-description: this is the official documentation on how to use this repo.
+yat:
+  dark_mode: true
