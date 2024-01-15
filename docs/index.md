@@ -1,10 +1,3 @@
-<style>
-  body {
-    background-color: black;
-    color: white;
-  }
-</style>
-
 # ** Knuth Programming Hub Documentation**
 
 <img title="" src="./GUI_Resources/KnuthLogo.png" alt="KnuthLogo.png" data-align="center" width="157">
