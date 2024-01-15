@@ -1,4 +1,6 @@
-theme: jekyll-theme-yat
 remote_theme: "jeffreytse/jekyll-theme-yat"
+plugins:
+  - jekyll-remote-theme
+
 yat:
   dark_mode: true
