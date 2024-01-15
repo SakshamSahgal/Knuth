@@ -1,6 +1,7 @@
-remote_theme: "jeffreytse/jekyll-theme-yat"
-plugins:
-  - jekyll-remote-theme
+remote_theme: "pmarsceill/just-the-docs@main"
 
-yat:
-  dark_mode: true
+title: Documentation
+description: this is the official documentation on how to use this repo.
+
+theme:
+  name: jekyll-theme-cayman
