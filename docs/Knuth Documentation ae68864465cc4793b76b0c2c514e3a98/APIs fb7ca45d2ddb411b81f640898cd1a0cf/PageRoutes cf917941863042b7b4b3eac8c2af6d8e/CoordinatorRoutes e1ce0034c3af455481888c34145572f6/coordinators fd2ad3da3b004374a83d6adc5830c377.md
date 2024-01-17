@@ -1,4 +1,4 @@
-# /coordinators
+# coordinators
 
 This API endpoint retrieves a list of coordinators and renders the corresponding page.
 
