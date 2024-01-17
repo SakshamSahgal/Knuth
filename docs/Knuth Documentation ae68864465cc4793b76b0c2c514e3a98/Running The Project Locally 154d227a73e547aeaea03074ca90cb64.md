@@ -33,7 +33,7 @@ Clone the repository locally by using the git command -
     
 - For explaination of the .env parameters, you can refer this -
     
-    [Configuration Parameters](Configuration%20Parameters%205b8ff156f01b4e9b905a85c438348086.md)
+    [Configuration Parameters](Configuration%20Parameters%205b8ff156f01b4e9b905a85c438348086.html)
     
     > Note: The value of these configuration parameters are very sensitive information and without these values the project won't be functional.
     > 
@@ -44,7 +44,7 @@ Clone the repository locally by using the git command -
 1. You can install the packages using the command `npm install`
 2. for more details about packages you can refer - 
 
-[Packages Used](Packages%20Used%20562ef0a62caa4062b79b33595f62e0ca.md)
+[Packages Used](Packages%20Used%20562ef0a62caa4062b79b33595f62e0ca.html)
 
 ### run
 
