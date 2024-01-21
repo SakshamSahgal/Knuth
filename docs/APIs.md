@@ -1,3 +1,6 @@
+
+# ALL APIs interacting with the Server
+
 - [/ping](APIs/ping.md)
 - [/](APIs/root.md)
 - [/pod/:page?](APIs/podPage.md)
@@ -23,3 +26,4 @@
 - [/admin/approvals](APIs/adminApprovals.md)
 - [/approveMail](APIs/approveMail.md)
 - [/rejectMail](APIs/rejectMail.md)
+ 
