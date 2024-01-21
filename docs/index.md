@@ -1,5 +1,5 @@
 
-![Description of the image](GUIResources/KnuthLogo.png)
+![Description of the image](GUIResources/KPHLogo.png)
 
 
 1.  [RunningLocally](RunningLocally.md)
