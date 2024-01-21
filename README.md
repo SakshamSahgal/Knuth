@@ -6,7 +6,7 @@
 
 **Website is Designed, Developed, and Maintained by [Saksham Sahgal](https://www.linkedin.com/in/saksham-sahgal-aaa23b164/)**
 
-## DOCS
+## Docs
 
 > Documentation can be accessed at [link](https://sakshamsahgal.github.io/Knuth/)
 
@@ -22,4 +22,4 @@
 
 ## Mission
 
-> Our sole mission is to foster and promote a vibrant coding culture at JIIT Noida.
+> Our sole mission is to foster and promote a vibrant coding culture at JIIT.
