@@ -1,5 +1,3 @@
-# Configuration Parameters
-
 # What does each configuration parameter means?
 
 - `URI` :
@@ -30,7 +28,7 @@
     - This way the uploaded data remains persistant even across deploys and restarts.
     - We don't need `imgurClientID` to upload images Anonymously to Igmur, but we need this to delete them.
     - We need the imgurClientID in the `Authorization header` to delete the images (with their respective `deleteHash`) when a post is deleted -
-    - `Authorization': `Client-ID ${clientId}`,`
+    - `Authorization':` Client-ID ${clientId}`,`
 - `imgurClientSecret`
     - Currently this is not used, because I am doing `Anonymous uploads` to `Imgur`, hence the uploads are not associated to any account.
 - `TitleLength`
