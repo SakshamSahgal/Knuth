@@ -30,7 +30,7 @@ Clone the repository locally by using the git command -
     RatingLength = 50
     ```
     
-- For explaination of the .env parameters, you can refer [Configuration Parameters](Configuration%20Parameters.md)
+- For explaination of the .env parameters, you can refer [ConfigurationParameters](ConfigurationParameters.md)
     
       
     > Note: The value of these configuration parameters are very sensitive information and without these values the project won't be functional.
@@ -39,7 +39,7 @@ Clone the repository locally by using the git command -
 ### Install Packages
 
 1. You can install the packages using the command `npm install`
-2. for more details about packages you can refer [Packages Used](Packages%20Used.md)
+2. for more details about packages you can refer [Packages Used](PackagesUsed.md)
 
 ### run
 
