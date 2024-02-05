@@ -1,6 +1,7 @@
 
 module.exports = (app) => {
 
+    const { updateLog } = require("../Admin/UserActivty.js")
     const path = require('path');
     const {isLoggedIn,updateLastActivity } = require("../Middlewares.js");
     const {upload, multerErrorHandling } = require("../UploadImage/multer.js");
@@ -9,7 +10,7 @@ module.exports = (app) => {
 
     app.get("/feedback",isLoggedIn,updateLastActivity, (req, res) => { 
 
-        console.log(req.user.emails[0].value + " is viewing the feedback page")
+        updateLog(req, "Accessed the feedback page")
 
         let template = {
             page: "feedback",

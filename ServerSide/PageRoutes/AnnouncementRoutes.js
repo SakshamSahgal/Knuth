@@ -11,35 +11,37 @@ module.exports = (app) => {
     require("dotenv").config();
     const { upload, multerErrorHandling, TypeCheck } = require("../UploadImage/multer.js");
     const { uploadFile, deleteImageFromImgur } = require("../UploadImage/imgur.js");
-    const {FieldLengthCheck} = require("../UploadImage/FormMidddlewares.js")
+    const { FieldLengthCheck } = require("../UploadImage/FormMidddlewares.js")
+    const { updateLog } = require('../Admin/UserActivty.js');
 
     app.get("/announcements/:page?", isLoggedIn, updateLastActivity, async (req, res) => {
-      
-        var NoOfEntries = await countDocuments("Main","Announcements",{}) //Counting the number of entries in the database     
-        var numberOfPage = Math.ceil(Number(NoOfEntries)/Number(process.env.limitPerPage)) //Calculating the number of pages
-        var curPage = (req.params.page == undefined) ? 1 : Math.max(Math.min(Number(req.params.page),numberOfPage),1) //Clamping the page number between 1 and 10
-        var toSkip = (curPage - 1) * Number(process.env.limitPerPage);
-        
-      console.log(req.user.emails[0].value + " is viewing the announcements page " + curPage)
-      //console.log("No of Entries " , NoOfEntries, "numberOfPage ", numberOfPage, "curPage " , curPage,"toSkip " ,toSkip)
-      
-      var coordinators = await readDB("Main", "Coordinators", { "list.gmail": req.user.emails[0].value }); //querrying DB to check if the email of the logged in user is present in the coordinators list
-      
-      let templateJson = {
-        fileLimit: parseInt(process.env.ImageUploadLimit),
-        fileSize: parseInt(process.env.ImageSizeLimitInBytes) / (1024 * 1024),
-        page: "announcements",
-        emailTo: req.user.emails[0].value,
-        username: req.user.displayName,
-        profilePicture: req.user.photos[0].value,
-        coordinator: (coordinators.length > 0),
-        announcements: await SkipRead("Main","Announcements",{},{ postedOn: -1 },toSkip,Number(process.env.limitPerPage)), //Reading the database
-        NumberOfPages : numberOfPage,
-        CurPage : curPage,
-        SubscriptionState : await readDB("Main","Subscribers",{email : req.user.emails[0].value}).then((found) => {return found.length > 0}), //Checking if the user is subscribed to announcements
-    }
 
-    res.render(path.join(__dirname, "..", "..", "ClientSide", "Announcements"), templateJson);//sending the user data to the frontend
+        var NoOfEntries = await countDocuments("Main", "Announcements", {}) //Counting the number of entries in the database     
+        var numberOfPage = Math.ceil(Number(NoOfEntries) / Number(process.env.limitPerPage)) //Calculating the number of pages
+        var curPage = (req.params.page == undefined) ? 1 : Math.max(Math.min(Number(req.params.page), numberOfPage), 1) //Clamping the page number between 1 and 10
+        var toSkip = (curPage - 1) * Number(process.env.limitPerPage);
+
+        updateLog(req, "Accessed the announcements page " + curPage)
+
+        //console.log("No of Entries " , NoOfEntries, "numberOfPage ", numberOfPage, "curPage " , curPage,"toSkip " ,toSkip)
+
+        var coordinators = await readDB("Main", "Coordinators", { "list.gmail": req.user.emails[0].value }); //querrying DB to check if the email of the logged in user is present in the coordinators list
+
+        let templateJson = {
+            fileLimit: parseInt(process.env.ImageUploadLimit),
+            fileSize: parseInt(process.env.ImageSizeLimitInBytes) / (1024 * 1024),
+            page: "announcements",
+            emailTo: req.user.emails[0].value,
+            username: req.user.displayName,
+            profilePicture: req.user.photos[0].value,
+            coordinator: (coordinators.length > 0),
+            announcements: await SkipRead("Main", "Announcements", {}, { postedOn: -1 }, toSkip, Number(process.env.limitPerPage)), //Reading the database
+            NumberOfPages: numberOfPage,
+            CurPage: curPage,
+            SubscriptionState: await readDB("Main", "Subscribers", { email: req.user.emails[0].value }).then((found) => { return found.length > 0 }), //Checking if the user is subscribed to announcements
+        }
+
+        res.render(path.join(__dirname, "..", "..", "ClientSide", "Announcements"), templateJson);//sending the user data to the frontend
 
     })
 
@@ -56,7 +58,7 @@ module.exports = (app) => {
     app.post("/PostAnnouncements", isLoggedIn, isCoordinator, upload.array("images", parseInt(process.env.ImageUploadLimit)), multerErrorHandling, TypeCheck, FieldLengthCheck, updateLastActivity, async (req, res) => {
 
         let Announcement = {
-            id : crypto.randomUUID(),
+            id: crypto.randomUUID(),
             title: req.body.title,
             description: req.body.post,
             images: [],
@@ -66,7 +68,7 @@ module.exports = (app) => {
                 profilePicture: req.user.photos[0].value
             },
             postedOn: new Date,
-            AnnounceToSubscribers : (req.body.AnnounceToSubscribers) ? true : false,
+            AnnounceToSubscribers: (req.body.AnnounceToSubscribers) ? true : false,
         }
 
         // console.log(Announcement)
@@ -82,35 +84,35 @@ module.exports = (app) => {
 
             if (Announcement.AnnounceToSubscribers) { //if the coordinator wants to announce to subscribers
 
-                    let subscribers = await readDB("Main", "Subscribers", {}); //reading the subscribers list
-                    
-                    let MailData = {
-                        to : [],
-                        subject : "Knuth Progarming Hub : " + Announcement.title,
-                        message : Announcement.description,
-                        images : []
-                    }
+                let subscribers = await readDB("Main", "Subscribers", {}); //reading the subscribers list
 
-                    for (let subscriber of subscribers) { //sending mail to all the subscribers
-                        MailData.to.push(subscriber.email)
-                    }
-
-                    for(let image of Announcement.images) { //adding all the images to the mail
-                        
-                        let img = {
-                            filename : image.link.split("/")[3],
-                            path : image.link,
-                        }
-
-                        MailData.images.push(img)
-                    }
-
-                    console.log(MailData)
-        
-                    await writeDB("Main","Approvals",MailData);
+                let MailData = {
+                    to: [],
+                    subject: "Knuth Progarming Hub : " + Announcement.title,
+                    message: Announcement.description,
+                    images: []
                 }
-    
-                return res.send("Announcement Posted")
+
+                for (let subscriber of subscribers) { //sending mail to all the subscribers
+                    MailData.to.push(subscriber.email)
+                }
+
+                for (let image of Announcement.images) { //adding all the images to the mail
+
+                    let img = {
+                        filename: image.link.split("/")[3],
+                        path: image.link,
+                    }
+
+                    MailData.images.push(img)
+                }
+
+                console.log(MailData)
+
+                await writeDB("Main", "Approvals", MailData);
+            }
+
+            return res.send("Announcement Posted")
 
         }).catch((err) => {
             console.log("Can't Write to Announcements ");
@@ -138,11 +140,11 @@ module.exports = (app) => {
                     deleteDB("Main", "Announcements", { "id": (req.params.id).toString() }).then((result) => { //deleting the announcement from DB
                         res.send("Announcement Deleted successfully")
                     })
-                    .catch((err) => {
-                        console.log("Can't Delete from Announcements ");
-                        console.log(err);
-                        res.send("Can't Delete Announcements, DB error");
-                    })
+                        .catch((err) => {
+                            console.log("Can't Delete from Announcements ");
+                            console.log(err);
+                            res.send("Can't Delete Announcements, DB error");
+                        })
                 }
                 else
                     res.status(400).send("You can't delete this announcement because it was not posted by you");
@@ -157,7 +159,7 @@ module.exports = (app) => {
     app.post("/SubscribeAnnouncement", isLoggedIn, updateLastActivity, (req, res) => {
 
         console.log("subscribe requested by " + req.user.emails[0].value)
-        
+
         readDB("Main", "Subscribers", { "email": req.user.emails[0].value }).then((found) => { //finding if the user is already subscribed
 
             if (found.length > 0) //user already subscribed
@@ -170,7 +172,7 @@ module.exports = (app) => {
                     profilePicture: req.user.photos[0].value,
                     subscribedOn: new Date,
                 }
-                    
+
                 writeDB("Main", "Subscribers", subscriber).then((result) => { //writing to DB to store the subscriber
                     res.send("Subscribed to Announcements")
                 }).catch((err) => {
@@ -194,11 +196,11 @@ module.exports = (app) => {
                 deleteDB("Main", "Subscribers", { "email": req.user.emails[0].value }).then((result) => { //deleting the subscriber from DB
                     res.send("Unsubscribed from Announcements")
                 })
-                .catch((err) => {
-                    console.log("Can't Delete from Subscribers ");
-                    console.log(err);
-                    res.send("Can't Unsubscribe from Announcements, DB error");
-                })
+                    .catch((err) => {
+                        console.log("Can't Delete from Subscribers ");
+                        console.log(err);
+                        res.send("Can't Unsubscribe from Announcements, DB error");
+                    })
             }
             else //user not subscribed
                 res.send("You are not subscribed to Announcements");

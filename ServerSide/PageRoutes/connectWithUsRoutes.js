@@ -3,10 +3,11 @@ module.exports = (app) => {
 const {readDB} = require("../MongoOperations.js");
 const {isLoggedIn,updateLastActivity} = require("../Middlewares.js")
 const path = require("path");
+const { updateLog } = require("../Admin/UserActivty.js")
 
 app.get("/ConnectWithUs",isLoggedIn,updateLastActivity,(req,res) => {
     
-    console.log(req.user.emails[0].value + " is viewing the ConnectWithUs page")
+    updateLog(req, "Accessed the ConnectWithUs page")
 
     readDB("Main","ConnectWithUs",{}).then((result) => {
 
