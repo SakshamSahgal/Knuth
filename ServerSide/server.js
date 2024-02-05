@@ -13,6 +13,7 @@ app.use(express.json({limit : '1mb'}));                                         
 app.use(express.static(path.join(__dirname,"..","ClientSide","Static")));                           //telling that my webapp will be using the files in the ClientSide/Static folder for static files
 
 const {redirectIfLoggedIn} = require("./Middlewares.js"); //including the Middlewares.js file (for the middlewares)
+const { connectDB } = require("./MongoOperations.js");
 //------------------------------------------------------------------------------------------------------------------------------
 
 // Setting the view engine to EJS
@@ -33,6 +34,7 @@ require("./KeepAlive.js")(app);                                    //requiring t
 
 app.listen(port, () => {
     console.log("Server Started at port " + port);
+    connectDB();
 });
 
 app.get("/",redirectIfLoggedIn, (req, res) => {                     //unprotected route
