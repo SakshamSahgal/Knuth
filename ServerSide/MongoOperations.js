@@ -9,10 +9,19 @@ const client = new MongoClient(process.env.URI, {
     }
 });
 
+async function connectDB() {
+    try {
+        await client.connect();
+        console.log("Connected to the database");
+    } catch (error) {
+        console.error("Error:", error);
+        throw error; // Rethrow the error for the caller to handle
+    }
+}
+
 
 async function writeDB(Database, Collection, Data) { //Create Entry
     try {
-        await client.connect();
         const db = client.db(Database);
         const collection = db.collection(Collection);
         
@@ -29,7 +38,6 @@ async function writeDB(Database, Collection, Data) { //Create Entry
 
 async function readDB(Database, Collection, Query) { //Read Entry
     try {
-        await client.connect();
         const db = client.db(Database);
         const collection = db.collection(Collection);
 
@@ -44,7 +52,6 @@ async function readDB(Database, Collection, Query) { //Read Entry
 
 async function readwithSortDB(Database, Collection, FindQuery, SortQuerry) { //Read Entry
     try {
-        await client.connect();
         const db = client.db(Database);
         const collection = db.collection(Collection);
 
@@ -59,7 +66,6 @@ async function readwithSortDB(Database, Collection, FindQuery, SortQuerry) { //R
 
 async function updateDB(Database, Collection, FindQuery, UpdateQuery) { //Update Entry
     try {
-        await client.connect();
         const db = client.db(Database);
         const collection = db.collection(Collection);
 
@@ -74,7 +80,6 @@ async function updateDB(Database, Collection, FindQuery, UpdateQuery) { //Update
 
 async function deleteDB(Database, Collection, Query) { //Delete Entry
     try {
-        await client.connect();
         const db = client.db(Database);
         const collection = db.collection(Collection);
 
@@ -89,7 +94,6 @@ async function deleteDB(Database, Collection, Query) { //Delete Entry
 
 async function countDocuments(Database, Collection, Query) { //Count Entries
     try {
-        await client.connect();
         const db = client.db(Database);
         const collection = db.collection(Collection);
 
@@ -105,7 +109,6 @@ async function countDocuments(Database, Collection, Query) { //Count Entries
 
 async function SkipRead(Database, Collection, Query, sortQuery, Skip, Limit) { //Read Entry
     try {
-        await client.connect();
         const db = client.db(Database);
         const collection = db.collection(Collection);
 
@@ -118,4 +121,4 @@ async function SkipRead(Database, Collection, Query, sortQuery, Skip, Limit) { /
     }
 }
 
-module.exports = {writeDB, readDB, updateDB, deleteDB, countDocuments, SkipRead , readwithSortDB};
+module.exports = {connectDB, writeDB, readDB, updateDB, deleteDB, countDocuments, SkipRead , readwithSortDB};

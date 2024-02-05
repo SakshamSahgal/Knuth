@@ -1,4 +1,4 @@
-const {writeDB,readDB,updateDB,deleteDB} = require("./MongoOperations.js"); //including the MongoOperations.js file (for the DB operations)
+const {readDB,updateDB} = require("./MongoOperations.js"); //including the MongoOperations.js file (for the DB operations)
 
 function isLoggedIn(req, res, next) { //Middleware to check if user is logged in
     if (req.user) //check if user is authenticated

@@ -1,3 +1,4 @@
+const { GetUserActivity } = require("../Admin/UserActivty.js")
 
 module.exports = (app) => {
 
@@ -8,6 +9,7 @@ module.exports = (app) => {
 
   app.get("/home", isLoggedIn,updateLastActivity,async (req, res) => { //protected route
 
+      GetUserActivity(req)
       console.log(req.user.emails[0].value + " is viewing the home page")
 
       let Template = {
