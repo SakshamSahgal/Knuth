@@ -40,10 +40,12 @@ const getUserLocation = async (ip) => {
     const ipAddress = ip; //IPv6-mapped IPv4 address
     // console.log("IP  : ")
     // console.log(ipAddress);
-    const ipv4Address = ipAddress.split(':').pop();
-    // console.log(ipAddress + " " + ipv4Address);
-
+    
+    
     try {
+        const ipv4Address = ipAddress.split(':').pop();
+        console.log(ipAddress + " " + ipv4Address);
+        
         const response = await axios.get(`https://ipinfo.io/${ipv4Address}/json`);
         const locationData = response.data;
         // console.log(locationData)
@@ -51,7 +53,7 @@ const getUserLocation = async (ip) => {
         delete locationData.ip;
         delete locationData.readme;
         delete locationData.loc;
-        
+
         locationData.latitude = locationData.loc.split(',')[0];
         locationData.longitude = locationData.loc.split(',')[1];
         return locationData;
