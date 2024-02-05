@@ -45,7 +45,8 @@ const getUserLocation = async (ip) => {
         const response = await axios.get(`https://ipinfo.io/${ipAddress}/json`);
         const locationData = response.data;
         
-        console.log(locationData);
+        // console.log(locationData);
+        
         if(locationData.loc){
             locationData.latitude = locationData.loc.split(',')[0];
             locationData.longitude = locationData.loc.split(',')[1];
