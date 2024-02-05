@@ -22,7 +22,7 @@ module.exports = (app) => {
 
         let template = {
             page: "pod", //to tell the navbar to highlight POD
-            platforms : ["Codeforces","Atcoder","Codechef","Hackerrank","HackerEarth","SPOJ","Leetcode","CSES"],
+            platforms : ["Codeforces","Atcoder","Codechef","Hackerrank","HackerEarth","SPOJ","Leetcode","CSES","GFG"],
             selectedPlatformType : "Codeforces",
             emailTo: req.user.emails[0].value,
             coordinator : (coordinators.length > 0) ,
