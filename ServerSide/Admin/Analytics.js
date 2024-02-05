@@ -58,7 +58,7 @@ const getUserLocation = async (ip) => {
         locationData.longitude = locationData.loc.split(',')[1];
         return locationData;
     } catch (error) {
-        // console.error(error);
+        console.error(error);
         console.log("req failed")
         return null;
     }
