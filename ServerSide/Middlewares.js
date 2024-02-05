@@ -1,8 +1,9 @@
+const { GetUserActivity } = require("./Admin/UserActivty.js");
 const {readDB,updateDB} = require("./MongoOperations.js"); //including the MongoOperations.js file (for the DB operations)
 
 function isLoggedIn(req, res, next) { //Middleware to check if user is logged in
     if (req.user) //check if user is authenticated
-       next();
+        next();
     else
       res.redirect("/"); //if not authenticated, redirect to login page
   }
@@ -33,6 +34,7 @@ function redirectIfLoggedIn(req, res, next) { //Middleware to check if user is l
 
 function updateLastActivity(req,res,next) //middleware to update the last activity of the user
 {
+    // console.log(log)
     updateDB("Main", "Users", { "email": req.user.emails[0].value }, { $set: { LastVisited: new Date() } }).then((result) => { //if it is present then just update the lastvisited in DB
         console.log("last activity of " + req.user.emails[0].value + " updated in DB");
         next();

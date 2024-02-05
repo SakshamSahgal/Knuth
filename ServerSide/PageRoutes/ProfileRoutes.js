@@ -1,3 +1,4 @@
+const { updateLog } = require("../Admin/UserActivty.js");
 
 module.exports = (app) => {
 
@@ -18,8 +19,8 @@ module.exports = (app) => {
     });
     
     app.get("/profile/:email",isLoggedIn,updateLastActivity,(req,res) => {
-
-        console.log(req.user.emails[0].value + " is viewing the profile page of " + req.params.email)
+      
+        updateLog(req, "Accessed the profile page of " + req.params.email)
 
         readDB("Main", "Users", {"email": req.params.email}).then((found) => { //finding the user in the DB
 

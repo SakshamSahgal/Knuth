@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <%- include('../ReusableComponents/BootstrapCDN.ejs') %>
+  
   <title>User Details</title>
 </head>
+<%- include('../ReusableComponents/BootstrapCDN.ejs') %>
 <body>
     
     <div class="container mt-5">
@@ -51,16 +52,84 @@
                                 </span>
                             </p>
                             <p> <strong>Last Active :</strong> <%=users[i].timeSinceLastActive%> </p>
+                            <hr>                 
+                            <button data-bs-target="#displayinfo" data-bs-toggle="modal" class="btn btn-primary w-100" onclick="displayActivityLog(<%= i %>)">User Activity</button>        
+                            
                         </div>
                     </div>
                 </div>
             <% } %>
+            
         </div>
     </div>
     
 </body>
-</html>
-<script>
-    
+<div class="modal" id="displayinfo">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header" align="center">
+                <h4 class="modal-title">User Activity Log 📈</h4>
+                <button type="button" class="btn close" data-bs-dismiss="modal"> &times; </button>
+            </div>
 
-  </script>
+            <div class="modal-body" align="center" style="max-height: 600px; overflow-y: auto;">
+                <table class="table table-bordered" id="activityLogTable">
+                    <!-- The activity log table will be dynamically added here using JavaScript -->
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+</html>
+
+<script>
+    function displayActivityLog(index) {
+        var usersActivityLog = <%- JSON.stringify(users) %>;
+        var activityLog = usersActivityLog[index].activityLog;
+        var activityLogTable = document.getElementById("activityLogTable");
+
+        // Clear existing content
+        activityLogTable.innerHTML = "";
+
+        // Create table header
+        var thead = document.createElement("thead");
+        var headerRow = thead.insertRow();
+        headerRow.innerHTML =
+            "<th class='bg-dark text-light text-center'>Timestamp</th>" +
+            "<th class='bg-dark text-light text-center'>Browser</th>" +
+            "<th class='bg-dark text-light text-center'>OS</th>" +
+            "<th class='bg-dark text-light text-center'>IP</th>" +
+            "<th class='bg-dark text-light text-center'>Device</th>" +
+            "<th class='bg-dark text-light text-center'>Location</th>" +
+            "<th class='bg-dark text-light text-center'>Log</th>";
+
+        // Append header to table
+        activityLogTable.appendChild(thead);
+
+        // Create table body
+        var tbody = document.createElement("tbody");
+
+        // Loop through activity log and create table rows
+        if (activityLog) {
+            activityLog.forEach(function (entry) {
+                console.log(entry);
+                var row = tbody.insertRow();
+                row.innerHTML =
+                    "<td class='text-center'>" + entry.timeStamp + "</td>" +
+                    "<td class='text-center'>" + entry.browserInfo.name + "</td>" +
+                    "<td class='text-center'>" + entry.osInfo.name + "</td>" +
+                    "<td class='text-center'>" + entry.ip + "</td>" +
+                    "<td class='text-center'>" + entry.deviceTypeInfo.name + "</td>" +
+                    "<td class='text-center'>" + (entry.locationData ? "Available" : "Not available") + "</td>" +
+                    "<td class='text-center'>" + entry.log + "</td>";
+            });
+
+            // Append body to table
+            activityLogTable.appendChild(tbody);
+        }
+    }
+</script>
+
