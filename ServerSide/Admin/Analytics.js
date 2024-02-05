@@ -38,8 +38,8 @@ function getDeviceType(userAgentInfo) {
 const getUserLocation = async (ip) => {
 
     const ipAddress = ip; //IPv6-mapped IPv4 address
-    // console.log("IP  : ")
-    // console.log(ipAddress);
+    console.log("IP  : ")
+    console.log(ipAddress);
     
     
     try {
