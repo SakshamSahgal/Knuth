@@ -44,15 +44,20 @@ const getUserLocation = async (ip) => {
         console.log(ipAddress)
         const response = await axios.get(`https://ipinfo.io/${ipAddress}/json`);
         const locationData = response.data;
-        // console.log(locationData)
+        
+        console.log(locationData);
+        if(locationData.loc){
+            locationData.latitude = locationData.loc.split(',')[0];
+            locationData.longitude = locationData.loc.split(',')[1];
+        }
+        
         //erase the ip, and readme fields
         delete locationData.ip;
         delete locationData.readme;
         delete locationData.loc;
 
-        locationData.latitude = locationData.loc.split(',')[0];
-        locationData.longitude = locationData.loc.split(',')[1];
         return locationData;
+
     } catch (error) {
         console.error(error);
         console.log("req failed")
