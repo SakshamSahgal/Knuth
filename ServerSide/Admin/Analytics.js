@@ -41,7 +41,7 @@ const getUserLocation = async (ip) => {
     
     try {
         const ipAddress = ip; //IPv6-mapped IPv4 address
-        console.log(ipAddress)
+        // console.log(ipAddress)
         const response = await axios.get(`https://ipinfo.io/${ipAddress}/json`);
         const locationData = response.data;
         
