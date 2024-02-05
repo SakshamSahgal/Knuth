@@ -1,23 +1,10 @@
-//------------------------------------------------------------Node Packages-----------------------------------------------------
-const express = require("express"); //including express package for creating a server
-const session = require('express-session'); // Import express-session use to manage sessions
+const { app } = require("./app");
 const path = require('path');
-require('dotenv').config() //including the .env file (for the API keys and DB Credentials)
-
-const app = express();
 
 const port = process.env.DEV_PORT || 3000
-
-app.use(session({ secret: process.env.SESSION_SECRET , resave: false, saveUninitialized: true }));  //telling express to use sesssion middleware [Secret used to sign the session cookie]
-app.use(express.json({limit : '1mb'}));                                                             //telling that my webapp will be sending/recieving data in json format (limiting to 1MB)
-app.use(express.static(path.join(__dirname,"..","ClientSide","Static")));                           //telling that my webapp will be using the files in the ClientSide/Static folder for static files
-
-const {redirectIfLoggedIn} = require("./Middlewares.js"); //including the Middlewares.js file (for the middlewares)
+const { redirectIfLoggedIn } = require("./Middlewares.js");       //including the Middlewares.js file (for the middlewares)
 const { connectDB } = require("./MongoOperations.js");
-//------------------------------------------------------------------------------------------------------------------------------
 
-// Setting the view engine to EJS
-app.set('view engine', 'ejs');
 
 require("./Authorization/GoogleOAuthRoutes.js")(app);              //requiring the GoogleOAuthRoutes.js file (for the google auth routes)
 require("./PageRoutes/CoordinatorRoutes.js")(app);                 //requiring the CoordinatorRoutes.js file (for the coordinator page routes)
@@ -37,6 +24,7 @@ app.listen(port, () => {
     connectDB();
 });
 
-app.get("/",redirectIfLoggedIn, (req, res) => {                     //unprotected route
+//unprotected route
+app.get("/",redirectIfLoggedIn, (req, res) => {                     
   res.render(path.join(__dirname,"..","ClientSide","Knuth.ejs"));
 });
