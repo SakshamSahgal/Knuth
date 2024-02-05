@@ -50,7 +50,8 @@ const getUserLocation = async (ip) => {
         //erase the ip, and readme fields
         delete locationData.ip;
         delete locationData.readme;
-
+        delete locationData.loc;
+        
         locationData.latitude = locationData.loc.split(',')[0];
         locationData.longitude = locationData.loc.split(',')[1];
         return locationData;
