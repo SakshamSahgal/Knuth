@@ -37,16 +37,12 @@ function getDeviceType(userAgentInfo) {
 
 const getUserLocation = async (ip) => {
 
-    const ipAddress = ip; //IPv6-mapped IPv4 address
-    console.log("IP  : ")
-    console.log(ipAddress);
-    
+       
     
     try {
-        const ipv4Address = ipAddress.split(':').pop();
-        console.log(ipAddress + " " + ipv4Address);
-        
-        const response = await axios.get(`https://ipinfo.io/${ipv4Address}/json`);
+        const ipAddress = ip; //IPv6-mapped IPv4 address
+
+        const response = await axios.get(`https://ipinfo.io/${ipAddress}/json`);
         const locationData = response.data;
         // console.log(locationData)
         //erase the ip, and readme fields
