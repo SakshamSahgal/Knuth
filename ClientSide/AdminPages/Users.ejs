@@ -103,6 +103,11 @@
             "<th class='bg-dark text-light text-center'>OS</th>" +
             "<th class='bg-dark text-light text-center'>IP</th>" +
             "<th class='bg-dark text-light text-center'>Device</th>" +
+            "<th class='bg-dark text-light text-center'>City</th>" +
+            "<th class='bg-dark text-light text-center'>Region</th>" +
+            "<th class='bg-dark text-light text-center'>Country</th>" +
+            "<th class='bg-dark text-light text-center'>Latitude</th>" +
+            "<th class='bg-dark text-light text-center'>Longitude</th>" +
             "<th class='bg-dark text-light text-center'>Location</th>" +
             "<th class='bg-dark text-light text-center'>Log</th>";
 
@@ -123,7 +128,12 @@
                     "<td class='text-center'>" + entry.osInfo.name + "</td>" +
                     "<td class='text-center'>" + entry.ip + "</td>" +
                     "<td class='text-center'>" + entry.deviceTypeInfo.name + "</td>" +
-                    "<td class='text-center'>" + (entry.locationData ? "Available" : "Not available") + "</td>" +
+                    "<td class='text-center'>" + (entry.locationData ? entry.locationData.city : "N/A") + "</td>" +
+                    "<td class='text-center'>" + (entry.locationData ? entry.locationData.region : "N/A") + "</td>" +
+                    "<td class='text-center'>" + (entry.locationData ? entry.locationData.country : "N/A") + "</td>" +
+                    "<td class='text-center'>" + (entry.locationData ? entry.locationData.latitude : "N/A") + "</td>" +
+                    "<td class='text-center'>" + (entry.locationData ? entry.locationData.longitude : "N/A") + "</td>" +
+                    "<td class='text-center'>" + (entry.locationData ? entry.locationData.loc : "N/A") + "</td>" +
                     "<td class='text-center'>" + entry.log + "</td>";
             });
 
@@ -132,4 +142,5 @@
         }
     }
 </script>
+
 
