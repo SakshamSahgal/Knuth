@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('../ReusableComponents/BootstrapCDN.ejs') %> <!-- Including Bootstrap CSS -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hackers Data</title>
+    <style>
+        .challenge-details {
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Hackers' Performance</h1>
+        <!-- Make the table responsive -->
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Hacker</th>
+                        <th>Solved Challenges</th>
+                        <th>Total Time Taken (s)</th>
+                        <!-- Dynamically generate challenge columns with tooltip for full names -->
+                        <% if (models.length > 0) { %>
+                            <% models[0].challenges.forEach(function(challenge, index) { %>
+                                <th>
+                                    <a href="#" data-bs-toggle="tooltip" title="<%= challenge.slug %>">
+                                        <%= String.fromCharCode(65 + index) %> <!-- A, B, C, etc. -->
+                                    </a>
+                                </th>
+                            <% }); %>
+                        <% } %>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Sorting hackers by index before displaying -->
+                    <% models.sort((a, b) => a.index - b.index); %>
+
+                    <!-- Loop through each hacker in the data (sorted by index) -->
+                    <% models.forEach(function(hacker) { %>
+                        <tr>
+                            <!-- Hacker details -->
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <img src="<%= hacker.avatar %>" alt="Avatar" class="rounded-circle me-2" width="40" height="40">
+                                    <div>
+                                        <strong><%= hacker.hacker %></strong> <br>
+                                        <small class="text-muted">Rank: <%= hacker.rank %>, Level: <%= hacker.level %></small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><%= hacker.solved_challenges %></td>
+                            <td><%= hacker.time_taken %></td>
+
+                            <!-- Challenges details for this hacker -->
+                            <% hacker.challenges.forEach(function(challenge) { %>
+                                <td class="<%
+                                    if (challenge.submissions > 0) {
+                                        if (challenge.time_taken > 0) {
+                                            %> bg-success text-white <% 
+                                        } else {
+                                            %> bg-danger text-dark <% 
+                                        }
+                                    } else {
+                                        %> bg-light text-muted <%
+                                    }
+                                    %>">
+                                    <!-- Check if the challenge was attempted -->
+                                    <% if (challenge.submissions > 0) { %>
+                                        <div class="challenge-details">
+                                            <p> <%= challenge.submissions %> ( <%= challenge.time_taken %>s + <%= challenge.penalty %>s ) </p>
+                                        </div>
+                                    <% } else { %>
+                                        <span class="text-muted">Not attempted</span>
+                                    <% } %>
+                                </td>
+                            <% }); %>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Initialize tooltips for challenge names
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+          return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    </script>
+</body>
+</html>
