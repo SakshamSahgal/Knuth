@@ -1,13 +1,14 @@
 # What does each configuration parameter means?
 
-- `URI` :
-    - This is the `Uniform Resource Identifier` provided by MongoDB that the project uses to connect to the Database.
-    - The string is used to connect to Knuth's cluster containing the Knuth's Database.
-    - It looks something like this -
-    - `mongodb+srv://<username>:<password>@knuthcluster.bdqayma.mongodb.net/?retryWrites=true&w=majority`
+- `DBUsername` :
+    - Username to connect to DEV/PROD Cluster.
+- `DBPassword` : 
+    - Password to connect to DEV/PROD Cluster.
+- `ClusterAddress` :
+    - Address of the Mongo Dev/Prod cluster containing the DBs.
 - `DEV_PORT` :
-    - specifies the port used by the server to host the application.
-    - by default the application is hosted on port 3000.
+    - Specifies the port used by the server to host the application.
+    - By default the application is hosted on port 3000.
 - `CLIENT_ID` and `CLIENT_SECRET`:
     - To make the google authentication work, you have to use Oauth API from google console.
     - Make a new project in google console.
@@ -52,3 +53,5 @@
 - `PingBotDuration`
     - This specifies the duration (in ms) in which the KeepAlive.js script should ping itself to keep the server from Spinning down.
     - by default the value is - `600000` which is `10 minutes`
+- `RatingLength`
+    - Max limit of characters allowed in problem rating.

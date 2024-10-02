@@ -5,7 +5,7 @@ const port = process.env.DEV_PORT || 3000
 const { redirectIfLoggedIn } = require("./Middlewares.js");       //including the Middlewares.js file (for the middlewares)
 const { connectDB } = require("./MongoOperations.js");
 
-
+//protected Routes
 require("./Authorization/GoogleOAuthRoutes.js")(app);              //requiring the GoogleOAuthRoutes.js file (for the google auth routes)
 require("./PageRoutes/CoordinatorRoutes.js")(app);                 //requiring the CoordinatorRoutes.js file (for the coordinator page routes)
 require("./PageRoutes/ProfileRoutes.js")(app);                     //requiring the ProfileRoutes.js file (for the profile page routes)
@@ -21,6 +21,7 @@ require("./KeepAlive.js")(app);                                    //requiring t
 
 app.listen(port, () => {
     console.log("Server Started at port " + port);
+    console.log("host : ",process.env.Host);
     connectDB();
 });
 
