@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('../ReusableComponents/BootstrapCDN.ejs') %> <!-- Including Bootstrap CSS -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hackers Data</title>
+    <style>
+        .challenge-details {
+            font-size: 0.9em;
+        }
+        .contest-header {
+            cursor: pointer;
+        }
+        /* Center the content of table cells */
+        .table td, .table th {
+            vertical-align: middle; /* Vertically center the content */
+        }
+    </style>
+</head>
+<body>
+
+    <%- include('../ReusableComponents/navbar.ejs',{ activePage : page, email: emailTo }) %>
+
+    <br><br>
+
+    <div class="container mt-5">
+        
+        <!-- Loop through each contest -->
+        <% Object.keys(leaderboardData).forEach(function(contestName, contestIndex) { %>
+            <!-- Contest header that toggles the collapse -->
+            <div class="card mb-3">
+                <div class="card-header contest-header" data-bs-toggle="collapse" data-bs-target="#contest<%= contestIndex %>">
+                    <h2 class="mb-0 text-center">
+                        <!-- Add a flag icon before the contest name -->
+                        <i class="fas fa-flag"></i> <!-- Font Awesome flag icon -->
+                        <%= contestName %> <!-- Display contest name -->
+                    </h2>
+                </div>
+
+                <!-- Collapsible leaderboard for this contest -->
+                <div id="contest<%= contestIndex %>" class="collapse">
+                    <div class="card-body">
+                        <!-- Make the table responsive -->
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped text-center"> <!-- Add text-center class -->
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Hacker</th>
+                                        <th>Solved Challenges</th>
+                                        <th>Total Time Taken (s)</th>
+                                        <!-- Dynamically generate challenge columns with tooltip for full names -->
+                                        <% if (leaderboardData[contestName].length > 0) { %>
+                                            <% leaderboardData[contestName][0].challenges.forEach(function(challenge, index) { %>
+                                                <th>
+                                                    <a href="#" data-bs-toggle="tooltip" title="<%= challenge.slug %>">
+                                                        <%= String.fromCharCode(65 + index) %> <!-- A, B, C, etc. -->
+                                                    </a>
+                                                </th>
+                                            <% }); %>
+                                        <% } %>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Sorting hackers by index before displaying -->
+                                    <% leaderboardData[contestName].sort((a, b) => a.index - b.index); %>
+
+                                    <!-- Loop through each hacker in the data (sorted by index) -->
+                                    <% leaderboardData[contestName].forEach(function(hacker) { %>
+                                        <tr>
+                                            <!-- Hacker details -->
+                                            <td>
+                                                <div class="d-flex align-items-center"> <!-- Center avatar and text -->
+                                                    <img src="<%= hacker.avatar %>" alt="Avatar" class="rounded-circle me-2" width="40" height="40">
+                                                    <div>
+                                                        <strong><%= hacker.hacker %></strong> <br>
+                                                        <small class="text-muted">Rank: <%= hacker.rank %>, Level: <%= hacker.level %></small>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td><%= hacker.solved_challenges %></td>
+                                            <td><%= hacker.time_taken %></td>
+
+                                            <!-- Challenges details for this hacker -->
+                                            <% hacker.challenges.forEach(function(challenge) { %>
+                                                <td class="<%
+                                                    if (challenge.submissions > 0) {
+                                                        if (challenge.time_taken > 0) {
+                                                            %> bg-success text-white <% 
+                                                        } else {
+                                                            %> bg-danger text-dark <% 
+                                                        }
+                                                    } else {
+                                                        %> bg-light text-muted <%
+                                                    }
+                                                    %>">
+                                                    <!-- Check if the challenge was attempted -->
+                                                    <% if (challenge.submissions > 0) { %>
+                                                        <div class="challenge-details">
+                                                            <p> <%= challenge.submissions %> ( <%= challenge.time_taken %>s + <%= challenge.penalty %>s ) </p>
+                                                        </div>
+                                                    <% } else { %>
+                                                        <span class="text-muted">Not attempted</span>
+                                                    <% } %>
+                                                </td>
+                                            <% }); %>
+                                        </tr>
+                                    <% }); %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% }); %>
+    </div>
+
+    <script>
+        // Initialize tooltips for challenge names
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+          return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    </script>
+</body>
+</html>

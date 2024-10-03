@@ -17,7 +17,7 @@ require("./PageRoutes/EventRoutes.js")(app);                       //requiring t
 require("./PageRoutes/FeedbackRoutes.js")(app);                    //requiring the FeedbackRoutes.js file (for the feedback page routes)
 require("./PageRoutes/PODRoutes.js")(app);                         //requiring the POD.js file (for the POD page routes)
 require("./KeepAlive.js")(app);                                    //requiring the KeepAlive.js file (for pinging the server at intervals function)
-
+require("./PageRoutes/LiveLeaderboard.js")(app);                 //requiring the LeaderboardRoutes.js file (for the leaderboard page routes)
 
 app.listen(port, () => {
     console.log("Server Started at port " + port);

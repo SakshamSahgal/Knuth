@@ -1,4 +1,3 @@
-const { GetUserActivity } = require("./Admin/UserActivty.js");
 const {readDB,updateDB} = require("./MongoOperations.js"); //including the MongoOperations.js file (for the DB operations)
 
 function isLoggedIn(req, res, next) { //Middleware to check if user is logged in
