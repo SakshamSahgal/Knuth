@@ -1,0 +1,31 @@
+.highlight-tab {
+  font-weight: bold;
+  color: #ff5733; /* Change the color of the text */
+  background-color: #f1f1f1; /* Optional background color */
+  border: 2px solid #ff5733; /* Add a border (outline) */
+  padding-left: 20px; /* Space for the star */
+  position: relative;
+}
+
+/* Add a star before the text */
+.highlight-tab::before {
+  content: '\2605'; /* Unicode for a star character */
+  font-size: 18px;
+  color: #ff5733; /* Match the star color with the text */
+  position: absolute;
+  left: 5px; /* Adjust the position of the star */
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Custom border color */
+.border-primary {
+  border-color: #007bff !important; /* Example of a blue border */
+}
+
+/* Optional: Customize the star color */
+.fas.fa-star {
+  color: gold; /* Change the star color */
+  font-size: 16px; /* Adjust the size of the star */
+}
+
