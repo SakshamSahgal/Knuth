@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coordinators</title>
 </head>
+<link rel="stylesheet" href="/Styles/Coordinators.css">
 <body>    
     <%- include('./ReusableComponents/navbar.ejs',{ activePage : page, email: emailTo }) %>
     <br><br>
@@ -16,12 +17,13 @@
             
 
             <% for(var i=0;i<coordinators.length;i++) { %>
-              
               <li class="nav-item">
-                <a href="#id_<%=i%>" class="nav-link <%= (i == 0) ? 'active' : ''  %>" data-bs-toggle="tab"> <%= coordinators[i].year %>  </a>
+                <a href="#id_<%=i%>" class="nav-link <%= (i == 0) ? 'active' : '' %> <%= (coordinators[i].year == '2022-2023') ? 'highlight-tab' : '' %>" data-bs-toggle="tab"> 
+                  <%= coordinators[i].year %>  
+                </a>
               </li>
-
-            <% } %>
+            <% } %>            
+            
           </ul>
 
           <div class="tab-content" id="YearTabContents">
@@ -34,15 +36,30 @@
                       
                       <% for(var j=0;j<coordinators[i].list.length;j++) { %>
 
-                      <li class="list-group-item d-flex align-items-center my-3 rounded border border-dark">
-                        <div class="flex-grow-1">
-                            <h5><%= coordinators[i].list[j].name %></h5>
-                        </div>
-                        <div>
-                            <a href="<%=coordinators[i].list[j].linkedIn%>" class="me-2" target="_blank"><i class="fab fa-linkedin"></i></a>
-                        </div>
-                      </li>
-                      
+                        <li class="list-group-item d-flex align-items-center my-3 rounded border <%= (coordinators[i].list[j].name == 'Saksham Sahgal') ? 'border-primary' : 'border-dark' %>">
+                          <div class="flex-grow-1">
+                            <h5>
+                              <%= (coordinators[i].list[j].name == 'Saksham Sahgal') ? '★ ' : '' %>
+                              
+                              <% if (coordinators[i].list[j].gmail) { %>
+                                <!-- Make the name clickable and redirect to the Gmail link -->
+                                <a href="profile/<%= coordinators[i].list[j].gmail %>" style="color: inherit; text-decoration: none;">
+                                  <%= coordinators[i].list[j].name %>
+                                </a>
+                              <% } else { %>
+                                <!-- Display the name as normal text if Gmail is empty -->
+                                <%= coordinators[i].list[j].name %>
+                              <% } %>
+                            </h5>
+                          </div>
+                          <div>
+                            <a href="<%= coordinators[i].list[j].linkedIn %>" class="me-2" target="_blank">
+                              <i class="fab fa-linkedin"></i>
+                            </a>
+                          </div>
+                        </li>
+                        
+
                       <% } %>
 
                     </ul>
