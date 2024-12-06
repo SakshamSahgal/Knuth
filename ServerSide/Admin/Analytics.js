@@ -37,8 +37,6 @@ function getDeviceType(userAgentInfo) {
 
 const getUserLocation = async (ip) => {
 
-       
-    
     try {
         const ipAddress = ip; //IPv6-mapped IPv4 address
         // console.log(ipAddress)
@@ -60,8 +58,8 @@ const getUserLocation = async (ip) => {
         return locationData;
 
     } catch (error) {
-        console.error(error);
-        console.log("req failed")
+        // console.error(error);
+        console.log("Error while fetching User's Location from IP");
         return null;
     }
 };
