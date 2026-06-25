@@ -1,20 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-    <%- include('../ReusableComponents/BootstrapCDN.ejs') %> <!-- Including Bootstrap CSS -->
+    <%- include('../ReusableComponents/BootstrapCDN.ejs') %>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hackers Data</title>
+    <title>Leaderboard</title>
     <style>
-        .challenge-details {
-            font-size: 0.9em;
+        .table td, .table th {
+            vertical-align: middle;
         }
         .contest-header {
             cursor: pointer;
-        }
-        /* Center the content of table cells */
-        .table td, .table th {
-            vertical-align: middle; /* Vertically center the content */
         }
     </style>
 </head>
@@ -25,85 +21,66 @@
     <br><br>
 
     <div class="container mt-5">
-        
-        <!-- Loop through each contest -->
+        <% if (typeof isAuthorized !== 'undefined' && isAuthorized) { %>
+            <div class="card mb-4 border-dark">
+                <div class="card-header bg-dark text-white" style="cursor:pointer;" onclick="document.getElementById('adminPanel').classList.toggle('d-none')">
+                    <h5 class="mb-0 text-center">🛠️ Leaderboard Management</h5>
+                </div>
+                <div class="card-body bg-light d-none" id="adminPanel">
+                    <div class="row">
+                        <div class="col-md-7 mb-3 mb-md-0">
+                            <form id="uploadForm">
+                                <input type="text" id="contestName" class="form-control mb-2" placeholder="Contest Name" required>
+                                <textarea id="leaderboardJSON" class="form-control mb-2" rows="4" placeholder="Paste JSON data..." required></textarea>
+                                <button type="submit" class="btn btn-dark btn-sm w-100">Submit</button>
+                            </form>
+                            <div id="uploadMsg" class="alert py-1 small mt-2" style="display:none;"></div>
+                        </div>
+                        <div class="col-md-5">
+                            <h6>Active Contests</h6>
+                            <div style="max-height: 160px; overflow-y: auto;">
+                                <ul class="list-group">
+                                    <% contests.forEach(c => { %>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center py-1">
+                                            <small><%= c.contestName %> (<%= c.entriesCount %>)</small>
+                                            <button class="btn btn-danger btn-xs py-0 px-2 remove-contest-btn" data-contest-name="<%= c.contestName %>">Remove</button>
+                                        </li>
+                                    <% }); %>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+
         <% Object.keys(leaderboardData).forEach(function(contestName, contestIndex) { %>
-            <!-- Contest header that toggles the collapse -->
-            <div class="card mb-3">
-                <div class="card-header contest-header" data-bs-toggle="collapse" data-bs-target="#contest<%= contestIndex %>">
-                    <h2 class="mb-0 text-center">
-                        <!-- Add a flag icon before the contest name -->
-                        <i class="fas fa-flag"></i> <!-- Font Awesome flag icon -->
-                        <%= contestName %> <!-- Display contest name -->
-                    </h2>
+            <div class="card mb-3 border-dark">
+                <div class="card-header bg-dark text-white contest-header" data-bs-target="#contest<%= contestIndex %>" style="cursor: pointer;">
+                    <h3 class="mb-0 text-center h5">
+                        🏆 <%= contestName %>
+                    </h3>
                 </div>
 
-                <!-- Collapsible leaderboard for this contest -->
                 <div id="contest<%= contestIndex %>" class="collapse">
-                    <div class="card-body">
-                        <!-- Make the table responsive -->
+                    <div class="card-body bg-light">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-striped text-center"> <!-- Add text-center class -->
+                            <table class="table table-bordered table-striped text-center mb-0">
                                 <thead class="table-dark">
                                     <tr>
-                                        <th>Hacker</th>
-                                        <th>Solved Challenges</th>
-                                        <th>Total Time Taken (s)</th>
-                                        <!-- Dynamically generate challenge columns with tooltip for full names -->
-                                        <% if (leaderboardData[contestName].length > 0) { %>
-                                            <% leaderboardData[contestName][0].challenges.forEach(function(challenge, index) { %>
-                                                <th>
-                                                    <a href="#" data-bs-toggle="tooltip" title="<%= challenge.slug %>">
-                                                        <%= String.fromCharCode(65 + index) %> <!-- A, B, C, etc. -->
-                                                    </a>
-                                                </th>
-                                            <% }); %>
-                                        <% } %>
+                                        <th>Rank</th>
+                                        <th>Username</th>
+                                        <th>Score</th>
+                                        <th>Time (s)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!-- Sorting hackers by index before displaying -->
-                                    <% leaderboardData[contestName].sort((a, b) => a.index - b.index); %>
-
-                                    <!-- Loop through each hacker in the data (sorted by index) -->
-                                    <% leaderboardData[contestName].forEach(function(hacker) { %>
+                                    <% leaderboardData[contestName].forEach(function(entry) { %>
                                         <tr>
-                                            <!-- Hacker details -->
-                                            <td>
-                                                <div class="d-flex align-items-center"> <!-- Center avatar and text -->
-                                                    <img src="<%= hacker.avatar %>" alt="Avatar" class="rounded-circle me-2" width="40" height="40">
-                                                    <div>
-                                                        <strong><%= hacker.hacker %></strong> <br>
-                                                        <small class="text-muted">Rank: <%= hacker.rank %>, Level: <%= hacker.level %></small>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td><%= hacker.solved_challenges %></td>
-                                            <td><%= hacker.time_taken %></td>
-
-                                            <!-- Challenges details for this hacker -->
-                                            <% hacker.challenges.forEach(function(challenge) { %>
-                                                <td class="<%
-                                                    if (challenge.submissions > 0) {
-                                                        if (challenge.time_taken > 0) {
-                                                            %> bg-success text-white <% 
-                                                        } else {
-                                                            %> bg-danger text-dark <% 
-                                                        }
-                                                    } else {
-                                                        %> bg-light text-muted <%
-                                                    }
-                                                    %>">
-                                                    <!-- Check if the challenge was attempted -->
-                                                    <% if (challenge.submissions > 0) { %>
-                                                        <div class="challenge-details">
-                                                            <p> <%= challenge.submissions %> ( <%= challenge.time_taken %>s + <%= challenge.penalty %>s ) </p>
-                                                        </div>
-                                                    <% } else { %>
-                                                        <span class="text-muted">Not attempted</span>
-                                                    <% } %>
-                                                </td>
-                                            <% }); %>
+                                            <td><%= entry.rank || '-' %></td>
+                                            <td><strong><%= entry.username || '-' %></strong></td>
+                                            <td><%= entry.score %></td>
+                                            <td><%= entry.time_taken %></td>
                                         </tr>
                                     <% }); %>
                                 </tbody>
@@ -116,11 +93,102 @@
     </div>
 
     <script>
-        // Initialize tooltips for challenge names
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-          return new bootstrap.Tooltip(tooltipTriggerEl)
-        })
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll(".contest-header").forEach(h => {
+                h.addEventListener("click", () => {
+                    const target = document.querySelector(h.dataset.bsTarget || h.getAttribute("data-bs-target"));
+                    target.classList.toggle("show");
+                });
+            });
+
+            // Pagination logic (20 per page)
+            document.querySelectorAll(".card").forEach(card => {
+                const rows = Array.from(card.querySelectorAll("tbody tr"));
+                if (rows.length <= 20) return;
+                let page = 1;
+                const total = Math.ceil(rows.length / 20);
+
+                const nav = document.createElement("div");
+                nav.className = "d-flex justify-content-between align-items-center mt-2";
+                nav.innerHTML = `<button class="btn btn-sm btn-outline-dark prev">Prev</button><span>Page 1 of ${total}</span><button class="btn btn-sm btn-outline-dark next">Next</button>`;
+                card.querySelector(".card-body").appendChild(nav);
+
+                const update = () => {
+                    rows.forEach((r, i) => r.style.display = (i >= (page - 1) * 20 && i < page * 20) ? "" : "none");
+                    nav.querySelector("span").innerText = `Page ${page} of ${total}`;
+                    nav.querySelector(".prev").disabled = (page === 1);
+                    nav.querySelector(".next").disabled = (page === total);
+                };
+
+                nav.querySelector(".prev").addEventListener("click", () => { if (page > 1) { page--; update(); } });
+                nav.querySelector(".next").addEventListener("click", () => { if (page < total) { page++; update(); } });
+                update();
+            });
+
+            // Remove contest event handler to avoid inline JS execution
+            document.querySelectorAll(".remove-contest-btn").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    const name = btn.getAttribute("data-contest-name");
+                    deleteContest(name);
+                });
+            });
+        });
+
+        const uploadForm = document.getElementById("uploadForm");
+        if (uploadForm) { 
+            uploadForm.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                const contestName = document.getElementById("contestName").value.trim();
+                const jsonText = document.getElementById("leaderboardJSON").value.trim();
+                const msg = document.getElementById("uploadMsg");
+                try {
+                    // Size limit check (5MB to match server-side limit)
+                    if (jsonText.length > 5 * 1024 * 1024) {
+                        throw new Error("File size exceeds the 5MB limit.");
+                    }
+
+                    const parsed = JSON.parse(jsonText);
+
+                    // Client-side schema validation
+                    const raw = parsed.models || parsed.leaderboard || (Array.isArray(parsed) ? parsed : null);
+                    if (!raw || !Array.isArray(raw)) {
+                        throw new Error("Pasted JSON must be a leaderboard array or contain a 'models'/'leaderboard' array property.");
+                    }
+                    if (raw.length === 0) {
+                        throw new Error("Leaderboard data cannot be empty.");
+                    }
+                    const isValid = raw.every(e => e && typeof e === 'object' && (e.username || e.hacker || e.name));
+                    if (!isValid) {
+                        throw new Error("Every entry in the leaderboard must have a 'username', 'hacker', or 'name' field.");
+                    }
+
+                    const res = await fetch("/api/upload-leaderboard", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ contestName, leaderboardData: parsed })
+                    }).then(r => r.json());
+                    msg.style.display = "block";
+                    msg.className = res.success ? "alert alert-success mt-2 py-1 small" : "alert alert-danger mt-2 py-1 small";
+                    msg.innerText = res.success ? "Success!" : "Failed: " + res.error;
+                    if (res.success) setTimeout(() => location.reload(), 1000);
+                } catch(err) {
+                    msg.style.display = "block";
+                    msg.className = "alert alert-danger mt-2 py-1 small";
+                    msg.innerText = "Invalid JSON: " + err.message;
+                }
+            });
+        }
+
+        async function deleteContest(contestName) {
+            if (!confirm(`Delete ${contestName}?`)) return;
+            const res = await fetch("/api/delete-contest", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ contestName })
+            }).then(r => r.json());
+            alert(res.message || res.error);
+            if (res.success) location.reload();
+        } 
     </script>
 </body>
 </html>

@@ -8,7 +8,7 @@ require('dotenv').config() //including the .env file (for the API keys and DB Cr
 const app = express();
 
 app.use(session({ secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: true }));      //telling express to use sesssion middleware [Secret used to sign the session cookie]
-app.use(express.json({ limit: '1mb' }));                                                               //telling that my webapp will be sending/recieving data in json format (limiting to 1MB)
+app.use(express.json({ limit: '5mb' }));                                                               //telling that my webapp will be sending/receiving data in json format (limiting to 5MB)
 app.use(express.static(path.join(__dirname, "..", "ClientSide", "Static")));                           //telling that my webapp will be using the files in the ClientSide/Static folder for static files
 
 app.use(useragent.express());                                                                          // use the useragent middleware to parse useragent header
