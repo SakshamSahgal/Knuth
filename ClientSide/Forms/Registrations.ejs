@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('../ReusableComponents/BootstrapCDN.ejs') %>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registrations</title>
+  <link rel="stylesheet" href="/Styles/common.css">
+  <link rel="stylesheet" href="/Styles/Registrations.css">
+</head>
+
+<body>
+
+  <%- include('../ReusableComponents/navbar.ejs', { activePage: page, email: emailTo }) %>
+  <%- include('../ReusableComponents/LoadOverlay.ejs') %>
+
+  <!-- Create Form Overlay (Coordinator only) -->
+  <% if (coordinator) { %>
+    <div class="overlay-container" id="overlay" hidden>
+      <button class="btn float-right text-white" onclick="closeIt('overlay')"><span>&#10006;</span></button>
+      <div class="container-fluid d-flex justify-content-center align-items-center vh-100">
+        <div class="col-lg-6 col-md-8 col-sm-10 col-12">
+          <div class="card border-dark shadow">
+            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+              <h5 class="mb-0">Create Registration Form</h5>
+              <button class="btn text-white" onclick="closeIt('overlay')"><span>&#10006;</span></button>
+            </div>
+            <div class="card-body bg-light">
+              <form id="createForm">
+                <div class="form-group">
+                  <label for="formTitle">Title</label>
+                  <input type="text" id="formTitle" class="form-control" placeholder="e.g. Knuth Cup 2026" required>
+                </div>
+                <div class="form-group">
+                  <label for="formDescription">Description</label>
+                  <textarea id="formDescription" class="form-control" rows="4" placeholder="Write event details & guidelines here..." required></textarea>
+                </div>
+                <div class="form-group">
+                  <label for="formDeadline">Registration Deadline</label>
+                  <input type="datetime-local" id="formDeadline" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-dark btn-block mt-3">Post Registration Form</button>
+              </form>
+              <div id="formMsg" class="alert py-1 small mt-2" style="display:none;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% } %>
+
+  <div class="container mt-5">
+    <!-- Page Header Banner -->
+    <div class="mb-3 banner bg-dark text-white text-center py-4 rounded border border-secondary shadow-sm">
+      <h2 class="mb-1 text-uppercase font-weight-bold tracking-wide">📝 Active Registrations</h2>
+      <p class="mb-0 text-muted small">Register yourself for ongoing events, contests, and workshops</p>
+    </div>
+
+    <!-- Coordinator Control Button -->
+    <% if (coordinator) { %>
+      <div class="mb-4">
+        <button type="button" class="btn btn-dark btn-block shadow-sm" onclick="openIt('overlay')">
+          ⚙️ Create New Registration Form
+        </button>
+      </div>
+    <% } %>
+
+    <!-- List of active and past forms -->
+    <div class="forms-list">
+      <% if (forms.length === 0) { %>
+        <div class="alert alert-info text-center shadow-sm">
+          No registration forms are currently active.
+        </div>
+      <% } else { %>
+        <% forms.forEach(function(form, index) { %>
+          <% 
+             const isClosed = new Date(form.deadline) <= new Date();
+             const isUserRegistered = (form.registrants || []).some(r => r.email.toLowerCase() === emailTo.toLowerCase());
+          %>
+          <div class="card mb-4 border-dark shadow-sm form-card" data-form-id="<%= form.id %>">
+            <!-- Header -->
+            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-3">
+              <h5 class="mb-0 font-weight-bold text-truncate" style="max-width: 70%;"><%= form.title %></h5>
+              <div class="d-flex align-items-center">
+                <!-- Real-time Countdown Badge -->
+                <span class="badge countdown-badge px-3 py-2 font-weight-bold" 
+                      data-deadline="<%= form.deadline %>">
+                  <%= isClosed ? 'Closed' : 'Loading...' %>
+                </span>
+                <% if (coordinator) { %>
+                  <button class="btn btn-danger btn-xs py-0 px-2 ml-2 delete-form-btn" data-form-id="<%= form.id %>">Remove</button>
+                <% } %>
+              </div>
+            </div>
+
+            <!-- Body -->
+            <div class="card-body bg-light">
+              <p class="card-text text-secondary text-pre-wrap"><%= form.description %></p>
+              
+              <!-- Action Row -->
+              <div class="d-flex justify-content-between align-items-center mt-4">
+                <div>
+                  <% if (isClosed) { %>
+                    <button class="btn btn-secondary px-4 py-2" disabled>Registration Closed</button>
+                  <% } else if (isUserRegistered) { %>
+                    <button class="btn btn-success action-btn unregister-btn" data-form-id="<%= form.id %>">
+                      Registered ✓ <span class="small font-italic">(Unregister)</span>
+                    </button>
+                  <% } else { %>
+                    <button class="btn btn-primary action-btn register-btn" data-form-id="<%= form.id %>">
+                      Register Now
+                    </button>
+                  <% } %>
+                </div>
+
+                <div class="text-right">
+                  <span class="badge badge-secondary px-3 py-2">
+                    Registrants: <strong class="registrant-count"><%= (form.registrants || []).length %></strong>
+                  </span>
+                </div>
+              </div>
+
+              <!-- Coordinator Panel (Registrant List) -->
+              <% if (coordinator) { %>
+                <div class="mt-4 border-top pt-3">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <button class="btn btn-sm btn-outline-dark text-left d-flex justify-content-between align-items-center toggle-registrants" 
+                            type="button" 
+                            data-toggle="collapse" 
+                            data-target="#registrantCollapse<%= index %>"
+                            style="flex-grow: 1; margin-right: 10px;">
+                      <span>👥 View Registered Participants</span>
+                      <span class="badge badge-dark"><%= (form.registrants || []).length %></span>
+                    </button>
+                    <% if ((form.registrants || []).length > 0) { %>
+                      <button class="btn btn-sm btn-success export-csv-btn" data-form-title="<%= form.title %>">
+                        📥 Export Excel (CSV)
+                      </button>
+                    <% } %>
+                  </div>
+
+                  <div class="collapse mt-2" id="registrantCollapse<%= index %>">
+                    <div class="table-responsive bg-white rounded border p-2" style="max-height: 250px; overflow-y: auto;">
+                      <% if ((form.registrants || []).length === 0) { %>
+                        <p class="text-center text-muted small py-2 mb-0">No entries registered yet.</p>
+                      <% } else { %>
+                        <table class="table table-sm table-striped table-hover mb-0 text-center text-small">
+                          <thead class="thead-dark">
+                            <tr>
+                              <th>#</th>
+                              <th>Name</th>
+                              <th>Email</th>
+                              <th>Registered On</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <% form.registrants.forEach(function(reg, rIdx) { %>
+                              <tr>
+                                <td><%= rIdx + 1 %></td>
+                                <td><strong><%= reg.name %></strong></td>
+                                <td><%= reg.email %></td>
+                                <td><small><%= new Date(reg.registeredAt).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) %></small></td>
+                              </tr>
+                            <% }); %>
+                          </tbody>
+                        </table>
+                      <% } %>
+                    </div>
+                  </div>
+                </div>
+              <% } %>
+            </div>
+
+            <!-- Footer -->
+            <div class="card-footer text-muted d-flex justify-content-between align-items-center py-2" style="font-size: 11px;">
+              <span>Created on: <%= new Date(form.createdAt).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' }) %> <%= new Date(form.createdAt).toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata' }) %></span>
+              <span>By: <%= form.createdBy %></span>
+            </div>
+          </div>
+        <% }); %>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="/Scripts/Registrations.js"></script>
+</body>
+
+</html>

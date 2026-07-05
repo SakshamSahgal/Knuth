@@ -1,0 +1,65 @@
+/* Styling specific to the Form Registrations timeline */
+
+body {
+    padding-top: 70px;
+    background-color: #f4f6f9;
+}
+
+.text-pre-wrap {
+    white-space: pre-wrap;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.form-card {
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Countdown Badge Styles */
+.countdown-badge {
+    font-size: 13px;
+    border-radius: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.countdown-badge.active-timer {
+    background-color: #28a745;
+    color: #fff;
+    box-shadow: 0 0 8px rgba(40, 167, 69, 0.4);
+    animation: timer-pulse 2s infinite alternate;
+}
+
+.countdown-badge.closed-timer {
+    background-color: #dc3545;
+    color: #fff;
+    box-shadow: none;
+}
+
+/* Timer Pulsing Animation */
+@keyframes timer-pulse {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1.03);
+    }
+}
+
+/* Extra Details list for coordinators */
+.text-small {
+    font-size: 12px;
+}
+
+.btn-xs {
+    padding: 2px 8px;
+    font-size: 11px;
+    border-radius: 4px;
+}

@@ -14,6 +14,13 @@ module.exports = (app) => {
 
             const leaderboards = await readDB("Main", "Leaderboards", {});
 
+            // Sort leaderboards by upload time (lastSyncedAt) descending (newest first)
+            leaderboards.sort((a, b) => {
+                const dateA = a.lastSyncedAt ? new Date(a.lastSyncedAt) : new Date(0);
+                const dateB = b.lastSyncedAt ? new Date(b.lastSyncedAt) : new Date(0);
+                return dateB - dateA;
+            });
+
             const leaderboardData = {};
             const contests = [];
             leaderboards.forEach(doc => {
